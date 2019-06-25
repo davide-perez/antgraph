@@ -1,0 +1,35 @@
+{
+  "name": "antgraph",
+  "version": "1.0.0",
+  "description": "3D environment with multi agents simulating the ACO, bachelor final project",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "d3": "^5.9.2"
+  },
+  "devDependencies": {
+    "jest": "^24.8.0"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davide-perez/antgraph.git"
+  },
+  "keywords": [
+    "graph",
+    "3d",
+    "ACO",
+    "ant",
+    "optimization"
+  ],
+  "author": "Davide Perez Cuevas <perezposta@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davide-perez/antgraph/issues"
+  },
+  "homepage": "https://github.com/davide-perez/antgraph#readme"
+}
