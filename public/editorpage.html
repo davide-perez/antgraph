@@ -5,15 +5,18 @@
     <style> 
         body { margin: 0; } 
     </style>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
     <script src="//unpkg.com/three"></script>
     <script src="//unpkg.com/three-spritetext"></script>
     <script src="//unpkg.com/3d-force-graph"></script>
+    <script src="//unpkg.com/force-graph"></script>
     <script src="editor.js"></script>
+    <svg id="svg" width="960" height="500"></svg>
     <title>
       Graph editor
     </title>
   </head>
-  <body onload="testGraph()">
-    <div id = "3d-graph"></div>
+  <body onload="d2Graph()">
+    <div id = "graph"></div>
   </body>
 </html>
