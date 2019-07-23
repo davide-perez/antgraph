@@ -5,47 +5,60 @@ class Editor{
 
     constructor(domElement) {
         if(!domElement){
-            domElement = document.getElementById('graph');
+            this.domElement = document.getElementById('graph');
+        }
+        else{
+            this.domElement = domElement;
         }
 
-        this.gData = {nodes: [], links:[]};
         this.initGraph();
 
-        this.lastClickedNode = null;
-
+        this.initDOMListeners();
 
     }
 
 
     initGraph(){
         this.graph = ForceGraph()
-        (document.getElementById('graph'))
+        (this.domElement)
             .linkDirectionalParticles(19)
             .cooldownTicks(0.1)
             .onNodeHover(function(node, prevNode){
-                console.log("Node: " + JSON.stringify(node))
+                //console.log("Node: " + JSON.stringify(node))
             })
+            //.onNodeRightClick(n => this.removeNode(n))
             .onNodeRightClick(n => this.removeNode(n))
-            .onNodeClick(n => this.lastClickedNode = n)
             .width(600)
             .height(400)
             .backgroundColor('red')
-            .graphData(this.gData);        
+            .graphData({nodes:  [{id:1}], links: []});
     }
 
-    
+// DOM event helper? Not class, just a file with the various events. + isolation, + clarity. Problem with this keyword?
+// Maybe no, if both context and a function is passed.
+    initDOMListeners(){
+        let self = this;//here is the trick
+        let clickHandler = function(ev){
+            if(ev.button == 0)
+                self.addNode({id:1});
+        }
+        this.domElement.addEventListener('click', clickHandler);
+    }
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// add update(gData) ?    
     addNode(node){
         let {
             nodes,
             links
         } = this.graph.graphData();
         const id = nodes.length;
-        this.graph.graphData({
+        let newGraphData = {
             nodes: [...nodes, node],
-            links: []
-        });
-        
-        this.gData = this.graph.graphData;
+            links: [...links]
+        }
+        this.update(newGraphData);
     }
 
 
@@ -61,10 +74,8 @@ class Editor{
       
       // Reset node ids to array index 
       nodes.forEach((n, idx) => { n.id = idx; }); 
-      
-      this.graph.graphData({ nodes, links });
-      
-      this.gData = this.graph.graphData;
+
+      this.update({nodes, links});
     
     }
 
@@ -86,7 +97,7 @@ class Editor{
         } = this.graph.graphData();
         const id = links.length;
         this.graph.graphData({
-            nodes: [...nodes, node],
+            nodes: [...nodes],
             links: [...links, link]
         });
         
@@ -97,5 +108,10 @@ class Editor{
 
     removeLink(link){
 
+    }
+
+
+    update(newData){
+        this.graph.graphData(newData);
     }
 }
