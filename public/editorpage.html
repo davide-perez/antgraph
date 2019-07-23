@@ -10,13 +10,26 @@
     <script src="//unpkg.com/three-spritetext"></script>
     <script src="//unpkg.com/3d-force-graph"></script>
     <script src="//unpkg.com/force-graph"></script>
-    <script src="editor.js"></script>
-    <svg id="svg" width="960" height="500"></svg>
+    <script src="./controllers/env_editor.js"></script>
+    <script src="./controllers/editor.js"></script>
+    <script>
+    
+      function loadEditor(){
+        var editor = new Editor('graph');
+        console.log("Editor loaded!");
+
+        const canvas = document.getElementById('graph');
+        canvas.addEventListener('click', ev => editor.addNode({'id':1}));
+    
+      }
+      
+  
+    </script>
     <title>
       Graph editor
     </title>
   </head>
-  <body onload="d2Graph()">
-    <div id = "graph"></div>
+  <body onload="loadEditor()">
+    <div id = "graph" style="border:3px solid black;"></div>
   </body>
 </html>

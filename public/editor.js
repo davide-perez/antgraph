@@ -32,7 +32,7 @@ function d2Graph(){
     };
     const Graph = ForceGraph()
       (document.getElementById('graph'))
-        .linkDirectionalParticles(3)
+        .linkDirectionalParticles(9)
         .graphData(gData);
 }
 
