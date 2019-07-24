@@ -11,6 +11,12 @@ class Editor{
             this.domElement = domElement;
         }
 
+        this.drawingConfig = {
+            nodeSize: 4, 
+            nodeColor: 'blue',
+            nodeRing: 'red'
+        }
+
         this.initGraph();
 
         this.initDOMListeners();
@@ -19,18 +25,32 @@ class Editor{
 
 
     initGraph(){
+        
+        let highlightNodes = [];
+        let highlightLink = null;
+
         this.graph = ForceGraph()
         (this.domElement)
             .linkDirectionalParticles(19)
             .cooldownTicks(0.1)
-            .onNodeHover(function(node, prevNode){
-                //console.log("Node: " + JSON.stringify(node))
-            })
+            .onNodeHover(node => {
+                highlightNodes = node ? [node] : [];
+                this.domElement.style.cursor = node ? '-webkit-grab' : null;
+              })
             //.onNodeRightClick(n => this.removeNode(n))
-            .onNodeRightClick(n => this.removeNode(n))
+            .onNodeRightClick(n => {n.nodeColor = 'green'; this.update()})
             .width(600)
             .height(400)
-            .backgroundColor('red')
+            .backgroundColor('black')
+            .nodeColor('black')
+            .nodeCanvasObjectMode(node => highlightNodes.indexOf(node) !== -1 ? 'before' : undefined)
+            .nodeCanvasObject((node, ctx) => {
+              // add ring just for highlighted nodes
+              ctx.beginPath();
+              ctx.arc(node.x, node.y, 4 * 1.4, 0, 2 * Math.PI, false);
+              ctx.fillStyle = 'red';
+              ctx.fill();
+            })
             .graphData({nodes:  [{id:1}], links: []});
     }
 
@@ -39,7 +59,7 @@ class Editor{
     initDOMListeners(){
         let self = this;//here is the trick
         let clickHandler = function(ev){
-            if(ev.button == 0)
+            if(ev.button == 0)//left click only
                 self.addNode({id:1});
         }
         this.domElement.addEventListener('click', clickHandler);
@@ -112,6 +132,9 @@ class Editor{
 
 
     update(newData){
-        this.graph.graphData(newData);
+        if(!newData)
+            this.graph.refresh();
+        else
+            this.graph.graphData(newData);
     }
 }
