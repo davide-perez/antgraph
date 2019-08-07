@@ -1,0 +1,50 @@
+<!doctype HTML>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <style> 
+        body { margin: 0; } 
+    </style>
+    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+    <script src="//unpkg.com/three"></script>
+    <script src="//unpkg.com/three-spritetext"></script>
+    <script src="//unpkg.com/3d-force-graph"></script>
+    <script src="//unpkg.com/force-graph"></script>
+    <script
+		src="https://code.jquery.com/jquery-3.4.1.min.js"
+		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+        crossorigin="anonymous">
+    </script>
+    <script src = "./controllers/graph_events.js"></script>
+    <script src="./controllers/env_controller2.js"></script>
+    <script src="./models/environment/environment.js"></script>
+    <script src="./models/environment/gedge.js"></script>
+    <script src="./models/environment/gnode.js"></script>
+    <script src="./views/editor.js"></script>
+    <script>
+    
+      function loadEditor(){
+        let elem = document.getElementById("graph");
+        console.log("Element fetched: " + JSON.stringify(elem))
+        var editor = new Editor(elem);
+        if(elem){
+            console.log("Editor loaded!");
+        }
+        $(document).keydown(function(event){
+          if(event.which=="171"){
+            editor.controller.addNode();
+            editor.update();
+          }
+            //cntrlIsPressed = true;
+        });
+      }
+  
+    </script>
+    <title>
+      Graph editor 2
+    </title>
+  </head>
+  <body onload="loadEditor()">
+    <div id = "graph" style="border:3px solid black;"></div>
+  </body>
+</html>

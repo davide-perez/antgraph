@@ -22,8 +22,8 @@ app.use(express.static(__dirname + '/public/'));
 
 app.get('/', function (req, res) {
     console.log(__dirname);
-  res.sendFile(__dirname + "/public/editorpage.html");
-  console.log("File " + __dirname + "" + "/public/editorpage.html sent!" )
+  res.sendFile(__dirname + "/public/views/editor.html");
+  console.log("File " + __dirname + "" + "/public/views/editor.html sent!" )
 });
 
 app.listen(port, function () {
