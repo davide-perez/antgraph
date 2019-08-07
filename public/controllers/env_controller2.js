@@ -9,39 +9,36 @@ class EnvironmentController{
     }
 
 
-
-    getNodes(){
-        return this._env.nodes;
-    };
-    getEdges(){
-        return this._env.edges;
+    nodes(){
+        return this.env.nodes;
     }
-    addNode(id){
-        var nodes = this.env.nodes;
-        var nodeToAdd = new GNode(id);
-        nodes.push(nodeToAdd);
-    };
-    deleteNode(currNode){
-        let nodes = this.env.nodes;
-        let edges = this.env.edges;
-        if(currNode){
-            edges = edges.filter(e => e.source !== node && e.target !== node);
-            nodes.splice(nodes.indexOf(currNode),1);
-        }
-    
-    };
-    addEdge(edge){
-        let edges = this.env.edges;
-        if(edge.source && edge.target)
-            edges.push(edge);
-    };
-    deleteEdge(){
 
-    };
+    edges(){
+        return this.env.edges;
+    }
+
+    addNodeToGraph(){
+        this.env.addNode()
+    }
+
+    deleteNodeFromGraph(node){
+        if(node)
+            this.env.removeNode(node);
+    }
+
+    addEdgeToGraph(startNode, endNode){
+        this.env.addEdgeToGraph(startNode, endNode);
+    }
+
+    deleteEdgeFromGraph(edge){
+        this.env.removeEdge(edge);
+    }
 
 
-    fetchData(){
-        return { nodes: this.env.nodes, links: this.env.edges };
+    data(){
+        let n = this.nodes();
+        let e = this.edges();
+        return { nodes: n, links: e };
     }
     
     reset(){};

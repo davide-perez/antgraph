@@ -6,6 +6,8 @@ class GNode {
         }
         this.id = id;
         console.log("Node instantiated. Values: " + JSON.stringify(this));
+        this.isGoal = false;
+        this.isStart = false;
 
     }
 

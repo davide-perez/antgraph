@@ -8,6 +8,8 @@ class Environment{
             edges = [];
         this.nodes = nodes;
         this.edges = edges;
+        this.goals = [];
+        this.start = [];
         //variables and params affecting the whole graph and all of the nodes
     }
 
@@ -24,7 +26,7 @@ class Environment{
         this.edges = this.edges.filter(e => e.source !== node && e.target !== node);
     }
 
-    addEdge(source, target){
+    addEdge(source , target){
         if(source && target){
             let edge = new GEdge(source, target)
             this.edges.push(edge);
@@ -44,23 +46,25 @@ class Environment{
 //////////////////////////////////END MODIFY DATASET//////////////////////////////
 
 
-    getNodeById(id){
+    findNodeById(id){
         return this.nodes.find(n => id === n.id);
     }
 
-    getOutgoingEdges(node){
-        return this.edges.filter(e => e.source === node);
+    contains(node){
+        return this.findNodeById(node.id);
     }
 
-    getIncomingEdges(node){
+    getOutgoingEdgesFrom(node){
+        return this.edges.filter (e => e.source === node);
+    }
+
+    getIncomingEdgesFrom(node){
         return this.edges.filter(e => e.target === node);
     }
 
-    hasLoops(){
-        this.edges.find(e => e.source === e.target);
-        //base case
-    }
+    hasCycles(){}
 
+    getPath(start, end){}
 
 
 
