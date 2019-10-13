@@ -13,10 +13,11 @@
     "mysql": "^2.17.1"
   },
   "devDependencies": {
+    "ava": "^2.4.0",
     "jest": "^24.8.0"
   },
   "scripts": {
-    "test": "jest"
+    "test": "jest && ava"
   },
   "repository": {
     "type": "git",

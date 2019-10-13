@@ -15,28 +15,19 @@
 		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
         crossorigin="anonymous">
     </script>
-    <script src = "./controllers/graph_events.js"></script>
-    <script src="./controllers/env_controller2.js"></script>
     <script src="./models/environment/environment.js"></script>
     <script src="./models/environment/gedge.js"></script>
     <script src="./models/environment/gnode.js"></script>
-    <script src="./views/editor.js"></script>
+    <script src="./controllers/env_controller.js"></script>
     <script>
     
       function loadEditor(){
-        let elem = document.getElementById("graph");
-        console.log("Element fetched: " + JSON.stringify(elem))
-        var editor = new Editor(elem);
-        if(elem){
-            console.log("Editor loaded!");
-        }
-        $(document).keydown(function(event){
-          if(event.which=="171"){
-            editor.controller.addNode();
-            editor.update();
-          }
-            //cntrlIsPressed = true;
-        });
+        var controller = new EnvironmentController();
+        let n1 = new GNode('first');
+        let n2 = new GNode('second');
+        let env = new Environment([n1,n2],[{source: n1, target: n2}]);
+        env.removeNode(n1);
+
       }
   
     </script>
