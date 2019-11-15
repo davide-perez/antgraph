@@ -7,7 +7,7 @@ class GNode {
         }
         this.id = id;
     */
-        this._id = this.generateId();
+        //this._id = this.generateId();
         this.label = label;
         console.log("Node instantiated. Values: " + JSON.stringify(this));
         //console.log(JSON.stringify(this._id));

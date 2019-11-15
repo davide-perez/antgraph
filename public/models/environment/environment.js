@@ -10,14 +10,45 @@ class Environment{
         //variables and params affecting the whole graph and all of the nodes
 
         this._observers = [];
+
+        // Start Test
+        this.setupSampleData();
+        // End Test
     }
 
    //////////////////////////////////START MODIFY DATASET/////////////////////////////
+
+    /**
+     * Generates a unique id code (wrt the application's domain) based on a timestamp and a random number.
+     * @returns a string representing an id
+     */
+    generateId(){
+        if (!Date.now) {
+            Date.now = function() { return new Date().getTime(); }
+        }
+        var id = "" + Math.round(Math.random() * Date.now());
+        if(this.findNodeById(id))
+            throw new NamingError(id);
+        return id;
+
+    }
+
+    rename(node, id){
+        if(this.findNodeById(id))
+            throw new NamingError(id);
+        node._id = id;
+        return true;
+    }
+
 
    addNode(node){
        if(!node){
            return false;
        }
+       if(!node._id)
+            node._id = this.generateId();
+       if(this.findNodeById(node._id))
+            throw new NamingError(node._id);
        this._nodes.push(node);
        this.notifyAll();
        return true;
@@ -28,13 +59,25 @@ class Environment{
         if(!node_exists){
             return false;
         }
-        let x_nodes = this._nodes;
-        let x_edges = this._edges;
+        console.log("Node first: ");
+        console.table(this._nodes);
+        let x_nodes = this._nodes.slice();
+        let x_edges = this._edges.slice();
         this._nodes = x_nodes.filter(n => n !== node);
-        this._edges = x_edges.filter(e => e.source !== node && e.target !== node);
-        if(this._edges.length !== x_edges.length)
-            console.log("An edge has been removed.");
-        console.log("Node removed! " + node._id + " " + node.label);
+        //15112019
+        let edges_to_del = this._edges.filter(e => e.source == node || e.target == node);
+        edges_to_del.forEach(e => this.removeEdge(e));
+        //15112019
+        /* this._edges = x_edges.filter(e => e.source !== node && e.target !== node);
+        //if(this._edges.length !== x_edges.length){
+        //    console.log("An edge has been removed.");
+        //}
+        */
+        console.log("Node removed! Id: " + node._id + ", label:" + node.label);
+        this.notifyAll();
+        console.log("Nodes now:");
+        console.table(this._nodes);
+        return true;
     }
 
     addEdge(source , target){
@@ -42,11 +85,18 @@ class Environment{
         if(!nodes_exists)
             return false;
         this._edges.push(new GEdge(source,target));
+        return true;
     }
 
     removeEdge(edge){
-        let x_edges = this._edges;
+        let x_edges = this._edges.slice();
         this._edges = x_edges.filter(e => e !== edge);
+        console.log("Edge removed!");
+        console.log("Edges first: ");
+        console.table(x_edges);
+        console.log("Edges now: ");
+        console.table(this._edges);
+        return x_edges != this._edges;
     }
 
     clear(){
@@ -54,13 +104,15 @@ class Environment{
         this._edges = [];
     }
 
-    rename(node, newId){
-        if(!this.findNodeById(node._id))
-            return false;
-        node._id = newId;
-        return false;
+    setupSampleData(){
+        let n1 = new GNode('Node 1');
+        let n2 = new GNode('Node 2');
+        n1.rename(this,'1');
+        n2.rename(this,'2');
+        this.addNode(n1);
+        this.addNode(n2);
+        this.addEdge(n1, n2);
     }
-
 //////////////////////////////////END MODIFY DATASET//////////////////////////////
 
 
@@ -72,7 +124,7 @@ findNodeById(id){
 }
 
 findNodeByLabel(label){
-    return this._nodes.find(n => label === n.label);
+    return this._nodes.filter(n => label === n.label);
 }
 
 contains(node){
