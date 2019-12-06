@@ -3,16 +3,16 @@
 class Environment{
 
     constructor(nodes, edges){
-        this._nodes = nodes || [];
-        this._edges = edges || [];
-        this._goals = [];
-        this._start = [];
+        this.nodes = nodes || [];
+        this.edges = edges || [];
+        this.goals = [];
+        this.start = [];
         //variables and params affecting the whole graph and all of the nodes
 
-        this._observers = [];
+        this.observers = [];
 
         // Start Test
-        this.setupSampleData();
+        //this.setupSampleData();
         // End Test
     }
 
@@ -27,45 +27,40 @@ class Environment{
             Date.now = function() { return new Date().getTime(); }
         }
         var id = "" + Math.round(Math.random() * Date.now());
-        if(this.findNodeById(id))
-            throw new NamingError(id);
         return id;
 
     }
 
     rename(node, id){
+        if(!id)
+            id = this.generateId();
         if(this.findNodeById(id))
-            throw new NamingError(id);
-        node._id = id;
+            return false;
+        node.id = id;
         return true;
     }
 
 
    addNode(node){
-       if(!node){
-           return false;
-       }
-       if(!node._id)
-            node._id = this.generateId();
-       if(this.findNodeById(node._id))
-            throw new NamingError(node._id);
-       this._nodes.push(node);
+       if(this.findNodeById(node.id))
+            return false;
+       this.nodes.push(node);
        this.notifyAll();
        return true;
     }
 
     removeNode(node){
-        let node_exists = this._nodes.length !== 0 && this.findNodeById(node.id);
+        let node_exists = this.nodes.length !== 0 && this.findNodeById(node.id);
         if(!node_exists){
             return false;
         }
         console.log("Node first: ");
-        console.table(this._nodes);
-        let x_nodes = this._nodes.slice();
-        let x_edges = this._edges.slice();
-        this._nodes = x_nodes.filter(n => n !== node);
+        console.table(this.nodes);
+        let x_nodes = this.nodes.slice();
+        let x_edges = this.edges.slice();
+        this.nodes = x_nodes.filter(n => n !== node);
         //15112019
-        let edges_to_del = this._edges.filter(e => e.source == node || e.target == node);
+        let edges_to_del = this.edges.filter(e => e.source == node || e.target == node);
         edges_to_del.forEach(e => this.removeEdge(e));
         //15112019
         /* this._edges = x_edges.filter(e => e.source !== node && e.target !== node);
@@ -73,10 +68,10 @@ class Environment{
         //    console.log("An edge has been removed.");
         //}
         */
-        console.log("Node removed! Id: " + node._id + ", label:" + node.label);
+        console.log("Node removed! Id: " + node.id + ", label:" + node.label);
         this.notifyAll();
         console.log("Nodes now:");
-        console.table(this._nodes);
+        console.table(this.nodes);
         return true;
     }
 
@@ -84,24 +79,24 @@ class Environment{
         let nodes_exists = this.findNodeById(source.id) && this.findNodeById(target.id);
         if(!nodes_exists)
             return false;
-        this._edges.push(new GEdge(source,target));
+        this.edges.push(new GEdge(source,target));
         return true;
     }
 
     removeEdge(edge){
-        let x_edges = this._edges.slice();
-        this._edges = x_edges.filter(e => e !== edge);
+        let x_edges = this.edges.slice();
+        this.edges = x_edges.filter(e => e !== edge);
         console.log("Edge removed!");
         console.log("Edges first: ");
         console.table(x_edges);
         console.log("Edges now: ");
-        console.table(this._edges);
-        return x_edges != this._edges;
+        console.table(this.edges);
+        return x_edges != this.edges;
     }
 
     clear(){
-        this._nodes = [];
-        this._edges = [];
+        this.nodes = [];
+        this.edges = [];
     }
 
     setupSampleData(){
@@ -122,11 +117,11 @@ class Environment{
 /////////////////////////////////START QUERY DATASET//////////////////////////////
 
 findNodeById(id){
-    return this._nodes.find(n => id === n.id);
+    return this.nodes.find(n => id === n.id);
 }
 
 findNodeByLabel(label){
-    return this._nodes.filter(n => label === n.label);
+    return this.nodes.filter(n => label === n.label);
 }
 
 contains(node){
@@ -138,20 +133,20 @@ contains(node){
 //////////////////////////////////////////////////////OBSERVABLE METHODS/////////////////////////////////////////////////////////
 
     subscribe(observer){
-        this._observers.push(observer);
+        this.observers.push(observer);
         if(this.debug)
-            console.log('An observer has subscribed to this subject. No. of observers: ' + this._observers.lenght);
+            console.log('An observer has subscribed to this subject. No. of observers: ' + this.observers.lenght);
     }
 
     unsubscribe(observer){
-        this._observers = this._observers.filter(o => o !== observer);
+        this.observers = this.observers.filter(o => o !== observer);
         if(this.debug)
-            console.log('An observer has unsubscribed to this subject. No. of observers: ' + this._observers.lenght);
+            console.log('An observer has unsubscribed to this subject. No. of observers: ' + this.observers.lenght);
     }
 
     notify(observer){
         var self = this;
-        if(this._observers.find(o => o === observer)){
+        if(this.observers.find(o => o === observer)){
             observer.update(self);
             if(this.debug)
                 console.log('A single observer has been notified of the subject change.\nSubject:');
@@ -164,9 +159,9 @@ contains(node){
 
     notifyAll(){
         var self = this;
-        self._observers.forEach(o => o.update(self));
+        self.observers.forEach(o => o.update(self));
         if(this.debug){
-            console.log('All ' + self._observers.lenght + ' observers have been notified of the subject change.\nSubject:');
+            console.log('All ' + self.observers.lenght + ' observers have been notified of the subject change.\nSubject:');
             console.table(self);
         }
     }

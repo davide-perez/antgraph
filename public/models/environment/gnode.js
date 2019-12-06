@@ -9,6 +9,7 @@ class GNode {
     */
         //this._id = this.generateId();
         this.label = label;
+        this.id = undefined;
         console.log("Node instantiated. Values: " + JSON.stringify(this));
         //console.log(JSON.stringify(this._id));
         this.isGoal = false;
@@ -30,14 +31,6 @@ class GNode {
             Date.now = function() { return new Date().getTime(); }
         }
         return "" + Math.round(Math.random() * Date.now());
-    }
-
-    // Not working
-    rename(graph, id){
-        if(graph.findNodeByID(id))
-            return false;
-        this._id = id;
-        return true;
     }
 
 
