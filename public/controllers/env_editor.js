@@ -1,9 +1,11 @@
 class EnvironmentEditor {
 
-    constructor(domElem){
-        this.graphObj = Forcegraph()(elem)
+    constructor(domElem, env){
+        this.environment = env || new Environment();
+        this.graphObj = ForceGraph()(domElem)
                         .graphData();
     }
+
 
 
 }

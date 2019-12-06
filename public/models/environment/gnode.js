@@ -32,6 +32,7 @@ class GNode {
         return "" + Math.round(Math.random() * Date.now());
     }
 
+    // Not working
     rename(graph, id){
         if(graph.findNodeByID(id))
             return false;

@@ -19,9 +19,11 @@
     <script src="./models/environment/gedge.js"></script>
     <script src="./models/environment/gnode.js"></script>
     <script src="./controllers/env_controller.js"></script>
+    <script src="./controllers/env_editor.js"></script>
     <script>
     
       function loadEditor(){
+        /*
         var controller = new EnvironmentController();
         let n1 = new GNode('first');
         let n2 = new GNode('second');
@@ -29,6 +31,10 @@
         env.removeNode(n1);
 
         console.log('end');
+        */
+       var e = document.getElementById("graph");
+       var g = new Environment();
+       var editor = new EnvironmentEditor(e,g);
       }
     </script>
     <title>

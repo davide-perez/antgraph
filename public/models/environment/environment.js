@@ -107,8 +107,10 @@ class Environment{
     setupSampleData(){
         let n1 = new GNode('Node 1');
         let n2 = new GNode('Node 2');
-        n1.rename(this,'1');
-        n2.rename(this,'2');
+        //n1.rename(this,'1');
+        //n2.rename(this,'2');
+        this.rename(n1, '1');
+        this.rename(n2, '2');
         this.addNode(n1);
         this.addNode(n2);
         this.addEdge(n1, n2);
