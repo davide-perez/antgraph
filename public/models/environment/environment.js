@@ -12,7 +12,7 @@ class Environment{
         this.observers = [];
 
         // Start Test
-        //this.setupSampleData();
+        this.setupSampleData();
         // End Test
     }
 
@@ -75,6 +75,14 @@ class Environment{
         return true;
     }
 
+    addEdge(edge){
+        let nodes_exists = this.findNodeById(edge.source.id) && this.findNodeById(edge.target.id);
+        if(!nodes_exists)
+            return false;
+        this.edges.push(edge);
+        return true;
+    }
+/*
     addEdge(source , target){
         let nodes_exists = this.findNodeById(source.id) && this.findNodeById(target.id);
         if(!nodes_exists)
@@ -82,7 +90,7 @@ class Environment{
         this.edges.push(new GEdge(source,target));
         return true;
     }
-
+*/
     removeEdge(edge){
         let x_edges = this.edges.slice();
         this.edges = x_edges.filter(e => e !== edge);
@@ -94,7 +102,7 @@ class Environment{
         return x_edges != this.edges;
     }
 
-    clear(){
+    reset(){
         this.nodes = [];
         this.edges = [];
     }
@@ -108,7 +116,8 @@ class Environment{
         this.rename(n2, '2');
         this.addNode(n1);
         this.addNode(n2);
-        this.addEdge(n1, n2);
+        let e1 = new GEdge(n1,n2);
+        this.addEdge(e1);
     }
 //////////////////////////////////END MODIFY DATASET//////////////////////////////
 
@@ -128,31 +137,32 @@ contains(node){
     return this.findNodeById(node.id);
 }
 
+empty(){
+    return this.nodes.lenght === 0;
+}
+
 //////////////////////////////////END QUERY DATASET///////////////////////////////
 
 //////////////////////////////////////////////////////OBSERVABLE METHODS/////////////////////////////////////////////////////////
 
     subscribe(observer){
         this.observers.push(observer);
-        if(this.debug)
-            console.log('An observer has subscribed to this subject. No. of observers: ' + this.observers.lenght);
+        console.log('An observer has subscribed to this subject. No. of observers: ' + this.observers.lenght);
     }
 
     unsubscribe(observer){
         this.observers = this.observers.filter(o => o !== observer);
-        if(this.debug)
-            console.log('An observer has unsubscribed to this subject. No. of observers: ' + this.observers.lenght);
+        console.log('An observer has unsubscribed to this subject. No. of observers: ' + this.observers.lenght);
     }
 
     notify(observer){
         var self = this;
         if(this.observers.find(o => o === observer)){
             observer.update(self);
-            if(this.debug)
-                console.log('A single observer has been notified of the subject change.\nSubject:');
-                console.table(self);
-                console.log('Observer:\n');
-                console.table(observer);
+            console.log('A single observer has been notified of the subject change.\nSubject:');
+            console.table(self);
+            console.log('Observer:\n');
+            console.table(observer);
         }
         
     }
