@@ -4,12 +4,32 @@ class Dataset {
         this.sync();
     }
 
-    translateNode(node){
+    addNode(node){
         this.nodes = [...this.nodes,{id: node.id}];
     }
 
-    translateEdge(edge){
+    addEdge(edge){
         this.links = [...this.links,{source: edge.source, target: edge.target}];
+    }
+
+    removeNode(node){
+
+    }
+
+    removeEdge(edge){
+
+    }
+
+    getNode(id){
+        return this.nodes.find(n => n.id === id);
+    }
+
+    getEdgesBetween(id1, id2){
+        if(!(getNode(id1) && this.getNode(id2)))
+            return null;
+        return this.links.filter(e =>{
+            ((source.id === id1 && target.id === id2) || (source.id === id2 && target.id === id1))
+        });
     }
 
     sync(env){

@@ -21,6 +21,7 @@
     <script src="./models/environment/dataset.js"></script>
     <script src="./controllers/env_controller.js"></script>
     <script src="./controllers/env_editor.js"></script>
+    <script src="./models/environment/namingerror.js"></script>
     <script>
     
       function loadEditor(){
@@ -34,7 +35,18 @@
         console.log('end');
         */
        var e = document.getElementById("graph");
-       var editor = new EnvironmentEditor(e);
+       var editor = new EnvironmentController(e);
+
+       document.addEventListener('keydown', (event) =>{
+            let key = event.key;
+            if(!key === '+'){
+              console.log('pressed: ' + key);
+              return;
+            }
+
+            editor.insertNode('p');
+       }
+       );
       }
     </script>
     <title>

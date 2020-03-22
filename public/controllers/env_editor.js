@@ -1,16 +1,15 @@
 class EnvironmentEditor {
 
     constructor(domElem){
-        this.dataset = null;
-        this.setNewEnvironment();
+        this.domElem = domElem;
         this.graphObj = ForceGraph()(domElem)
-                        .graphData(this.dataset);
+                        .graphData();
     }
 
-    setNewEnvironment(env){
-        this.dataset = new Dataset();
-        this.environment = env || new Environment();
-        this.dataset.sync(this.environment);
+    update(dataset){
+        const Graph = this.graphObj = ForceGraph()(this.domElem).graphData(dataset);
+        Graph.graphData(dataset);
+        this.graphObj = Graph;
     }
 
 
