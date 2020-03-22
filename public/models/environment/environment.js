@@ -45,8 +45,8 @@ class Environment{
        if(this.findNodeById(node.id))
             return false;
        this.nodes.push(node);
-       console.log('Nodes now: ');
-       console.table(this.nodes);
+       //console.log('Nodes now: ');
+       //console.table(this.nodes);
        return true;
     }
 

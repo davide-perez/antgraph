@@ -16,7 +16,7 @@ connection.connect(function(err) {
   });
 });
 
-var port = 3339;
+var port = 3000;
 
 app.use(express.static(__dirname + '/public/'));
 

@@ -1,17 +1,9 @@
 class GNode {
 
     constructor(label){
-    /**
-        if (!id){
-            id = this.generateId();
-        }
-        this.id = id;
-    */
-        //this._id = this.generateId();
+
         this.label = label;
         this.id = undefined;
-        console.log("Node instantiated. Values: " + JSON.stringify(this));
-        //console.log(JSON.stringify(this._id));
         this.isGoal = false;
         this.isStart = false;
 

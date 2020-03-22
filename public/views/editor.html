@@ -21,33 +21,9 @@
     <script src="./models/environment/dataset.js"></script>
     <script src="./controllers/env_controller.js"></script>
     <script src="./controllers/env_editor.js"></script>
+    <script src="./views/client_events.js"></script>
     <script src="./models/environment/namingerror.js"></script>
     <script>
-    
-      function loadEditor(){
-        /*
-        var controller = new EnvironmentController();
-        let n1 = new GNode('first');
-        let n2 = new GNode('second');
-        let env = new Environment([n1,n2],[{source: n1, target: n2}]);
-        env.removeNode(n1);
-
-        console.log('end');
-        */
-       var e = document.getElementById("graph");
-       var editor = new EnvironmentController(e);
-
-       document.addEventListener('keydown', (event) =>{
-            let key = event.key;
-            if(!key === '+'){
-              console.log('pressed: ' + key);
-              return;
-            }
-
-            editor.insertNode('p');
-       }
-       );
-      }
     </script>
     <title>
       Graph editor 2
