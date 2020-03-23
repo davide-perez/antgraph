@@ -3,6 +3,7 @@ class EnvironmentEditor {
     constructor(domElem){
         this.domElem = domElem;
         this.NODE_REL_SIZE = 8;
+        this.selectedNodes = [];
         this.graphObj = ForceGraph()
             .width(600)
             .height(400)
@@ -19,22 +20,29 @@ class EnvironmentEditor {
 
     // admit at most two nodes highlighted, so that the next selected one takes the place of the first one?
     // So it becomes easy to add an arc!
+
+    // move events in other functions?
     setupHighlighting(){
-        let highlightedNodes = [];
         let highlightedEdge = null;
         this.graphObj
         .onNodeClick(node => {
-            highlightedNodes = node ? [node] : [];
+            //selectedNodes = node ? [node] : [];
+            if(node){
+                this.selectedNodes.push(node);
+                if(this.selectedNodes.length > 2){
+                    this.selectedNodes.shift();
+                }
+            }
             this.domElem.style.cursor = node ? '-webkit-grab' : null;
           })
         .onLinkHover(edge => {
             highlightedEdge= edge;
-            highlightedNodes = edge ? [edge.source, edge.target] : [];
+            this.selectedNodes = edge ? [edge.source, edge.target] : [];
           })
         .linkWidth(edge => edge === highlightedEdge ? 5 : 1)
         .linkDirectionalParticles(4)
         .linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
-        .nodeCanvasObjectMode(node => highlightedNodes.indexOf(node) !== -1 ? 'before' : undefined)
+        .nodeCanvasObjectMode(node => this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined)
         .nodeCanvasObject((node, ctx) => {
           // add ring just for highlighted nodes
           ctx.beginPath();
