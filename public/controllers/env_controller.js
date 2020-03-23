@@ -21,11 +21,21 @@ class EnvironmentController {
         }
     }
 
-    insertEdge(edge){
+    insertEdge(startNode,endNode){
+        let edge = new GEdge(startNode,endNode);
         if(this.env.addEdge(edge)){
             this.dataset.addEdge(edge);
             this.renderer.update(this.dataset);
         }
+    }
+
+
+    insertEdgeFromUserSelection(){
+        let selectedNodes = this.renderer.selectedNodes;
+        if(selectedNodes.length !== 2)
+            return;
+        this.insertEdge(selectedNodes[0],selectedNodes[1]);
+        
     }
 
 

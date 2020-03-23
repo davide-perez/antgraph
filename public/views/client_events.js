@@ -9,6 +9,7 @@ function loadEditor(){
 
 function setupEvents(){
   document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
+  document.addEventListener('keydown', (event) => insertEdgeOnKeyPress());
 }
 
 function insertNodeOnKeyPress(){
@@ -18,4 +19,14 @@ function insertNodeOnKeyPress(){
   if(key === '+'){
     editor.insertNode('p');
   }
+}
+
+
+function insertEdgeOnKeyPress(){
+  let key = event.key;
+  console.log('pressed: ' + key);
+  console.log(key === '-');
+  if(key === '-'){
+    editor.insertEdgeFromUserSelection();
+  } 
 }

@@ -8,7 +8,7 @@ class EnvironmentEditor {
             .width(600)
             .height(400)
             .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
-            .backgroundColor("yellow")
+            .backgroundColor("pink")
             .cooldownTicks(0);
         this.setupGraphicEvents();
     }

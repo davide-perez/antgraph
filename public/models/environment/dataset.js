@@ -9,7 +9,7 @@ class Dataset {
     }
 
     addEdge(edge){
-        this.links = [...this.links,{source: edge.source, target: edge.target}];
+        this.links = [...this.links,{source: edge.source.id, target: edge.target.id}];
     }
 
     removeNode(node){
