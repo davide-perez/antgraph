@@ -13,11 +13,16 @@ class Dataset {
     }
 
     removeNode(node){
-
+        let x_nodes = this.nodes.slice();
+        let x_links = this.links.slice();
+        this.nodes = x_nodes.filter(n => n.id !== node.id);
+        this.links = this.links.filter(l => l.source.id !== node.id && l.target.id !== node.id);
+        this.print();
     }
 
-    removeEdge(edge){
-
+    removeLink(link){
+        let x_links = this.links.slice();
+        this.links = this.links.filter(l => l !== link);
     }
 
     getNode(id){

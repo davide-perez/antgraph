@@ -8,12 +8,6 @@ class Environment{
         this.goals = [];
         this.start = [];
         //variables and params affecting the whole graph and all of the nodes
-
-        this.observers = [];
-
-        // Start Test
-        //this.setupSampleData();
-        // End Test
     }
 
    //////////////////////////////////START MODIFY DATASET/////////////////////////////
@@ -59,9 +53,9 @@ class Environment{
         console.table(this.nodes);
         let x_nodes = this.nodes.slice();
         let x_edges = this.edges.slice();
-        this.nodes = x_nodes.filter(n => n !== node);
+        this.nodes = x_nodes.filter(n => n.id !== node.id);
         //15112019
-        let edges_to_del = this.edges.filter(e => e.source == node || e.target == node);
+        let edges_to_del = this.edges.filter(e => e.source.id === node.id || e.target.id === node.id);
         edges_to_del.forEach(e => this.removeEdge(e));
         //15112019
         /* this._edges = x_edges.filter(e => e.source !== node && e.target !== node);
@@ -70,7 +64,6 @@ class Environment{
         //}
         */
         console.log("Node removed! Id: " + node.id + ", label:" + node.label);
-        this.notifyAll();
         console.log("Nodes now:");
         console.table(this.nodes);
         return true;
@@ -124,57 +117,25 @@ class Environment{
 
 
 
-/////////////////////////////////START QUERY DATASET//////////////////////////////
+    /////////////////////////////////START QUERY DATASET//////////////////////////////
 
-findNodeById(id){
-    return this.nodes.find(n => id === n.id);
-}
+    findNodeById(id){
+        return this.nodes.find(n => id === n.id);
+    }
 
-findNodeByLabel(label){
-    return this.nodes.filter(n => label === n.label);
-}
+    findNodeByLabel(label){
+        return this.nodes.filter(n => label === n.label);
+    }
 
-contains(node){
-    return this.findNodeById(node.id);
-}
+    contains(node){
+        return this.findNodeById(node.id);
+    }
 
-empty(){
-    return this.nodes.lenght === 0;
-}
+    empty(){
+        return this.nodes.lenght === 0;
+    }
 
 //////////////////////////////////END QUERY DATASET///////////////////////////////
 
-//////////////////////////////////////////////////////OBSERVABLE METHODS/////////////////////////////////////////////////////////
-
-    subscribe(observer){
-        this.observers.push(observer);
-        console.log('An observer has subscribed to this subject. No. of observers: ' + this.observers.lenght);
-    }
-
-    unsubscribe(observer){
-        this.observers = this.observers.filter(o => o !== observer);
-        console.log('An observer has unsubscribed to this subject. No. of observers: ' + this.observers.lenght);
-    }
-
-    notify(observer){
-        var self = this;
-        if(this.observers.find(o => o === observer)){
-            observer.update(self);
-            console.log('A single observer has been notified of the subject change.\nSubject:');
-            console.table(self);
-            console.log('Observer:\n');
-            console.table(observer);
-        }
-        
-    }
-
-    notifyAll(){
-        var self = this;
-        self.observers.forEach(o => o.update(self));
-        if(this.debug){
-            console.log('All ' + self.observers.lenght + ' observers have been notified of the subject change.\nSubject:');
-            console.table(self);
-        }
-    }
 
 }

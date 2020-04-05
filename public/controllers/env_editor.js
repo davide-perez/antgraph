@@ -28,6 +28,14 @@ class EnvironmentEditor {
         .onNodeClick(node => {
             //selectedNodes = node ? [node] : [];
             if(node){
+                //latest
+                let index = this.selectedNodes.findIndex(n => (n === node));
+                if(index !== -1){
+                    console.log('Node ' + node.id + ' already selected. Removing from selection.');
+                    this.selectedNodes.splice(index,1);
+                    return;
+                }
+                // latest
                 this.selectedNodes.push(node);
                 if(this.selectedNodes.length > 2){
                     this.selectedNodes.shift();

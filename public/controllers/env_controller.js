@@ -39,6 +39,21 @@ class EnvironmentController {
     }
 
 
+    deleteNodeFromUserSelection(){
+        let selectedNodes = this.renderer.selectedNodes;
+        if(selectedNodes.length !== 1)
+            return;
+        if(this.env.removeNode(selectedNodes[0])){
+            this.dataset.removeNode(selectedNodes[0]);
+            this.renderer.update(this.dataset);
+        }
+    }
+
+    getGraphObject(){
+        return this.renderer.graphObj;
+    }
+
+
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE
     // So that property cannot be assigned w/o enforcing some rules, because rename()
     // does not protect against misuses (node.id = somewrongval is still possible)

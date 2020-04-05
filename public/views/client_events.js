@@ -10,6 +10,7 @@ function loadEditor(){
 function setupEvents(){
   document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
   document.addEventListener('keydown', (event) => insertEdgeOnKeyPress());
+  document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
 }
 
 function insertNodeOnKeyPress(){
@@ -29,4 +30,14 @@ function insertEdgeOnKeyPress(){
   if(key === '-'){
     editor.insertEdgeFromUserSelection();
   } 
+}
+
+
+function deleteNodeOnKeyPress(){
+  let key = event.key;
+  console.log('pressed: ' + key);
+  if(key === 'Delete'){
+    editor.deleteNodeFromUserSelection();
+  }
+  
 }
