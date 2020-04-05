@@ -4,6 +4,7 @@ class EnvironmentEditor {
         this.domElem = domElem;
         this.NODE_REL_SIZE = 8;
         this.selectedNodes = [];
+        this.selectedEdge = null;
         this.graphObj = ForceGraph()
             .width(600)
             .height(400)
@@ -23,7 +24,6 @@ class EnvironmentEditor {
 
     // move events in other functions?
     setupHighlighting(){
-        let highlightedEdge = null;
         this.graphObj
         .onNodeClick(node => {
             //selectedNodes = node ? [node] : [];
@@ -43,13 +43,22 @@ class EnvironmentEditor {
             }
             this.domElem.style.cursor = node ? '-webkit-grab' : null;
           })
+        .onNodeHover(node => {
+
+        })
         .onLinkHover(edge => {
-            highlightedEdge= edge;
-            this.selectedNodes = edge ? [edge.source, edge.target] : [];
+            // display node info on a navigator?
           })
-        .linkWidth(edge => edge === highlightedEdge ? 5 : 1)
+        .onLinkClick(edge => {
+            if(edge){
+                this.selectedEdge = edge;
+            }
+        })
+        .linkColor('red')
+        .linkWidth(edge => edge === this.selectedEdge ? 5 : 1)
         .linkDirectionalParticles(4)
-        .linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
+        //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
+        .linkCurvature(0.3) // make this proportional to number of links between nodes
         .nodeCanvasObjectMode(node => this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined)
         .nodeCanvasObject((node, ctx) => {
           // add ring just for highlighted nodes
