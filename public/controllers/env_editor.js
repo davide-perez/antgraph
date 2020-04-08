@@ -2,16 +2,17 @@ class EnvironmentEditor {
 
     constructor(domElem){
         this.domElem = domElem;
-        this.NODE_REL_SIZE = 8;
+        this.NODE_REL_SIZE = 8; // config file vs db setup table
         this.selectedNodes = [];
         this.selectedEdge = null;
-        this.graphObj = ForceGraph()
-            .width(600)
-            .height(400)
-            .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
-            .backgroundColor("pink")
-            .cooldownTicks(0);
+        this.graphObj = ForceGraph();
+
         this.setupGraphicEvents();
+    }
+
+
+    setupGraph(){
+
     }
 
 
@@ -25,6 +26,11 @@ class EnvironmentEditor {
     // move events in other functions?
     setupHighlighting(){
         this.graphObj
+        .width(600)
+        .height(400)
+        .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
+        .backgroundColor("pink")
+        .cooldownTicks(0)
         .onNodeClick(node => {
             //selectedNodes = node ? [node] : [];
             if(node){
@@ -51,7 +57,10 @@ class EnvironmentEditor {
           })
         .onLinkClick(edge => {
             if(edge){
-                this.selectedEdge = edge;
+                if(this.selectedEdge === edge)
+                    this.selectedEdge = null
+                else
+                    this.selectedEdge = edge;
             }
         })
         .linkColor('red')

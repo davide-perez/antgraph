@@ -1,9 +1,9 @@
 var e = null;
-var editor = null;
+var controller = null;
 
 function loadEditor(){
   e = document.getElementById("graph");
-  editor = new EnvironmentController(e);
+  controller = new EnvironmentController(e);
   setupEvents();
 }
 
@@ -11,33 +11,37 @@ function setupEvents(){
   document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
   document.addEventListener('keydown', (event) => insertEdgeOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
+  document.addEventListener('keydown', (event) => deleteEdgeOnKeyPress());
 }
 
 function insertNodeOnKeyPress(){
   let key = event.key;
-  console.log('pressed: ' + key);
-  console.log(key === '+');
   if(key === '+'){
-    editor.insertNode('p');
+    controller.insertNode('p');
   }
 }
 
 
 function insertEdgeOnKeyPress(){
   let key = event.key;
-  console.log('pressed: ' + key);
-  console.log(key === '-');
   if(key === '-'){
-    editor.insertEdgeFromUserSelection();
+    controller.insertEdgeFromUserSelection();
   } 
 }
 
 
 function deleteNodeOnKeyPress(){
   let key = event.key;
-  console.log('pressed: ' + key);
   if(key === 'Delete'){
-    editor.deleteNodeFromUserSelection();
+    controller.deleteNodeFromUserSelection();
   }
   
+}
+
+
+function deleteEdgeOnKeyPress(){
+  let key = event.key;
+  if(key === 'Delete'){
+    controller.deleteEdgeFromUserSelection();
+  }
 }

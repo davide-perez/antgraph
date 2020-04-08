@@ -49,6 +49,19 @@ class EnvironmentController {
         }
     }
 
+
+    deleteEdgeFromUserSelection() {
+        let selectedEdge = this.renderer.selectedEdge;
+        if(!selectedEdge)
+            return;
+        if(this.env.removeEdge(selectedEdge)){
+            this.dataset.removeLink(selectedEdge);
+            this.renderer.update(this.dataset);
+        }
+    }
+
+
+
     getGraphObject(){
         return this.renderer.graphObj;
     }
