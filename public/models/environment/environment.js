@@ -127,6 +127,20 @@ class Environment{
         return this.nodes.filter(n => label === n.label);
     }
 
+    findOutgoingEdges(startNode){
+        return this.edges.filter(e => e.source === startNode) || [];
+    }
+
+    findForwardBranchingFactor(startNode){
+        return this.findOutgoingEdges(startNode).length;
+    }
+
+    findEdgesBetweenNodes(node1,node2){
+        return this.edges.filter(e => (e.source.id === node1.id && e.target.id === node2.id) || 
+                                      (e.source.id === node2.id && e.target.id === node2.id)
+                                );
+    }
+
     contains(node){
         return this.findNodeById(node.id);
     }

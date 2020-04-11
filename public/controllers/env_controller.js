@@ -24,7 +24,8 @@ class EnvironmentController {
     insertEdge(startNode,endNode){
         let edge = new GEdge(startNode,endNode);
         if(this.env.addEdge(edge)){
-            this.dataset.addEdge(edge);
+            let curvature = this.computeEdgeCurvature(edge);
+            this.dataset.addEdge(edge,curvature);
             this.renderer.update(this.dataset);
         }
     }
@@ -41,15 +42,12 @@ class EnvironmentController {
 
     deleteNodeFromUserSelection(){
         let selectedNodes = this.renderer.selectedNodes;
-        console.log('Selection from deletion:');
-        console.table(selectedNodes);
         if(selectedNodes.length !== 1)
             return;
         if(this.env.removeNode(selectedNodes[0])){
             this.dataset.removeNode(selectedNodes[0]);
             this.renderer.update(this.dataset);
-            this.renderer.selectedNodes = [];
-            this.renderer.selectedEdge = null;
+            this.renderer.resetSelection();
         }
     }
 
@@ -61,9 +59,17 @@ class EnvironmentController {
         if(this.env.removeEdge(selectedEdge)){
             this.dataset.removeLink(selectedEdge);
             this.renderer.update(this.dataset);
-            this.renderer.selectedEdge = null;
-            this.renderer.selectedNodes = [];
+            this.renderer.resetSelection();
         }
+    }
+
+
+    computeEdgeCurvature(edge){
+        let startNode = edge.source;
+        let fbf = this.env.findForwardBranchingFactor(startNode) - 1; // substract 1 because the node you're adding already has been inserted.
+        let curveFactor = (fbf % 2 == 0) ? 0.15 : - 0.15;
+        return curveFactor * fbf;
+
     }
 
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE

@@ -8,8 +8,10 @@ class Dataset {
         this.nodes = [...this.nodes,{id: node.id}];
     }
 
-    addEdge(edge){
-        this.links = [...this.links,{source: edge.source.id, target: edge.target.id}];
+    addEdge(edge,curvature){
+        if(!curvature)
+            curvature = 0.0;
+        this.links = [...this.links,{source: edge.source.id, target: edge.target.id, curvature: curvature}];
     }
 
     removeNode(node){
