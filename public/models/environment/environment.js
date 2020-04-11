@@ -136,9 +136,7 @@ class Environment{
     }
 
     findEdgesBetweenNodes(node1,node2){
-        return this.edges.filter(e => (e.source.id === node1.id && e.target.id === node2.id) || 
-                                      (e.source.id === node2.id && e.target.id === node2.id)
-                                );
+        return this.edges.filter(e => (e.source === node1 && e.target === node2));
     }
 
     contains(node){

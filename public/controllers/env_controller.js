@@ -63,13 +63,15 @@ class EnvironmentController {
         }
     }
 
-
     computeEdgeCurvature(edge){
         let startNode = edge.source;
-        let fbf = this.env.findForwardBranchingFactor(startNode) - 1; // substract 1 because the node you're adding already has been inserted.
-        let curveFactor = (fbf % 2 == 0) ? 0.15 : - 0.15;
-        return curveFactor * fbf;
-
+        let endNode = edge.target;
+        let curveFactor = 0.0;
+        // count edges from n1 to n2 and sum them to edges from n2 to n1
+        let noOfEdges = this.env.findEdgesBetweenNodes(startNode,endNode).length + this.env.findEdgesBetweenNodes(endNode,startNode).length;
+        if (noOfEdges !== 1)
+            curveFactor = (noOfEdges % 2 == 0) ? 0.15 : - 0.15;
+        return curveFactor * noOfEdges;
     }
 
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE
