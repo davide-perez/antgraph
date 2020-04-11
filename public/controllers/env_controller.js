@@ -41,11 +41,15 @@ class EnvironmentController {
 
     deleteNodeFromUserSelection(){
         let selectedNodes = this.renderer.selectedNodes;
+        console.log('Selection from deletion:');
+        console.table(selectedNodes);
         if(selectedNodes.length !== 1)
             return;
         if(this.env.removeNode(selectedNodes[0])){
             this.dataset.removeNode(selectedNodes[0]);
             this.renderer.update(this.dataset);
+            this.renderer.selectedNodes = [];
+            this.renderer.selectedEdge = null;
         }
     }
 
@@ -57,15 +61,10 @@ class EnvironmentController {
         if(this.env.removeEdge(selectedEdge)){
             this.dataset.removeLink(selectedEdge);
             this.renderer.update(this.dataset);
+            this.renderer.selectedEdge = null;
+            this.renderer.selectedNodes = [];
         }
     }
-
-
-
-    getGraphObject(){
-        return this.renderer.graphObj;
-    }
-
 
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE
     // So that property cannot be assigned w/o enforcing some rules, because rename()

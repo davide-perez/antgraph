@@ -33,6 +33,7 @@ function insertEdgeOnKeyPress(){
 function deleteNodeOnKeyPress(){
   let key = event.key;
   if(key === 'Delete'){
+    console.log("Node deletion triggered.");
     controller.deleteNodeFromUserSelection();
   }
   
@@ -41,7 +42,7 @@ function deleteNodeOnKeyPress(){
 
 function deleteEdgeOnKeyPress(){
   let key = event.key;
-  if(key === 'Delete'){
+  if(key === 'Backspace'){
     controller.deleteEdgeFromUserSelection();
   }
 }
