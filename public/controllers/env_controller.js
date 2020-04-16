@@ -2,9 +2,6 @@ class EnvironmentController {
 
     constructor (domElem,env){
         this.env = env || new Environment();
-        console.log("Environment created.");
-        this.dataset = new Dataset();
-        this.dataset.sync(env);
         this.renderer = new EnvironmentEditor(domElem);
     }
 
@@ -16,17 +13,15 @@ class EnvironmentController {
             throw new NamingError(id);
         };
         if(this.env.addNode(node)){
-            this.dataset.addNode(node);
-            this.renderer.update(this.dataset);
+            this.renderer.update(this.env.dataset);
         }
     }
 
     insertEdge(startNode,endNode){
         let edge = new GEdge(startNode,endNode);
-        if(this.env.addEdge(edge)){
-            let curvature = this.computeEdgeCurvature(edge);
-            this.dataset.addEdge(edge,curvature);
-            this.renderer.update(this.dataset);
+        edge.curvature = this.computeEdgeCurvature(edge);
+        if(this.env.addEdge(edge)){            
+            this.renderer.update(this.env.dataset);
         }
     }
 
@@ -45,8 +40,7 @@ class EnvironmentController {
         if(selectedNodes.length !== 1)
             return;
         if(this.env.removeNode(selectedNodes[0])){
-            this.dataset.removeNode(selectedNodes[0]);
-            this.renderer.update(this.dataset);
+            this.renderer.update(this.env.dataset);
             this.renderer.resetSelection();
         }
     }
@@ -57,19 +51,18 @@ class EnvironmentController {
         if(!selectedEdge)
             return;
         if(this.env.removeEdge(selectedEdge)){
-            this.dataset.removeLink(selectedEdge);
-            this.renderer.update(this.dataset);
+            this.renderer.update(this.env.dataset);
             this.renderer.resetSelection();
         }
     }
-
+// refactor this in the dataset class?
     computeEdgeCurvature(edge){
         let startNode = edge.source;
         let endNode = edge.target;
         let curveFactor = 0.0;
         // count edges from n1 to n2 and sum them to edges from n2 to n1
         let noOfEdges = this.env.findEdgesBetweenNodes(startNode,endNode).length + this.env.findEdgesBetweenNodes(endNode,startNode).length;
-        if (noOfEdges !== 1)
+        if (noOfEdges !== 0)
             curveFactor = (noOfEdges % 2 == 0) ? 0.15 : - 0.15;
         return curveFactor * noOfEdges;
     }

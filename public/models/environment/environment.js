@@ -8,6 +8,8 @@ class Environment{
         this.goals = [];
         this.start = [];
         //variables and params affecting the whole graph and all of the nodes
+
+        this.dataset = new Dataset();
     }
 
    //////////////////////////////////START MODIFY DATASET/////////////////////////////
@@ -39,8 +41,7 @@ class Environment{
        if(this.findNodeById(node.id))
             return false;
        this.nodes.push(node);
-       //console.log('Nodes now: ');
-       //console.table(this.nodes);
+       this.dataset.addNode(node);
        return true;
     }
 
@@ -54,18 +55,9 @@ class Environment{
         let x_nodes = this.nodes.slice();
         let x_edges = this.edges.slice();
         this.nodes = x_nodes.filter(n => n.id !== node.id);
-        //15112019
         let edges_to_del = this.edges.filter(e => e.source.id === node.id || e.target.id === node.id);
+        this.dataset.removeNode(node);
         edges_to_del.forEach(e => this.removeEdge(e));
-        //15112019
-        /* this._edges = x_edges.filter(e => e.source !== node && e.target !== node);
-        //if(this._edges.length !== x_edges.length){
-        //    console.log("An edge has been removed.");
-        //}
-        */
-        console.log("Node removed! Id: " + node.id + ", label:" + node.label);
-        console.log("Nodes now:");
-        console.table(this.nodes);
         return true;
     }
 
@@ -74,25 +66,14 @@ class Environment{
         if(!nodes_exists)
             return false;
         this.edges.push(edge);
+        this.dataset.addLink(edge)
         return true;
     }
-/*
-    addEdge(source , target){
-        let nodes_exists = this.findNodeById(source.id) && this.findNodeById(target.id);
-        if(!nodes_exists)
-            return false;
-        this.edges.push(new GEdge(source,target));
-        return true;
-    }
-*/
+
     removeEdge(edge){
         let x_edges = this.edges.slice();
         this.edges = x_edges.filter(e => e !== edge);
-        console.log("Edge removed!");
-        console.log("Edges first: ");
-        console.table(x_edges);
-        console.log("Edges now: ");
-        console.table(this.edges);
+        this.dataset.removeLink(edge);
         return x_edges != this.edges;
     }
 
@@ -101,18 +82,6 @@ class Environment{
         this.edges = [];
     }
 
-    setupSampleData(){
-        let n1 = new GNode('Node 1');
-        let n2 = new GNode('Node 2');
-        //n1.rename(this,'1');
-        //n2.rename(this,'2');
-        this.rename(n1, '1');
-        this.rename(n2, '2');
-        this.addNode(n1);
-        this.addNode(n2);
-        let e1 = new GEdge(n1,n2);
-        this.addEdge(e1);
-    }
 //////////////////////////////////END MODIFY DATASET//////////////////////////////
 
 
