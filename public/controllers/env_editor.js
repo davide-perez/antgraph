@@ -33,7 +33,7 @@ class EnvironmentEditor {
 
     setupEvents(){
         this.graphObj
-        .onNodeClick(node => this.handleNodeClick(node))
+        .onNodeRightClick(node => this.handleNodeRightClick(node))
         .onLinkClick(link => this.handleLinkClick(link))
     }
 
@@ -50,7 +50,7 @@ class EnvironmentEditor {
     }
 
 
-    handleNodeClick(node){
+    handleNodeRightClick(node){
         if(node){
             let index = this.selectedNodes.findIndex(n => (n === node));
             if(index !== -1){
