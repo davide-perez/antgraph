@@ -27,6 +27,7 @@ class EnvironmentEditor {
         .linkWidth(link => link === this.selectedLink ? 5 : 1)
         .linkDirectionalParticles(4)
         //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
+        .linkDirectionalArrowLength(0.5)
         .linkCurvature('curvature')
     }
 
@@ -53,7 +54,6 @@ class EnvironmentEditor {
         if(node){
             let index = this.selectedNodes.findIndex(n => (n === node));
             if(index !== -1){
-                console.log('Node ' + node.id + ' already selected. Removing from selection.');
                 this.selectedNodes.splice(index,1);
                 return;
             }

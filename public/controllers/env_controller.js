@@ -18,6 +18,21 @@ class EnvironmentController {
         }
     }
 
+    insertNodeAt(label,id,x,y){
+        label = label || '';
+        id = id || this.generateId();
+        let node = new GNode(label);
+        let pos = this.renderer.graphObj.screen2GraphCoords(x,y);
+        node.x = pos.x;
+        node.y = pos.y;
+        if(!this.env.rename(node,id)){
+            throw new NamingError(id);
+        };
+        if(this.env.addNode(node)){
+            this.renderer.update(this.env);
+        }       
+    }
+
 
     insertLink(startNode,endNode){
         let link = new GEdge(startNode,endNode);

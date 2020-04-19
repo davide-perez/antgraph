@@ -12,13 +12,20 @@ function setupEvents(){
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
   document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
+  document.addEventListener('click', (event) => insertNodeOnClick());
 }
 
 function insertNodeOnKeyPress(){
   let key = event.key;
   if(key === '+'){
-    controller.insertNode('p');
+    controller.insertNode('');
   }
+}
+
+function insertNodeOnClick(){
+  let x = event.clientX;
+  let y = event.clientY;
+  controller.insertNodeAt('',null,x,y);
 }
 
 
