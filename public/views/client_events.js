@@ -4,10 +4,10 @@ var controller = null;
 function loadEditor(){
   e = document.getElementById("graph");
   controller = new EnvironmentController(e);
-  setupEvents();
+  setupClientEvents();
 }
 
-function setupEvents(){
+function setupClientEvents(){
   document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());

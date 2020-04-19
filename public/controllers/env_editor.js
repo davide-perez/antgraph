@@ -75,17 +75,6 @@ class EnvironmentEditor {
     }
 
     
-/*
-* Link object accessor function, attribute or a numeric constant for the curvature radius of the link line. 
-* Curved lines are represented as bezier curves, and any numeric value is accepted. A value of 0 renders a straight line. 
-* 1 indicates a radius equal to half of the line length, causing the curve to approximate a semi-circle. 
-* For self-referencing links (source equal to target) the curve is represented as a loop around the node, with length proportional to the curvature value. 
-* Lines are curved clockwise for positive values, and counter-clockwise for negative values. 
-* Note that rendering curved lines is purely a visual effect and does not affect the behavior of the underlying forces.
-***************************************************************************************************************************
-* Plan: curvature proportional to number of edges between the two nodes. Pass a function that evaluates it.
-*/
-
 
     update(env){
         this.graphObj(this.domElem)
