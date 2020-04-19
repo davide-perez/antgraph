@@ -14,27 +14,25 @@ class EnvironmentController {
             throw new NamingError(id);
         };
         if(this.env.addNode(node)){
-            this.renderer.dataset.addNode(node);
-            this.renderer.update();
+            this.renderer.update(this.env);
         }
     }
 
 
-    insertEdge(startNode,endNode){
-        let edge = new GEdge(startNode,endNode);
-        edge.curvature = this.computeEdgeCurvature(edge);
-        if(this.env.addEdge(edge)){  
-            this.renderer.dataset.addLink(edge);          
-            this.renderer.update();
+    insertLink(startNode,endNode){
+        let link = new GEdge(startNode,endNode);
+        link.curvature = this.computeLinkCurvature(link);
+        if(this.env.addLink(link)){  
+            this.renderer.update(this.env);
         }
     }
 
 
-    insertEdgeFromUserSelection(){
+    insertLinkFromUserSelection(){
         let selectedNodes = this.renderer.selectedNodes;
         if(selectedNodes.length !== 2)
             return;
-        this.insertEdge(selectedNodes[0],selectedNodes[1]);
+        this.insertLink(selectedNodes[0],selectedNodes[1]);
         
     }
 
@@ -44,33 +42,31 @@ class EnvironmentController {
         if(selectedNodes.length !== 1)
             return;
         if(this.env.removeNode(selectedNodes[0])){
-            this.renderer.dataset.removeNode(selectedNodes[0]);
-            this.renderer.update();
+            this.renderer.update(this.env);
             this.renderer.resetSelection();
         }
     }
 
 
-    deleteEdgeFromUserSelection() {
-        let selectedEdge = this.renderer.selectedEdge;
-        if(!selectedEdge)
+    deleteLinkFromUserSelection() {
+        let selectedLink = this.renderer.selectedLink;
+        if(!selectedLink)
             return;
-        if(this.env.removeEdge(selectedEdge)){
-            this.renderer.dataset.removeLink(selectedEdge);
-            this.renderer.update();
+        if(this.env.removeLink(selectedLink)){
+            this.renderer.update(this.env);
             this.renderer.resetSelection();
         }
     }
 // refactor this in the dataset class?
-    computeEdgeCurvature(edge){
-        let startNode = edge.source;
-        let endNode = edge.target;
+    computeLinkCurvature(link){
+        let startNode = link.source;
+        let endNode = link.target;
         let curveFactor = 0.0;
         // count edges from n1 to n2 and sum them to edges from n2 to n1
-        let noOfEdges = this.env.findEdgesBetweenNodes(startNode,endNode).length + this.env.findEdgesBetweenNodes(endNode,startNode).length;
-        if (noOfEdges !== 0)
-            curveFactor = (noOfEdges % 2 == 0) ? 0.15 : - 0.15;
-        return curveFactor * noOfEdges;
+        let noOfLinks = this.env.findLinksBetweenNodes(startNode,endNode).length + this.env.findLinksBetweenNodes(endNode,startNode).length;
+        if (noOfLinks !== 0)
+            curveFactor = (noOfLinks % 2 == 0) ? 0.15 : - 0.15;
+        return curveFactor * noOfLinks;
     }
 
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE

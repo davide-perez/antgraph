@@ -1,12 +1,11 @@
 class EnvironmentEditor {
 
     constructor(domElem){
-        this.dataset = new Dataset();
 
         this.domElem = domElem;
         this.NODE_REL_SIZE = 8; // config file vs db setup table
         this.selectedNodes = [];
-        this.selectedEdge = null;
+        this.selectedLink = null;
         this.graphObj = ForceGraph();
 
         //this.setupGraphicEvents();
@@ -25,7 +24,7 @@ class EnvironmentEditor {
         .backgroundColor("pink")
         .cooldownTicks(0)
         .linkColor('red')
-        .linkWidth(edge => edge === this.selectedEdge ? 5 : 1)
+        .linkWidth(link => link === this.selectedLink ? 5 : 1)
         .linkDirectionalParticles(4)
         //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
         .linkCurvature('curvature')
@@ -34,7 +33,7 @@ class EnvironmentEditor {
     setupEvents(){
         this.graphObj
         .onNodeClick(node => this.handleNodeClick(node))
-        .onLinkClick(edge => this.handleEdgeClick(edge))
+        .onLinkClick(link => this.handleLinkClick(link))
     }
 
 
@@ -66,12 +65,12 @@ class EnvironmentEditor {
         this.domElem.style.cursor = node ? '-webkit-grab' : null;
     }
 
-    handleEdgeClick(edge){
-        if(edge){
-            if(this.selectedEdge === edge)
-                this.selectedEdge = null
+    handleLinkClick(link){
+        if(link){
+            if(this.selectedLink === link)
+                this.selectedLink = null
             else
-                this.selectedEdge = edge;
+                this.selectedLink = link;
         }
     }
 
@@ -88,16 +87,14 @@ class EnvironmentEditor {
 */
 
 
-    update(dataset){
-        if(!dataset)
-            dataset = this.dataset;
+    update(env){
         this.graphObj(this.domElem)
-        .graphData(dataset);
+        .graphData(env);
     }
 
     resetSelection(){
         this.selectedNodes = [];
-        this.selectedEdge = null;
+        this.selectedLink = null;
     }
 
 

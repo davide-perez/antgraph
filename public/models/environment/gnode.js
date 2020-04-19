@@ -6,7 +6,6 @@ class GNode {
         this.id = undefined;
         this.isGoal = false;
         this.isStart = false;
-
     }
 
 // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE

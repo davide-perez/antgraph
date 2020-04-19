@@ -2,16 +2,13 @@
 //Class representing the environment model.
 class Environment{
 
-    constructor(nodes, edges){
+    constructor(nodes, links){
         this.nodes = nodes || [];
-        this.edges = edges || [];
+        this.links = links || [];
         this.goals = [];
         this.start = [];
         //variables and params affecting the whole graph and all of the nodes
 
-        // Proxy object in the controller?
-        //https://towardsdatascience.com/why-to-use-javascript-proxy-5cdc69d943e3
-        //http://www.zsoltnagy.eu/es6-proxies-in-practice/
         //https://javascript.info/proxy 
     }
 
@@ -52,33 +49,31 @@ class Environment{
         if(!node_exists){
             return false;
         }
-        console.log("Node first: ");
-        console.table(this.nodes);
         let x_nodes = this.nodes.slice();
-        let x_edges = this.edges.slice();
+        let x_links = this.links.slice();
         this.nodes = x_nodes.filter(n => n.id !== node.id);
-        let edges_to_del = this.edges.filter(e => e.source.id === node.id || e.target.id === node.id);
-        edges_to_del.forEach(e => this.removeEdge(e));
+        let links_to_del = this.links.filter(e => e.source.id === node.id || e.target.id === node.id);
+        links_to_del.forEach(e => this.removeLink(e));
         return true;
     }
 
-    addEdge(edge){
-        let nodes_exists = this.findNodeById(edge.source.id) && this.findNodeById(edge.target.id);
+    addLink(link){
+        let nodes_exists = this.findNodeById(link.source.id) && this.findNodeById(link.target.id);
         if(!nodes_exists)
             return false;
-        this.edges.push(edge);
+        this.links.push(link);
         return true;
     }
 
-    removeEdge(edge){
-        let x_edges = this.edges.slice();
-        this.edges = x_edges.filter(e => e !== edge);
-        return x_edges != this.edges;
+    removeLink(link){
+        let x_links = this.links.slice();
+        this.links = x_links.filter(e => e !== link);
+        return x_links != this.links;
     }
 
     reset(){
         this.nodes = [];
-        this.edges = [];
+        this.links = [];
     }
 
 //////////////////////////////////END MODIFY DATASET//////////////////////////////
@@ -95,16 +90,16 @@ class Environment{
         return this.nodes.filter(n => label === n.label);
     }
 
-    findOutgoingEdges(startNode){
-        return this.edges.filter(e => e.source === startNode) || [];
+    findOutgoingLinks(startNode){
+        return this.links.filter(e => e.source === startNode) || [];
     }
 
     findForwardBranchingFactor(startNode){
-        return this.findOutgoingEdges(startNode).length;
+        return this.findOutgoingLinks(startNode).length;
     }
 
-    findEdgesBetweenNodes(node1,node2){
-        return this.edges.filter(e => (e.source === node1 && e.target === node2));
+    findLinksBetweenNodes(node1,node2){
+        return this.links.filter(e => (e.source === node1 && e.target === node2));
     }
 
     contains(node){

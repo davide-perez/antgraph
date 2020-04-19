@@ -9,9 +9,9 @@ function loadEditor(){
 
 function setupEvents(){
   document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
-  document.addEventListener('keydown', (event) => insertEdgeOnKeyPress());
+  document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
-  document.addEventListener('keydown', (event) => deleteEdgeOnKeyPress());
+  document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
 }
 
 function insertNodeOnKeyPress(){
@@ -22,10 +22,10 @@ function insertNodeOnKeyPress(){
 }
 
 
-function insertEdgeOnKeyPress(){
+function insertLinkOnKeyPress(){
   let key = event.key;
   if(key === '-'){
-    controller.insertEdgeFromUserSelection();
+    controller.insertLinkFromUserSelection();
   } 
 }
 
@@ -33,16 +33,15 @@ function insertEdgeOnKeyPress(){
 function deleteNodeOnKeyPress(){
   let key = event.key;
   if(key === 'Delete'){
-    console.log("Node deletion triggered.");
     controller.deleteNodeFromUserSelection();
   }
   
 }
 
 
-function deleteEdgeOnKeyPress(){
+function deleteLinkOnKeyPress(){
   let key = event.key;
   if(key === 'Backspace'){
-    controller.deleteEdgeFromUserSelection();
+    controller.deleteLinkFromUserSelection();
   }
 }
