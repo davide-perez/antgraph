@@ -5,6 +5,7 @@ class EnvironmentController {
         this.renderer = new EnvironmentEditor(domElem);
     }
 
+
     insertNode(label,id){
         label = label || '';
         id = id || this.generateId();
@@ -13,15 +14,18 @@ class EnvironmentController {
             throw new NamingError(id);
         };
         if(this.env.addNode(node)){
-            this.renderer.update(this.env.dataset);
+            this.renderer.dataset.addNode(node);
+            this.renderer.update();
         }
     }
+
 
     insertEdge(startNode,endNode){
         let edge = new GEdge(startNode,endNode);
         edge.curvature = this.computeEdgeCurvature(edge);
-        if(this.env.addEdge(edge)){            
-            this.renderer.update(this.env.dataset);
+        if(this.env.addEdge(edge)){  
+            this.renderer.dataset.addLink(edge);          
+            this.renderer.update();
         }
     }
 
@@ -40,7 +44,8 @@ class EnvironmentController {
         if(selectedNodes.length !== 1)
             return;
         if(this.env.removeNode(selectedNodes[0])){
-            this.renderer.update(this.env.dataset);
+            this.renderer.dataset.removeNode(selectedNodes[0]);
+            this.renderer.update();
             this.renderer.resetSelection();
         }
     }
@@ -51,7 +56,8 @@ class EnvironmentController {
         if(!selectedEdge)
             return;
         if(this.env.removeEdge(selectedEdge)){
-            this.renderer.update(this.env.dataset);
+            this.renderer.dataset.removeLink(selectedEdge);
+            this.renderer.update();
             this.renderer.resetSelection();
         }
     }
@@ -82,7 +88,5 @@ class EnvironmentController {
         }
         return "" + Math.round(Math.random() * Date.now());
     }
-
-
 }
 //put here all the logic to construct nodes from scratch and handle errors. In the environment, let methods return true/false only for success/failure.

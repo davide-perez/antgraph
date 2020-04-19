@@ -1,6 +1,8 @@
 class EnvironmentEditor {
 
     constructor(domElem){
+        this.dataset = new Dataset();
+
         this.domElem = domElem;
         this.NODE_REL_SIZE = 8; // config file vs db setup table
         this.selectedNodes = [];
@@ -87,6 +89,8 @@ class EnvironmentEditor {
 
 
     update(dataset){
+        if(!dataset)
+            dataset = this.dataset;
         this.graphObj(this.domElem)
         .graphData(dataset);
     }

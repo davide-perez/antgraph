@@ -9,7 +9,10 @@ class Environment{
         this.start = [];
         //variables and params affecting the whole graph and all of the nodes
 
-        this.dataset = new Dataset();
+        // Proxy object in the controller?
+        //https://towardsdatascience.com/why-to-use-javascript-proxy-5cdc69d943e3
+        //http://www.zsoltnagy.eu/es6-proxies-in-practice/
+        //https://javascript.info/proxy 
     }
 
    //////////////////////////////////START MODIFY DATASET/////////////////////////////
@@ -41,7 +44,6 @@ class Environment{
        if(this.findNodeById(node.id))
             return false;
        this.nodes.push(node);
-       this.dataset.addNode(node);
        return true;
     }
 
@@ -56,7 +58,6 @@ class Environment{
         let x_edges = this.edges.slice();
         this.nodes = x_nodes.filter(n => n.id !== node.id);
         let edges_to_del = this.edges.filter(e => e.source.id === node.id || e.target.id === node.id);
-        this.dataset.removeNode(node);
         edges_to_del.forEach(e => this.removeEdge(e));
         return true;
     }
@@ -66,14 +67,12 @@ class Environment{
         if(!nodes_exists)
             return false;
         this.edges.push(edge);
-        this.dataset.addLink(edge)
         return true;
     }
 
     removeEdge(edge){
         let x_edges = this.edges.slice();
         this.edges = x_edges.filter(e => e !== edge);
-        this.dataset.removeLink(edge);
         return x_edges != this.edges;
     }
 
