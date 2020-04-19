@@ -2,12 +2,14 @@
 //Class representing the environment model.
 class Environment{
 
-    constructor(nodes, edges){
+    constructor(nodes, links){
         this.nodes = nodes || [];
-        this.edges = edges || [];
+        this.links = links || [];
         this.goals = [];
         this.start = [];
         //variables and params affecting the whole graph and all of the nodes
+
+        //https://javascript.info/proxy 
     }
 
    //////////////////////////////////START MODIFY DATASET/////////////////////////////
@@ -39,8 +41,6 @@ class Environment{
        if(this.findNodeById(node.id))
             return false;
        this.nodes.push(node);
-       //console.log('Nodes now: ');
-       //console.table(this.nodes);
        return true;
     }
 
@@ -49,70 +49,33 @@ class Environment{
         if(!node_exists){
             return false;
         }
-        console.log("Node first: ");
-        console.table(this.nodes);
         let x_nodes = this.nodes.slice();
-        let x_edges = this.edges.slice();
+        let x_links = this.links.slice();
         this.nodes = x_nodes.filter(n => n.id !== node.id);
-        //15112019
-        let edges_to_del = this.edges.filter(e => e.source.id === node.id || e.target.id === node.id);
-        edges_to_del.forEach(e => this.removeEdge(e));
-        //15112019
-        /* this._edges = x_edges.filter(e => e.source !== node && e.target !== node);
-        //if(this._edges.length !== x_edges.length){
-        //    console.log("An edge has been removed.");
-        //}
-        */
-        console.log("Node removed! Id: " + node.id + ", label:" + node.label);
-        console.log("Nodes now:");
-        console.table(this.nodes);
+        let links_to_del = this.links.filter(e => e.source.id === node.id || e.target.id === node.id);
+        links_to_del.forEach(e => this.removeLink(e));
         return true;
     }
 
-    addEdge(edge){
-        let nodes_exists = this.findNodeById(edge.source.id) && this.findNodeById(edge.target.id);
+    addLink(link){
+        let nodes_exists = this.findNodeById(link.source.id) && this.findNodeById(link.target.id);
         if(!nodes_exists)
             return false;
-        this.edges.push(edge);
+        this.links.push(link);
         return true;
     }
-/*
-    addEdge(source , target){
-        let nodes_exists = this.findNodeById(source.id) && this.findNodeById(target.id);
-        if(!nodes_exists)
-            return false;
-        this.edges.push(new GEdge(source,target));
-        return true;
-    }
-*/
-    removeEdge(edge){
-        let x_edges = this.edges.slice();
-        this.edges = x_edges.filter(e => e !== edge);
-        console.log("Edge removed!");
-        console.log("Edges first: ");
-        console.table(x_edges);
-        console.log("Edges now: ");
-        console.table(this.edges);
-        return x_edges != this.edges;
+
+    removeLink(link){
+        let x_links = this.links.slice();
+        this.links = x_links.filter(e => e !== link);
+        return x_links != this.links;
     }
 
     reset(){
         this.nodes = [];
-        this.edges = [];
+        this.links = [];
     }
 
-    setupSampleData(){
-        let n1 = new GNode('Node 1');
-        let n2 = new GNode('Node 2');
-        //n1.rename(this,'1');
-        //n2.rename(this,'2');
-        this.rename(n1, '1');
-        this.rename(n2, '2');
-        this.addNode(n1);
-        this.addNode(n2);
-        let e1 = new GEdge(n1,n2);
-        this.addEdge(e1);
-    }
 //////////////////////////////////END MODIFY DATASET//////////////////////////////
 
 
@@ -127,16 +90,16 @@ class Environment{
         return this.nodes.filter(n => label === n.label);
     }
 
-    findOutgoingEdges(startNode){
-        return this.edges.filter(e => e.source === startNode) || [];
+    findOutgoingLinks(startNode){
+        return this.links.filter(e => e.source === startNode) || [];
     }
 
     findForwardBranchingFactor(startNode){
-        return this.findOutgoingEdges(startNode).length;
+        return this.findOutgoingLinks(startNode).length;
     }
 
-    findEdgesBetweenNodes(node1,node2){
-        return this.edges.filter(e => (e.source === node1 && e.target === node2));
+    findLinksBetweenNodes(node1,node2){
+        return this.links.filter(e => (e.source === node1 && e.target === node2));
     }
 
     contains(node){

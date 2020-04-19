@@ -4,28 +4,35 @@ var controller = null;
 function loadEditor(){
   e = document.getElementById("graph");
   controller = new EnvironmentController(e);
-  setupEvents();
+  setupClientEvents();
 }
 
-function setupEvents(){
+function setupClientEvents(){
   document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
-  document.addEventListener('keydown', (event) => insertEdgeOnKeyPress());
+  document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
-  document.addEventListener('keydown', (event) => deleteEdgeOnKeyPress());
+  document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
+  document.addEventListener('click', (event) => insertNodeOnClick());
 }
 
 function insertNodeOnKeyPress(){
   let key = event.key;
   if(key === '+'){
-    controller.insertNode('p');
+    controller.insertNode('');
   }
 }
 
+function insertNodeOnClick(){
+  let x = event.clientX;
+  let y = event.clientY;
+  controller.insertNodeAt('',null,x,y);
+}
 
-function insertEdgeOnKeyPress(){
+
+function insertLinkOnKeyPress(){
   let key = event.key;
   if(key === '-'){
-    controller.insertEdgeFromUserSelection();
+    controller.insertLinkFromUserSelection();
   } 
 }
 
@@ -33,16 +40,15 @@ function insertEdgeOnKeyPress(){
 function deleteNodeOnKeyPress(){
   let key = event.key;
   if(key === 'Delete'){
-    console.log("Node deletion triggered.");
     controller.deleteNodeFromUserSelection();
   }
   
 }
 
 
-function deleteEdgeOnKeyPress(){
+function deleteLinkOnKeyPress(){
   let key = event.key;
   if(key === 'Backspace'){
-    controller.deleteEdgeFromUserSelection();
+    controller.deleteLinkFromUserSelection();
   }
 }
