@@ -1,37 +1,162 @@
 <!doctype HTML>
 <html>
-  <head>
-    <meta charset="UTF-8">
-    <style> 
-        body { margin: 0; } 
-    </style>
-    <link rel="stylesheet" href="./views/styles/editor.css">
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="//unpkg.com/three"></script>
-    <script src="//unpkg.com/three-spritetext"></script>
-    <script src="//unpkg.com/3d-force-graph"></script>
-    <script src="//unpkg.com/force-graph"></script>
-    <script
-		src="https://code.jquery.com/jquery-3.4.1.min.js"
-		integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
-        crossorigin="anonymous">
+
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="./views/styles/editor.css">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="//unpkg.com/three"></script>
+  <script src="//unpkg.com/three-spritetext"></script>
+  <script src="//unpkg.com/3d-force-graph"></script>
+  <script src="//unpkg.com/force-graph"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
     </script>
-    <script src="./models/environment/environment.js"></script>
-    <script src="./models/environment/gedge.js"></script>
-    <script src="./models/environment/gnode.js"></script>
-    <script src="./models/environment/dataset.js"></script>
-    <script src="./controllers/env_controller.js"></script>
-    <script src="./controllers/env_editor.js"></script>
-    <script src="./views/client_events.js"></script>
-    <script src="./models/environment/namingerror.js"></script>
-    <script>
-    </script>
-    <title>
-      Graph editor 2
-    </title>
-  </head>
-  <body onload="loadEditor()">
-    <!--https://heliosanctus.fandom.com/wiki/Custom_HTML_Infobox-->
-    <div id = "graph" style="border:3px solid black;"></div>
-  </body>
+  <script src="./models/environment/environment.js"></script>
+  <script src="./models/environment/gedge.js"></script>
+  <script src="./models/environment/gnode.js"></script>
+  <script src="./models/environment/dataset.js"></script>
+  <script src="./controllers/env_controller.js"></script>
+  <script src="./controllers/env_editor.js"></script>
+  <script src="./views/client_events.js"></script>
+  <script src="./models/environment/namingerror.js"></script>
+  <script>
+  </script>
+  <title>
+    Graph editor 2
+  </title>
+</head>
+
+<body onload="loadEditor()">
+  <!--https://heliosanctus.fandom.com/wiki/Custom_HTML_Infobox-->
+  <div id="wrapper">
+    <div id="graph"></div>
+    <div id="infobox-container">
+      <table id="infobox"
+        style="float:right; width:430px; margin:0 0 7px 14px; border-collapse:collapse; background:#fff; border:1px solid #999; line-height:1.5; color:#000; font-size:smaller;">
+        <tr>
+          <th colspan="2"
+            style="background:#ddd; border-bottom:1px solid #999; font-size:larger; padding:4px; text-align:center;">
+            type
+            name here</th>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <th colspan="2" style="padding:0;">[[File:Blankicon.png|258px]]</th>
+        </tr>
+        <tr>
+          <td style="padding:4px;"><b>Artist</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr>
+          <th colspan="2"
+            style="background:#ddd; border-bottom:1px solid #999; border-top:1px solid #999; padding:4px; text-align:center;">
+            Background Information</th>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Creator</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Main Attribute</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Elemental Attribute</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Theme Animal</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Theme Color</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Theme Song</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>MBTI Personality</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr>
+          <th colspan="2" style="background:#ddd; border-bottom:1px solid #999; padding:4px; text-align:center;">
+            Character
+            Information</th>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Age</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Gender</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Orientation</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Occupation</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Tribe</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Goal</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Residence</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Relatives</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Allies</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Enemies</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Likes</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Dislikes</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Powers and abilities</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Weapons</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Ships</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+        <tr style="border-bottom:1px solid #999;">
+          <td style="padding:4px;"><b>Quote</b></td>
+          <td style="padding:4px;">type here</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</body>
+
 </html>

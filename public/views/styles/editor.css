@@ -2,8 +2,28 @@ body {
     background-color: powderblue;
 }
 
-#graph{
+#graph {
     border-style: solid;
     border-color: black;
     border-width: 3px 3px 3px 3px;
 }
+
+
+#wrapper { 
+    display: flex; 
+}
+/*
+#infobox {
+    float: right;
+    width: 450px;
+    margin: 0 0 7px 14px;
+    border-collapse: collapse;
+    background: white;
+    border-width:1px; 
+    border-style:solid;
+    border-color: silver;
+    line-height:1.5;
+    color: black;
+    font-size:smaller;
+}
+*/

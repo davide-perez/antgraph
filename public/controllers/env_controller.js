@@ -75,6 +75,16 @@ class EnvironmentController {
             this.renderer.resetSelection();
         }
     }
+
+
+    emitParticleAcrossSelectedLink(){
+        let selectedLink = this.renderer.selectedLink;
+        if (!selectedLink)
+            return;
+        this.editor.emitParticle(selectedLink);      
+    }
+
+
     // refactor this in the dataset class?
     computeLinkCurvature(link) {
         let startNode = link.source;

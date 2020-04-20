@@ -18,6 +18,7 @@ function setupClientEvents(){
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
   document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
+  document.addEventListener('keydown', (event) => emitParticleOnKeyPress());
   document.addEventListener('click', (event) => insertNodeOnClick());
 }
 
@@ -56,5 +57,12 @@ function deleteLinkOnKeyPress(){
   let key = event.key;
   if(key === 'Backspace'){
     controller.deleteLinkFromUserSelection();
+  }
+}
+
+function emitParticleOnKeyPress(){
+  let key = event.key;
+  if(key === 'Control'){
+    controller.emitParticleAcrossSelectedLink();
   }
 }

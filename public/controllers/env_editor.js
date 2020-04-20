@@ -19,12 +19,12 @@ class EnvironmentEditor {
     initGraph(){
         this.graphObj
         .width(1400)
-        .height(700)
+        .height(800)
         .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
-        .backgroundColor("pink")
+        .backgroundColor('white')
         .cooldownTicks(0)
-        .linkColor('red')
-        .linkWidth(link => link === this.selectedLink ? 10 : 15)
+        .linkColor(link => link === this.selectedLink ? 'blue' : 'grey')
+        .linkWidth(link => link === this.selectedLink ? 10 : 5)
         .linkDirectionalParticles(0)
         //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
         .linkDirectionalParticleSpeed(0.001)
