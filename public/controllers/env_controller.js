@@ -81,7 +81,7 @@ class EnvironmentController {
         let selectedLink = this.renderer.selectedLink;
         if (!selectedLink)
             return;
-        this.editor.emitParticle(selectedLink);      
+        this.renderer.emitParticle(selectedLink);      
     }
 
 

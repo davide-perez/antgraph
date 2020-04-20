@@ -29,7 +29,8 @@ class EnvironmentEditor {
         //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
         .linkDirectionalParticleSpeed(0.001)
         .linkDirectionalParticleColor(() => 'red')
-        .linkDirectionalArrowLength(12)
+        .linkDirectionalParticleWidth(10)
+        .linkDirectionalArrowLength(22)
         .linkCurvature('curvature')
     }
 
