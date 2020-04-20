@@ -3,7 +3,7 @@ class EnvironmentEditor {
     constructor(domElem){
 
         this.domElem = domElem;
-        this.NODE_REL_SIZE = 8; // config file vs db setup table
+        this.NODE_REL_SIZE = 15; // config file vs db setup table
         this.selectedNodes = [];
         this.selectedLink = null;
         this.graphObj = ForceGraph();
@@ -18,16 +18,18 @@ class EnvironmentEditor {
     
     initGraph(){
         this.graphObj
-        .width(600)
-        .height(400)
+        .width(1400)
+        .height(700)
         .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
         .backgroundColor("pink")
         .cooldownTicks(0)
         .linkColor('red')
-        .linkWidth(link => link === this.selectedLink ? 5 : 1)
-        .linkDirectionalParticles(4)
+        .linkWidth(link => link === this.selectedLink ? 10 : 15)
+        .linkDirectionalParticles(0)
         //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
-        .linkDirectionalArrowLength(0.5)
+        .linkDirectionalParticleSpeed(0.001)
+        .linkDirectionalParticleColor(() => 'red')
+        .linkDirectionalArrowLength(12)
         .linkCurvature('curvature')
     }
 
@@ -35,6 +37,7 @@ class EnvironmentEditor {
         this.graphObj
         .onNodeRightClick(node => this.handleNodeRightClick(node))
         .onLinkClick(link => this.handleLinkClick(link))
+        .onLinkRightClick(link => this.handleLinkRightClick(link))
     }
 
 
@@ -65,12 +68,19 @@ class EnvironmentEditor {
         this.domElem.style.cursor = node ? '-webkit-grab' : null;
     }
 
-    handleLinkClick(link){
+    handleLinkRightClick(link){
         if(link){
             if(this.selectedLink === link)
                 this.selectedLink = null
             else
                 this.selectedLink = link;
+        }
+    }
+
+
+    emitParticle(link){
+        if(link){
+            this.graphObj.emitParticle(link);
         }
     }
 

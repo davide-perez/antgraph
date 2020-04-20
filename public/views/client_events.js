@@ -5,10 +5,16 @@ function loadEditor(){
   e = document.getElementById("graph");
   controller = new EnvironmentController(e);
   setupClientEvents();
+  setupDefaultGraph();
+}
+
+function setupDefaultGraph(){
+  controller.insertNode('node1', '170496');
+  controller.insertNode('node2', '109855');
 }
 
 function setupClientEvents(){
-  document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
+  //document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
   document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
