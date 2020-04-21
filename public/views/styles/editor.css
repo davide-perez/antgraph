@@ -12,18 +12,39 @@ body {
 #wrapper { 
     display: flex; 
 }
-/*
+
 #infobox {
     float: right;
     width: 450px;
     margin: 0 0 7px 14px;
     border-collapse: collapse;
     background: white;
-    border-width:1px; 
+    border-width:1px 1px 1px 1px; 
     border-style:solid;
     border-color: silver;
     line-height:1.5;
     color: black;
     font-size:smaller;
 }
-*/
+
+.infobox-header > th {
+    background-color: #ddd;
+    border-bottom-width: 1px;
+    border-bottom-color: #999;
+    border-bottom-style: solid;
+    border-top-width: 1px;
+    border-top-color: #999;
+    border-top-style: solid;
+    padding: 4px 4px 4px 4px;
+    text-align: center;
+}
+
+#infobox td {
+    padding: 4px 4px 4px 4px;
+}
+
+#infobox tr {
+    border-bottom: 1px;
+    border-style: solid;
+    border-color: #999;
+}

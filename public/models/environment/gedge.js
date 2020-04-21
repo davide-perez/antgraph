@@ -1,9 +1,10 @@
 class GEdge {
 
-    constructor(source, target){
+    constructor(source, target, length){
 
         this.source = source;
         this.target = target;
+        this.length = length || 0;
 
 
     }
