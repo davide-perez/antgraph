@@ -1,3 +1,4 @@
+// careful with graph vs multigraph
 class EnvironmentController {
 
     constructor(domElem, env) {

@@ -1,3 +1,5 @@
+//Dyamically update particles -> https://github.com/vasturiano/force-graph/issues/116
+// Graph search -> https://github.com/vasturiano/force-graph/issues/16
 class EnvironmentEditor {
 
     constructor(domElem){
@@ -19,7 +21,7 @@ class EnvironmentEditor {
     initGraph(){
         this.graphObj
         .width(1400)
-        .height(800)
+        //.height(800)
         .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
         .backgroundColor('white')
         .cooldownTicks(0)
@@ -59,7 +61,6 @@ class EnvironmentEditor {
 
           const start = link.source;
           const end = link.target;
-          const length = link.length;
 
           // ignore unbound links
           if (typeof start !== 'object' || typeof end !== 'object') return;
@@ -79,7 +80,7 @@ class EnvironmentEditor {
           if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
 
           //const label = `${link.source.id} > ${link.target.id}`;
-          const label = '' + link.length;
+          const label = `${link.length}`;
 
           // estimate fontSize to fit in link length
           ctx.font = '1px Sans-Serif';
