@@ -78,11 +78,11 @@ class EnvironmentController {
     }
 
 
-    emitParticleAcrossSelectedLink(){
+    emitParticleAcrossSelectedLink() {
         let selectedLink = this.renderer.selectedLink;
         if (!selectedLink)
             return;
-        this.renderer.emitParticle(selectedLink);      
+        this.renderer.emitParticle(selectedLink);
     }
 
 
@@ -94,9 +94,10 @@ class EnvironmentController {
         // count edges from n1 to n2 and sum them to edges from n2 to n1
         let noOfLinks = this.env.findLinksBetweenNodes(startNode, endNode).length + this.env.findLinksBetweenNodes(endNode, startNode).length;
         if (noOfLinks !== 0)
-            curveFactor = (noOfLinks % 2 == 0) ? 0.15 : - 0.15;
+            curveFactor = (noOfLinks % 2 == 0) ? 0.15 : -0.15;
         return curveFactor * noOfLinks;
     }
+
 
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE
     // So that property cannot be assigned w/o enforcing some rules, because rename()
@@ -109,7 +110,9 @@ class EnvironmentController {
 
     generateId() {
         if (!Date.now) {
-            Date.now = function () { return new Date().getTime(); }
+            Date.now = function () {
+                return new Date().getTime();
+            }
         }
         return "" + Math.round(Math.random() * Date.now());
     }

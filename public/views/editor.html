@@ -16,7 +16,7 @@
   <script src="//unpkg.com/force-graph"></script>
   <script src="https://code.jquery.com/jquery-3.4.1.min.js"
     integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
-    </script>
+  </script>
   <script src="./models/environment/environment.js"></script>
   <script src="./models/environment/gedge.js"></script>
   <script src="./models/environment/gnode.js"></script>
@@ -24,6 +24,7 @@
   <script src="./controllers/env_controller.js"></script>
   <script src="./controllers/env_editor.js"></script>
   <script src="./views/client_events.js"></script>
+  <script src="./views/infobox.js"></script>
   <script src="./models/environment/namingerror.js"></script>
   <script>
   </script>
@@ -53,34 +54,16 @@
           <th colspan="2">
             Background Information</th>
         </tr>
-        <tr>
-          <td><b>Number of nodes</b></td>
-          <td>type here</td>
-        </tr>
-        <tr>
-          <td><b>Number of edges</b></td>
-          <td>type here</td>
-        </tr>
-        <tr>
-          <td><b>Number of ants</b></td>
-          <td>type here</td>
-        </tr>
-        <tr>
-          <td><b>Running time</b></td>
-          <td>type here</td>
-        </tr>
-        <tr>
-          <td><b>Theme Color</b></td>
-          <td>type here</td>
-        </tr>
-        <tr>
-          <td><b>Theme Song</b></td>
-          <td>type here</td>
-        </tr>
-        <tr>
-          <td><b>MBTI Personality</b></td>
-          <td>type here</td>
-        </tr>
+        <tbody id="graph-info">
+          <tr>
+            <td><b>Number of ants</b></td>
+            <td>type here</td>
+          </tr>
+          <tr>
+            <td><b>Running time</b></td>
+            <td>type here</td>
+          </tr>
+        </tbody>
         <tr class="infobox-header">
           <th colspan="2">
             Item
@@ -214,7 +197,8 @@
         <td>
           info cell 1
         </td>
-      </tr>      <tr>
+      </tr>
+      <tr>
         <td>
           info cell 1
         </td>
