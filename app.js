@@ -7,7 +7,7 @@ var connection = mysql.createConnection({
   password : 'p4$$w0rd',
   database: 'db_antgraph'
 });
-
+/*
 connection.connect(function(err) {
   if (err) throw err;
   connection.query("SELECT server_name, port, homepage_path FROM server_setup", function (err, result, fields) {
@@ -15,7 +15,7 @@ connection.connect(function(err) {
     console.log(result);
   });
 });
-
+*/
 var port = 3000;
 
 app.use(express.static(__dirname + '/public/'));
