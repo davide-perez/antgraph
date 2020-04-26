@@ -1,4 +1,4 @@
-function updateGraphInfo(env) {
+function displayGraphInfo(env) {
   $("#graph-info").html("");
   if (!env) return;
   let noOfNodes = env.nodes.length || 0;
@@ -11,19 +11,31 @@ function updateGraphInfo(env) {
   );
 }
 
-function showNodeInfo(node) {
-  $("#item-info").html("");
+function displayNodeInfo(node) {
+  resetItemInfo();
   if (!node) return;
   $("#item-info").append(
-    "<tr><td><b>Node name</b></td><td>" + noOfNodes + "</td></tr>"
+    "<tr><td><b>Node name</b></td><td>" + node.label + "</td></tr>"
   );
   $("#item-info").append(
-    "<tr><td><b>Node id</b></td><td>" + noOfEdges + "</td></tr>"
+    "<tr><td><b>Node id</b></td><td>" + node.id + "</td></tr>"
   );
   $("#item-info").append(
-    "<tr><td><b>Node class</b></td><td>" + noOfNodes + "</td></tr>"
+    "<tr><td><b>Node class</b></td><td>" + node.classification + "</td></tr>"
+  );
+}
+
+function displayEdgeInfo(edge) {
+  resetItemInfo();
+  if (!edge) return;
+  $("#item-info").append(
+    "<tr><td><b>Edge source</b></td><td>" + edge.source.id + "</td></tr>"
   );
   $("#item-info").append(
-    "<tr><td><b>Node fbf</b></td><td>" + noOfEdges + "</td></tr>"
+    "<tr><td><b>Edge target</b></td><td>" + edge.target.id + "</td></tr>"
   );
+}
+
+function resetItemInfo() {
+  $("#item-info").html("");
 }
