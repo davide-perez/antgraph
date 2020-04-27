@@ -139,8 +139,8 @@ class EnvironmentEditor {
       //change this stuff. Seriously, change it.
       //Maybe a check to see whether tbody item information is already populated?
       displayNodeInfo(this.selectedNodes[0]);
-      if (this.selectedNodes.length === 1) {
-        displayNodeInfo(this.selectedNodes[1], 1);
+      if (this.selectedNodes.length === 2) {
+        displayNode2Info(this.selectedNodes[1]);
       }
     }
     this.domElem.style.cursor = node ? "-webkit-grab" : null;

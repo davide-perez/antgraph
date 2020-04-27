@@ -11,32 +11,48 @@ function displayGraphInfo(env) {
   );
 }
 
-function displayNodeInfo(node, index) {
-  resetItemInfo();
-  resetItemInfo(1);
+function displayNodeInfo(node) {
+  resetItemInfo("#item-info");
   if (!node)
     return;
-  let selector = "#item-info";
-  if (index === 1)
-    selector = selector + "-2";
 
-  $(selector).append(
+  $("#item-info").append(
     "<tr><td><b>Name</b></td><td>" + node.label + "</td></tr>"
   );
-  $(selector).append(
+  $("#item-info").append(
     "<tr><td><b>Id</b></td><td>" + node.id + "</td></tr>"
   );
-  $(selector).append(
+  $("#item-info").append(
     "<tr><td><b>Type</b></td><td>" + node.classification + "</td></tr>"
   );
-  $(selector).append(
+  $("#item-info").append(
+    "<tr><td><b>Fbf</b></td><td>" + node.outgoingLinks.length + "</td></tr>"
+  );
+}
+
+function displayNode2Info(node) {
+  resetItemInfo("#item-info-2");
+  if (!node)
+    return;
+
+  $("#item-info-2").append(
+    "<tr><td><b>Name</b></td><td>" + node.label + "</td></tr>"
+  );
+  $("#item-info-2").append(
+    "<tr><td><b>Id</b></td><td>" + node.id + "</td></tr>"
+  );
+  $("#item-info-2").append(
+    "<tr><td><b>Type</b></td><td>" + node.classification + "</td></tr>"
+  );
+  $("#item-info-2").append(
     "<tr><td><b>Fbf</b></td><td>" + node.outgoingLinks.length + "</td></tr>"
   );
 }
 
 function displayEdgeInfo(edge) {
-  resetItemInfo();
-  if (!edge) return;
+  resetItemInfo("#item-info");
+  if (!edge)
+    return;
   $("#item-info").append(
     "<tr><td><b>Source node</b></td><td>" + edge.source.id + "</td></tr>"
   );
@@ -51,9 +67,12 @@ function displayEdgeInfo(edge) {
   );
 }
 
-function resetItemInfo(index) {
-  let selector = "#item-info";
-  if (index === 1)
-    selector = selector + "-2";
-  $(selector).html("");
+function resetItemInfo(which) {
+  if (!which) {
+    $("#item-info").html("");
+    $("#item-info-2").html("");
+  }
+  else {
+    $(which).html("");
+  }
 }
