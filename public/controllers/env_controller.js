@@ -22,7 +22,7 @@ class EnvironmentController {
     // solution to avoid undefined: insert default graph with some sample data
     insertNodeAt(label, id, x, y) {
         label = label || '';
-        id = id || this.generateId();
+        id = id || this.env.generateId();
         let node = new GNode(label);
         if (!this.env.empty() && (x && y)) {
             let pos = this.renderer.graphObj.screen2GraphCoords(x, y);

@@ -1,13 +1,8 @@
 class GEdge {
-
-    constructor(source, target, length){
-
-        this.source = source;
-        this.target = target;
-        this.length = length || 0;
-
-
-    }
-
-
+  constructor(source, target, cost) {
+    this.source = source;
+    this.target = target;
+    this.cost = cost || 1;
+    this.pheromone = 0;
+  }
 }

@@ -1,11 +1,11 @@
-var express = require('express');
+var express = require("express");
 var app = express();
-var mysql = require('mysql');
+var mysql = require("mysql");
 var connection = mysql.createConnection({
-  host: 'localhost',
-  user: 'dperezcuevas',
-  password: 'p4$$w0rd',
-  database: 'db_antgraph'
+  host: "localhost",
+  user: "dperezcuevas",
+  password: "p4$$w0rd",
+  database: "db_antgraph",
 });
 /*
 connection.connect(function(err) {
@@ -18,14 +18,14 @@ connection.connect(function(err) {
 */
 var port = 3000;
 
-app.use(express.static(__dirname + '/public/'));
+app.use(express.static(__dirname + "/public/"));
 
-app.get('/', function (req, res) {
+app.get("/", function (req, res) {
   console.log(__dirname);
   res.sendFile(__dirname + "/public/views/editor.html");
-  console.log("File " + __dirname + "" + "/public/views/editor.html sent!")
+  console.log("File " + __dirname + "" + "/public/views/editor.html sent!");
 });
 
 app.listen(port, function () {
-  console.log('Example app listening on port ' + port);
+  console.log("Example app listening on port " + port);
 });

@@ -91,7 +91,7 @@ class EnvironmentEditor {
         if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
 
         //const label = `${link.source.id} > ${link.target.id}`;
-        const label = `${link.length}`;
+        const label = `${link.cost}`;
 
         // estimate fontSize to fit in link length
         ctx.font = "1px Sans-Serif";
@@ -135,6 +135,12 @@ class EnvironmentEditor {
       this.selectedNodes.push(node);
       if (this.selectedNodes.length > 2) {
         this.selectedNodes.shift();
+      }
+      //change this stuff. Seriously, change it.
+      //Maybe a check to see whether tbody item information is already populated?
+      displayNodeInfo(this.selectedNodes[0]);
+      if (this.selectedNodes.length === 1) {
+        displayNodeInfo(this.selectedNodes[1], 1);
       }
     }
     this.domElem.style.cursor = node ? "-webkit-grab" : null;

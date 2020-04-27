@@ -11,17 +11,26 @@ function displayGraphInfo(env) {
   );
 }
 
-function displayNodeInfo(node) {
+function displayNodeInfo(node, index) {
   resetItemInfo();
-  if (!node) return;
-  $("#item-info").append(
-    "<tr><td><b>Node name</b></td><td>" + node.label + "</td></tr>"
+  resetItemInfo(1);
+  if (!node)
+    return;
+  let selector = "#item-info";
+  if (index === 1)
+    selector = selector + "-2";
+
+  $(selector).append(
+    "<tr><td><b>Name</b></td><td>" + node.label + "</td></tr>"
   );
-  $("#item-info").append(
-    "<tr><td><b>Node id</b></td><td>" + node.id + "</td></tr>"
+  $(selector).append(
+    "<tr><td><b>Id</b></td><td>" + node.id + "</td></tr>"
   );
-  $("#item-info").append(
-    "<tr><td><b>Node class</b></td><td>" + node.classification + "</td></tr>"
+  $(selector).append(
+    "<tr><td><b>Type</b></td><td>" + node.classification + "</td></tr>"
+  );
+  $(selector).append(
+    "<tr><td><b>Fbf</b></td><td>" + node.outgoingLinks.length + "</td></tr>"
   );
 }
 
@@ -29,13 +38,22 @@ function displayEdgeInfo(edge) {
   resetItemInfo();
   if (!edge) return;
   $("#item-info").append(
-    "<tr><td><b>Edge source</b></td><td>" + edge.source.id + "</td></tr>"
+    "<tr><td><b>Source node</b></td><td>" + edge.source.id + "</td></tr>"
   );
   $("#item-info").append(
-    "<tr><td><b>Edge target</b></td><td>" + edge.target.id + "</td></tr>"
+    "<tr><td><b>Target node</b></td><td>" + edge.target.id + "</td></tr>"
+  );
+  $("#item-info").append(
+    "<tr><td><b>Cost</b></td><td>" + edge.cost + "</td></tr>"
+  );
+  $("#item-info").append(
+    "<tr><td><b>Pheromone</b></td><td>" + edge.pheromone + "</td></tr>"
   );
 }
 
-function resetItemInfo() {
-  $("#item-info").html("");
+function resetItemInfo(index) {
+  let selector = "#item-info";
+  if (index === 1)
+    selector = selector + "-2";
+  $(selector).html("");
 }
