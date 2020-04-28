@@ -1,6 +1,6 @@
 //Dyamically update particles -> https://github.com/vasturiano/force-graph/issues/116
 // Graph search -> https://github.com/vasturiano/force-graph/issues/16
-class EnvironmentEditor {
+class GraphEditor {
   constructor(domElem) {
     this.domElem = domElem;
     this.NODE_REL_SIZE = 15; // config file vs db setup table
@@ -162,10 +162,10 @@ class EnvironmentEditor {
     }
   }
 
-  update(env) {
-    this.graphObj(this.domElem).graphData(env);
+  update(graph) {
+    this.graphObj(this.domElem).graphData(graph);
 
-    displayGraphInfo(env); // move this in controller and call it from client_events.js
+    displayGraphInfo(graph); // move this in controller and call it from client_events.js
   }
 
   resetSelection() {

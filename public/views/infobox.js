@@ -1,8 +1,8 @@
-function displayGraphInfo(env) {
+function displayGraphInfo(graph) {
   $("#graph-info").html("");
-  if (!env) return;
-  let noOfNodes = env.nodes.length || 0;
-  let noOfEdges = env.links.length || 0;
+  if (!graph) return;
+  let noOfNodes = graph.nodes.length || 0;
+  let noOfEdges = graph.links.length || 0;
   $("#graph-info").append(
     "<tr><td><b>No. of nodes</b></td><td>" + noOfNodes + "</td></tr>"
   );

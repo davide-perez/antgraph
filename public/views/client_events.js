@@ -1,19 +1,19 @@
 var e = null;
 var controller = null;
 
-function loadEditor(){
+function loadEditor() {
   e = document.getElementById("graph");
-  controller = new EnvironmentController(e);
+  controller = new GraphController(e);
   setupClientEvents();
   setupDefaultGraph();
 }
 
-function setupDefaultGraph(){
+function setupDefaultGraph() {
   controller.insertNode('node1', '170496');
   controller.insertNode('node2', '109855');
 }
 
-function setupClientEvents(){
+function setupClientEvents() {
   //document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
@@ -22,47 +22,47 @@ function setupClientEvents(){
   document.addEventListener('click', (event) => insertNodeOnClick());
 }
 
-function insertNodeOnKeyPress(){
+function insertNodeOnKeyPress() {
   let key = event.key;
-  if(key === '+'){
+  if (key === '+') {
     controller.insertNode('');
   }
 }
 
-function insertNodeOnClick(){
+function insertNodeOnClick() {
   let x = event.clientX;
   let y = event.clientY;
-  controller.insertNodeAt('',null,x,y);
+  controller.insertNodeAt('', null, x, y);
 }
 
 
-function insertLinkOnKeyPress(){
+function insertLinkOnKeyPress() {
   let key = event.key;
-  if(key === '-'){
+  if (key === '-') {
     controller.insertLinkFromUserSelection();
-  } 
+  }
 }
 
 
-function deleteNodeOnKeyPress(){
+function deleteNodeOnKeyPress() {
   let key = event.key;
-  if(key === 'Delete'){
+  if (key === 'Delete') {
     controller.deleteNodeFromUserSelection();
   }
-  
+
 }
 
 
-function deleteLinkOnKeyPress(){
+function deleteLinkOnKeyPress() {
   let key = event.key;
-  if(key === 'Backspace'){
+  if (key === 'Backspace') {
     controller.deleteLinkFromUserSelection();
   }
 }
 
-function emitParticleOnKeyPress(){
+function emitParticleOnKeyPress() {
   let key = event.key;
-  if(key === 'Control'){
+  if (key === 'Control') {
     controller.emitParticleAcrossSelectedLink();
   }
 }

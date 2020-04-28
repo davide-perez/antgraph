@@ -1,9 +1,9 @@
 // careful with graph vs multigraph
-class EnvironmentController {
+class GraphController {
 
-    constructor(domElem, env) {
-        this.env = env || new Environment();
-        this.renderer = new EnvironmentEditor(domElem);
+    constructor(domElem, graph) {
+        this.graph = graph || new Graph();
+        this.renderer = new GraphEditor(domElem);
     }
 
 
@@ -11,29 +11,29 @@ class EnvironmentController {
         label = label || '';
         id = id || this.generateId();
         let node = new GNode(label)
-        if (!this.env.rename(node, id)) {
+        if (!this.graph.rename(node, id)) {
             throw new NamingError(id);
         };
-        if (this.env.addNode(node)) {
-            this.renderer.update(this.env);
+        if (this.graph.addNode(node)) {
+            this.renderer.update(this.graph);
         }
     }
 
     // solution to avoid undefined: insert default graph with some sample data
     insertNodeAt(label, id, x, y) {
         label = label || '';
-        id = id || this.env.generateId();
+        id = id || this.graph.generateId();
         let node = new GNode(label);
-        if (!this.env.empty() && (x && y)) {
+        if (!this.graph.empty() && (x && y)) {
             let pos = this.renderer.graphObj.screen2GraphCoords(x, y);
             node.x = pos.x;
             node.y = pos.y;
         }
-        if (!this.env.rename(node, id)) {
+        if (!this.graph.rename(node, id)) {
             throw new NamingError(id);
         };
-        if (this.env.addNode(node)) {
-            this.renderer.update(this.env);
+        if (this.graph.addNode(node)) {
+            this.renderer.update(this.graph);
         }
     }
 
@@ -41,8 +41,8 @@ class EnvironmentController {
     insertLink(startNode, endNode) {
         let link = new GEdge(startNode, endNode);
         link.curvature = this.computeLinkCurvature(link);
-        if (this.env.addLink(link)) {
-            this.renderer.update(this.env);
+        if (this.graph.addLink(link)) {
+            this.renderer.update(this.graph);
         }
     }
 
@@ -60,8 +60,8 @@ class EnvironmentController {
         let selectedNodes = this.renderer.selectedNodes;
         if (selectedNodes.length !== 1)
             return;
-        if (this.env.removeNode(selectedNodes[0])) {
-            this.renderer.update(this.env);
+        if (this.graph.removeNode(selectedNodes[0])) {
+            this.renderer.update(this.graph);
             this.renderer.resetSelection();
         }
     }
@@ -71,8 +71,8 @@ class EnvironmentController {
         let selectedLink = this.renderer.selectedLink;
         if (!selectedLink)
             return;
-        if (this.env.removeLink(selectedLink)) {
-            this.renderer.update(this.env);
+        if (this.graph.removeLink(selectedLink)) {
+            this.renderer.update(this.graph);
             this.renderer.resetSelection();
         }
     }
@@ -92,7 +92,7 @@ class EnvironmentController {
         let endNode = link.target;
         let curveFactor = 0.0;
         // count edges from n1 to n2 and sum them to edges from n2 to n1
-        let noOfLinks = this.env.findLinksBetweenNodes(startNode, endNode).length + this.env.findLinksBetweenNodes(endNode, startNode).length;
+        let noOfLinks = this.graph.findLinksBetweenNodes(startNode, endNode).length + this.graph.findLinksBetweenNodes(endNode, startNode).length;
         if (noOfLinks !== 0)
             curveFactor = (noOfLinks % 2 == 0) ? 0.15 : -0.15;
         return curveFactor * noOfLinks;
@@ -117,4 +117,3 @@ class EnvironmentController {
         return "" + Math.round(Math.random() * Date.now());
     }
 }
-//put here all the logic to construct nodes from scratch and handle errors. In the environment, let methods return true/false only for success/failure.
