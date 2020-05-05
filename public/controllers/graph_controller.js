@@ -98,6 +98,12 @@ class GraphController {
         return curveFactor * noOfLinks;
     }
 
+    // Passes the graph structure only, "striping out" unneccessary data such as functions.
+    // Needed because web workers only accept object messages in such format.
+    environment() {
+        return { nodes: this.graph.nodes, links: this.graph.links };
+    }
+
 
     // USE OBJECT DEFINE PROPERTY TO SET RULES FOR THIS ******** ID PLEASE
     // So that property cannot be assigned w/o enforcing some rules, because rename()

@@ -20,6 +20,16 @@ function setupClientEvents() {
   document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
   document.addEventListener('keydown', (event) => emitParticleOnKeyPress());
   document.addEventListener('click', (event) => insertNodeOnClick());
+
+  document.addEventListener('keypress', (event) => testAntColony());
+}
+
+
+function testAntColony() {
+  if (event.key !== 't')
+    return;
+  let colony = new StandardColony(controller);
+
 }
 
 function insertNodeOnKeyPress() {
