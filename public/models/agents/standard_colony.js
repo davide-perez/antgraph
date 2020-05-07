@@ -13,7 +13,7 @@ class StandardColony {
 
 
     releaseAnt() {
-        let antWorker = new Worker('./controllers/standard_ant_worker.js');
+        let antWorker = new Worker('./models/agents/standard_ant_worker.js');
         antWorker.onmessage = (e) => {
             console.log('Message received from an ant');
             console.table(e.data);
