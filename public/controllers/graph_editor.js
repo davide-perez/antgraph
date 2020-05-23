@@ -91,7 +91,7 @@ class GraphEditor {
         if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
 
         //const label = `${link.source.id} > ${link.target.id}`;
-        const label = `${link.cost}`;
+        const label = `${link.pheromone}`;
 
         // estimate fontSize to fit in link length
         ctx.font = "1px Sans-Serif";

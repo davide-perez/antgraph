@@ -1,15 +1,17 @@
 var e = null;
 var controller = null;
+let colony = null;
 
 function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
   setupClientEvents();
   setupDefaultGraph();
+  colony = new StandardColony(controller);
 }
 
 function setupDefaultGraph() {
-  controller.insertNode('node1', '170496');
+  controller.insertNode('node1', '170496', 'start');
   controller.insertNode('node2', '109855');
 }
 
@@ -26,10 +28,8 @@ function setupClientEvents() {
 
 
 function testAntColony() {
-  if (event.key !== 't')
-    return;
-  let colony = new StandardColony(controller);
-
+  if (event.key === 't')
+    colony.startAll();
 }
 
 function insertNodeOnKeyPress() {
@@ -42,7 +42,7 @@ function insertNodeOnKeyPress() {
 function insertNodeOnClick() {
   let x = event.clientX;
   let y = event.clientY;
-  controller.insertNodeAt('', null, x, y);
+  controller.insertNodeAt('', null, 'normal', x, y);
 }
 
 

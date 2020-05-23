@@ -2,46 +2,44 @@ class StandardColony {
 
     constructor(env) {
         this.environment = env.environment();
+        this.position = env.findNodesByClassification('start')[0];
         this.ants = [];
         this.pheromone = 0.0;
         this.evaporation = 0.0;
-
-        this.releaseAnt();
-        this.releaseAnt();
-        this.releaseAnt();
+        this.NO_OF_ANTS = 100;
+        this.STEPS_PER_TICK = 1;
+        this.TICK_INTERVAL = 300;
+        this.NO_OF_ITERATIONS = 1000;
+        this.TIMEOUT = 50;
     }
 
+    iterate() {
+        let i = 0, that = this;
+        doWork(i);
 
-    releaseAnt() {
-        let antWorker = new Worker('./models/agents/standard_ant_worker.js');
-        this.setupMessages(antWorker);
-        this.ants.push(antWorker);
-        antWorker.postMessage({ cmd: 'start', args: [] });
-    }
-
-
-    terminateAnt(ant) {
-        ant.terminate();
-    }
-
-
-    setupMessages(ant) {
-        ant.onmessage = (e) => {
-            var cmd = e.data.cmd || 'unknown';
-            var args = e.data.args || [];
-            console.log('Command ' + cmd + ' received from ant with ' + args.length + ' args');
-            console.table(args);
-            switch (cmd) {
-                case 'outgoing_links':
-                    // return adjacent edges!
-                    let node = args[0];
-                    // may need promises here...
-                    let outgoingLinks = this.environment.findOutgoingLinks(node);
-                    ant.postMessage({ cmd: 'outgoing_links', args: [outgoingLinks] })
-                    break;
-
-            }
+        function doWork(i) {
+            setTimeout(function () {
+                that.releaseAnt();
+                that.updatePheromones(); // update graph references too
+                i++;
+                that.daemonActions(i);
+                if (i < that.NO_OF_ITERATIONS) {
+                    doWork(i);
+                }
+            }, TIMEOUT);
         }
     }
+
+    releaseAnt() {
+        var ant = {} // create ant locally so that you may access environment and avoid circular references.
+        ant.startPosition = this;
+        this.ants.push(ant);
+        //do work for every ant
+    }
+
+
+
+
+
 
 }

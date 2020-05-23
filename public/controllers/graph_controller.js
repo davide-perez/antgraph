@@ -7,10 +7,12 @@ class GraphController {
     }
 
 
-    insertNode(label, id) {
+    insertNode(label, id, classification) {
         label = label || '';
         id = id || this.generateId();
-        let node = new GNode(label)
+        classification = classification || 'normal';
+        let node = new GNode(label);
+        node.classification = classification;
         if (!this.graph.rename(node, id)) {
             throw new NamingError(id);
         };
@@ -20,10 +22,11 @@ class GraphController {
     }
 
     // solution to avoid undefined: insert default graph with some sample data
-    insertNodeAt(label, id, x, y) {
+    insertNodeAt(label, id, classification, x, y) {
         label = label || '';
         id = id || this.graph.generateId();
         let node = new GNode(label);
+        node.classification = classification || 'normal';
         if (!this.graph.empty() && (x && y)) {
             let pos = this.renderer.graphObj.screen2GraphCoords(x, y);
             node.x = pos.x;

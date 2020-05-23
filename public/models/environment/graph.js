@@ -118,6 +118,11 @@ class Graph {
         return this.nodes.lenght === 0;
     }
 
+
+    findNodesByClassification(classification) {
+        return this.links.filter(e => (e.classification === classification));
+    }
+
     //////////////////////////////////END QUERY DATASET///////////////////////////////
 
 
