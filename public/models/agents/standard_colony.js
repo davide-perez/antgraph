@@ -4,8 +4,8 @@ class StandardColony {
         this.environment = env.environment();
         this.position = env.findNodesByClassification('start')[0];
         this.ants = [];
-        this.pheromone = 0.0;
         this.evaporation = 0.0;
+        this.PHEROMONE = 1;
         this.NO_OF_ANTS = 100;
         this.STEPS_PER_TICK = 1;
         this.TICK_INTERVAL = 300;
@@ -37,6 +37,10 @@ class StandardColony {
         //do work for every ant
     }
 
+
+    updatePheromones(links) {
+        links.foreach();
+    }
 
 
 

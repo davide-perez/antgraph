@@ -2,38 +2,51 @@ class StandardAnt {
 
   contructor(colony) {
     this.colony = colony;
-    this.currentPosition = position;
+    this.currentPosition = colony.position;
     this.visited = [];
     this.active = false;
-
-    this.colony = colony;
+    this.STEPS_PER_TICK = colony.STEPS_PER_TICK || 1;
+    this.TICK_INTERVAL = colony.TICK_INTERVAL || 300;
   }
 
-  init(stepsPerTick, tickInterval) {
-    this.STEPS_PER_TICK = stepsPerTick || 1;
-    this.TICK_INTERVAL = tickInterval || 300;
-    this.start();
+  start() {
+    this.active = true;
+    this.move();
   }
 
   move() {
-    this.step([], this.STEPS_PER_TICK);
-    return [this.currentPosition];
+    let path = [];
+    this.step(this.currentPosition, path, this.STEPS_PER_TICK);
+    //this.releasePheromone(path);
+    this.colony.updatePheromones(path);
   }
 
-  step(path, counter) {
-    if (counter = 0)
+  // remove CurrPos, pass adjacencynodes at the firsr call?
+  step(currPos, path, counter) {
+    if (counter = 0 || !currPos) {
+      this.currentPosition = currPos;
       return path;
+    }
     let adjacentNodes = colony.env.findOutgoingLinks(pos);
     let chosen = chooseNext(adjacentNodes);
-    this.currentPosition = chosen.target;
-    let application = { step: chosen, pheromone: 0.1 };
-    this.step(path.push(application), counter - 1)
+    let newPos = chosen.target;
+    path.push(chosen);
+    this.step(newPos, path.push(chosen), counter - 1)
   }
 
   chooseNext(adjacentNodes) {
     let pheromoneMap = adjacentNodes.map(e => e.pheromone || 0);
 
 
+  }
+
+  // divide pheromone qty (1) per noOfArcs
+  releasePheromone(path) {
+    if (!path.length)
+      return;
+    let qtyPerLink = path.length;
+    let pheromoneReleases = path.map(e => { link: e; pheromone: qtyPerLink });
+    // crrate application map. Colony object will apply new pheromones
   }
 
   isOnGoalNode() {

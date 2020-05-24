@@ -61,22 +61,21 @@ class Graph {
 
     addLink(link) {
         let nodes_exists = this.findNodeById(link.source.id) && this.findNodeById(link.target.id);
-        if (!nodes_exists)
+        let link_already_exists = this.findLinkBetweenNodes(link.source, link.target);
+        if (!nodes_exists || link_already_exists)
             return false;
-        this.links.push(link);
-
-        link.source.outgoingLinks = this.findOutgoingLinks(link.source);
+        var link2 = new GEdge(link.target, link.source);
+        this.links.push(link, link2); // to get bidirectionality
 
         return true;
     }
 
     removeLink(link) {
         let x_links = this.links.slice();
-        this.links = x_links.filter(e => e !== link);
+        var link2 = this.findLinkBetweenNodes(link.target, link.source);
+        this.links = x_links.filter(e => (e !== link) && (e !== link2));
 
-        link.source.outgoingLinks = this.findOutgoingLinks(link.source);
-
-        return x_links != this.links;
+        return x_links.length != this.links.length;
     }
 
     reset() {
@@ -106,8 +105,8 @@ class Graph {
         return this.findOutgoingLinks(startNode).length;
     }
 
-    findLinksBetweenNodes(node1, node2) {
-        return this.links.filter(e => (e.source === node1 && e.target === node2));
+    findLinkBetweenNodes(node1, node2) {
+        return this.links.find(e => (e.source === node1 && e.target === node2));
     }
 
     contains(node) {

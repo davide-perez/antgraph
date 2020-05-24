@@ -43,7 +43,7 @@ class GraphController {
 
     insertLink(startNode, endNode) {
         let link = new GEdge(startNode, endNode);
-        link.curvature = this.computeLinkCurvature(link);
+        //link.curvature = this.computeLinkCurvature(link);
         if (this.graph.addLink(link)) {
             this.renderer.update(this.graph);
         }

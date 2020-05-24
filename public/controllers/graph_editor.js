@@ -27,10 +27,7 @@ class GraphEditor {
       //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
       .linkDirectionalParticleSpeed(0.001)
       .linkDirectionalParticleColor(() => "red")
-      .linkDirectionalParticleWidth(10)
-      .linkDirectionalArrowLength(22)
-      .linkDirectionalArrowRelPos(1)
-      .linkCurvature("curvature");
+      .linkDirectionalParticleWidth(10);
   }
 
   setupEvents() {
