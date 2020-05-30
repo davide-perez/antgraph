@@ -89,16 +89,25 @@ class GraphController {
     }
 
 
-    // refactor this in the dataset class?
-    computeLinkCurvature(link) {
-        let startNode = link.source;
-        let endNode = link.target;
-        let curveFactor = 0.0;
-        // count edges from n1 to n2 and sum them to edges from n2 to n1
-        let noOfLinks = this.graph.findLinksBetweenNodes(startNode, endNode).length + this.graph.findLinksBetweenNodes(endNode, startNode).length;
-        if (noOfLinks !== 0)
-            curveFactor = (noOfLinks % 2 == 0) ? 0.15 : -0.15;
-        return curveFactor * noOfLinks;
+    computeAngleBetweenLinks(link1, link2) {
+        if (!this.graph.areAdjacentLinks(link1, link2))
+            return;
+        let p1 = { x: link1.source.x, y: link1.source.y };
+        let p2 = { x: link1.target.x, y: link1.target.y };
+        let q1 = { x: link2.source.x, y: link2.source.y };
+        let q2 = { x: link2.target.x, y: link2.target.y };
+
+        var r = function (x) {
+            let m = (p2.y - p1.y / p2.x - p1.x);
+            let q = p1.y - m * p1.x;
+            return m * x + q;
+        };
+
+        var s = function (x) {
+            let m = (q2.y - q1.y / q2.x - q1.x);
+            let q = q1.y - m * q1.x;
+            return m * x + q;
+        };
     }
 
     // Passes the graph structure only, "striping out" unneccessary data such as functions.

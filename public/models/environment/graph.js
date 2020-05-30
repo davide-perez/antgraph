@@ -117,9 +117,12 @@ class Graph {
         return this.nodes.lenght === 0;
     }
 
-
     findNodesByClassification(classification) {
         return this.links.filter(e => (e.classification === classification));
+    }
+
+    areAdjacentLinks(link1, link2) {
+        return link1.target === link2.source || link1.source === link2.target;
     }
 
     //////////////////////////////////END QUERY DATASET///////////////////////////////

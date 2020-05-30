@@ -40,7 +40,7 @@ class StandardAnt {
 
   }
 
-  // divide pheromone qty (1) per noOfArcs
+  // ?? ask prof how to handle pheromone 
   releasePheromone(path) {
     if (!path.length)
       return;
