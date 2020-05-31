@@ -88,4 +88,7 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 
+# IIS
+iisexpress.json
+
 # End of https://www.gitignore.io/api/node
