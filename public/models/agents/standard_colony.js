@@ -10,7 +10,8 @@ class StandardColony {
         this.STEPS_PER_TICK = 1;
         this.TICK_INTERVAL = 300;
         this.NO_OF_ITERATIONS = 1000;
-        this.TIMEOUT = 50;
+        this.TIMEOUT = 300;
+        this.SIZE_OF_SUBSET = 10;
     }
 
     iterate() {
@@ -19,8 +20,9 @@ class StandardColony {
 
         function doWork(i) {
             setTimeout(function () {
-                that.releaseAnt();
-                that.updatePheromones(); // update graph references too
+                let ants = that.selectRandomAntSubset();
+                that.moveGroup(ants);
+                that.updatePheromones(); // apply all udpdates here
                 i++;
                 that.daemonActions(i);
                 if (i < that.NO_OF_ITERATIONS) {
@@ -30,8 +32,31 @@ class StandardColony {
         }
     }
 
+    // partial Fisher-Yates shuffle
+    selectAntSubset(){
+        var selected = [];
+        var l = ants.length;
+        var taken = [];
+        var n = this.SIZE_OF_SUBSET < l && this.SIZE_OF_SUBSET > 0 ? this.SIZE_OF_SUBSET : l;
+        while(n--){
+            var k = Math.floor(Math.random()*l);
+            selected[n] = ants[k in taken ? taken[k] : k];
+            taken[k] = --l in taken ? taken[l] : l;
+        }
+        return selected;
+    }
+
+
+    moveGroup(ants){
+        
+    }
+
+    applyUpdates(ants){
+        
+    }
+
     releaseAnt() {
-        var ant = {} // create ant locally so that you may access environment and avoid circular references.
+        var ant = n // create ant locally so that you may access environment and avoid circular references.
         ant.startPosition = this;
         this.ants.push(ant);
         //do work for every ant
