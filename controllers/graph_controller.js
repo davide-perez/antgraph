@@ -113,7 +113,7 @@ class GraphController {
     // Passes the graph structure only, "striping out" unneccessary data such as functions.
     // Needed because web workers only accept object messages in such format.
     environment() {
-        return { nodes: this.graph.nodes, links: this.graph.links };
+        return this.graph;
     }
 
 

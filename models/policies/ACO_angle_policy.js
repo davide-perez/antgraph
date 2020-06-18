@@ -1,14 +1,15 @@
 class ACOAnglePolicy {
 
-    constructor(name){
-        this.name = name;
+    constructor(){
+        this.name = 'ACO with angles';
     }
 
     // information needed to select the next nodes:
     // the adjacent links and a (minimal) memory. The visitedPath can consist of a single
     // edge too, if we want to keep the ant memory at the minimum.
-    chooseNextLink(adjacentLinks, tabooList){
-        return null;
+    chooseNextLink(ant, adjacentLinks){
+        const random = adjacentLinks[Math.floor(Math.random() * adjacentLinks.length)];
+        return random;
     }
 
     releasePheromone(link, totalPheromone){

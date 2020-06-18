@@ -7,7 +7,6 @@ function loadEditor() {
   controller = new GraphController(e);
   setupClientEvents();
   setupDefaultGraph();
-  colony = new StandardColony(controller);
 }
 
 function setupDefaultGraph() {
@@ -28,8 +27,14 @@ function setupClientEvents() {
 
 
 function testAntColony() {
-  if (event.key === 't')
-    colony.startAll();
+  if (event.key !== 't')
+    return;
+  if (confirm('Release ants and start algorithm?')){
+    if (!colony){
+      colony = new AntColony(controller);
+      colony.run();
+    }
+  }
 }
 
 function insertNodeOnKeyPress() {
