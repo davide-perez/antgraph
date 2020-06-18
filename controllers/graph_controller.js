@@ -15,7 +15,7 @@ class GraphController {
         let node = new GNode(label);
         node.classification = classification;
         if (!this.graph.rename(node, id)) {
-            throw new NamingError(id);
+            throw new Error('Node ' + id + 'already exists in this environment.');
         };
         this.graph.addNode(node);
     }
@@ -32,7 +32,7 @@ class GraphController {
             node.y = pos.y;
         }
         if (!this.graph.rename(node, id)) {
-            throw new NamingError(id);
+            throw new Error('Node ' + id + 'already exists in this environment.');
         };
         this.graph.addNode(node);
     }
