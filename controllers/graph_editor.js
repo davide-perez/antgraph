@@ -162,7 +162,13 @@ class GraphEditor {
   update(graph) {
     this.graphObj(this.domElem).graphData(graph);
 
+    this.resetSelection();
+
     displayGraphInfo(graph); // move this in controller and call it from client_events.js
+  }
+
+  notify(data){
+    this.update(data);
   }
 
   resetSelection() {

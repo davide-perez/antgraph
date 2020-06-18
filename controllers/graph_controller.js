@@ -4,21 +4,20 @@ class GraphController {
     constructor(domElem, graph) {
         this.graph = graph || new Graph();
         this.renderer = new GraphEditor(domElem);
-    }
 
+        this.graph.registerObserver(this.renderer);
+    }
 
     insertNode(label, id, classification) {
         label = label || '';
-        id = id || this.generateId();
+        id = id || this.graph.generateId();
         classification = classification || 'normal';
         let node = new GNode(label);
         node.classification = classification;
         if (!this.graph.rename(node, id)) {
             throw new NamingError(id);
         };
-        if (this.graph.addNode(node)) {
-            this.renderer.update(this.graph);
-        }
+        this.graph.addNode(node);
     }
 
     // solution to avoid undefined: insert default graph with some sample data
@@ -35,18 +34,13 @@ class GraphController {
         if (!this.graph.rename(node, id)) {
             throw new NamingError(id);
         };
-        if (this.graph.addNode(node)) {
-            this.renderer.update(this.graph);
-        }
+        this.graph.addNode(node);
     }
 
 
     insertLink(startNode, endNode) {
         let link = new GEdge(startNode, endNode);
-        //link.curvature = this.computeLinkCurvature(link);
-        if (this.graph.addLink(link)) {
-            this.renderer.update(this.graph);
-        }
+        this.graph.addLink(link);
     }
 
 
@@ -64,7 +58,6 @@ class GraphController {
         if (selectedNodes.length !== 1)
             return;
         if (this.graph.removeNode(selectedNodes[0])) {
-            this.renderer.update(this.graph);
             this.renderer.resetSelection();
         }
     }
@@ -75,7 +68,6 @@ class GraphController {
         if (!selectedLink)
             return;
         if (this.graph.removeLink(selectedLink)) {
-            this.renderer.update(this.graph);
             this.renderer.resetSelection();
         }
     }
@@ -110,8 +102,6 @@ class GraphController {
         };
     }
 
-    // Passes the graph structure only, "striping out" unneccessary data such as functions.
-    // Needed because web workers only accept object messages in such format.
     environment() {
         return this.graph;
     }
