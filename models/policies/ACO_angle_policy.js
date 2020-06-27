@@ -14,7 +14,7 @@ class ACOAnglePolicy {
 
     releasePheromone(link, totalPheromone){
         // path here is an object of form {link}. All pheromone goes on the single edge.
-        return [{link: link, pheromone: totalPheromone}];
+        return {link: link, pheromone: totalPheromone};
 
     }
 

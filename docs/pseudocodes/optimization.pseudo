@@ -1,0 +1,35 @@
+function genericACO() do
+    set ants = [];
+    set updates = [];
+    ants = selectAnts();
+    for(i = 0; i < ants.length; i++) do
+        set edge = ant[i].chooseNextEdge();
+        set update = ant[i].releasePheromone(edge); // return edge/path done
+        // updates[i] = move(ant[i]);
+        updates[i] = update;
+    end
+    updatePheromones(updates);
+    daemonActions();
+end;
+
+// updatePheromones: may be overridden such that for example only some updates are valued? or some post-reporting actions can be performed to it? e.g. max cap on edges pheromone
+// Signatures:
+function selectAnts() : []
+function move() do // since pheromone is constant, maybe it is not necessary to return pheromone applied too! can be just the edge??
+  set steps = [];  
+  chooseNextEdge();
+  releasePheromone();
+  return steps; // return path done;
+end;
+function updatePheromones(updates[]) : void
+
+/* Variants:
+* 1) k ants with angle
+    affects selectAnts, move
+  2) k ants without angle
+    as 1)
+  3) all ants:
+     affects selectAnts
+  4) 1 ant at a time
+     affect selectAnts
+*/

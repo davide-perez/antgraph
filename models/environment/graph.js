@@ -15,15 +15,12 @@ class Graph {
     /**
      * Generates a unique id code (wrt the application's domain) based on a timestamp and a random number.
      * @returns a string representing an id
-     */
+    */
     generateId() {
-        if (!Date.now) {
-            Date.now = function () { return new Date().getTime(); }
-        }
-        var id = "" + Math.round(Math.random() * Date.now());
-        return id;
-
-    }
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+          (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        )
+      }
 
     rename(node, id) {
         if (this.findNodeById(id))
@@ -36,11 +33,18 @@ class Graph {
         if (this.findNodeById(node.id))
             return false;
         this.nodes.push(node);
-        node.outgoingLinks = this.findOutgoingLinks(node);
 
         this.notifyObservers({nodes: this.nodes, links: this.links});
 
         return true;
+    }
+
+    addAnonymousNode(){
+        var node = new GNode();
+        var id = this.generateId();
+        if (this.rename(node, id))
+            this.addNode(node);
+        return node;
     }
 
     removeNode(node) {
@@ -64,7 +68,7 @@ class Graph {
         let link_already_exists = this.findLinkBetweenNodes(link.source, link.target);
         if (!nodes_exists || link_already_exists)
             return false;
-        var link2 = new GEdge(link.target, link.source);
+        var link2 = new GLink(link.target, link.source);
         this.links.push(link, link2); // to get bidirectionality
 
         this.notifyObservers({nodes: this.nodes, links: this.links});
@@ -122,7 +126,7 @@ class Graph {
     }
 
     findNodesByClassification(classification) {
-        return this.links.filter(e => (e.classification === classification));
+        return this.nodes.filter(e => (e.classification === classification));
     }
 
     areAdjacentLinks(link1, link2) {

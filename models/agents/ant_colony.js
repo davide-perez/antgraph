@@ -2,9 +2,11 @@ class AntColony {
 
     constructor(env) {
         this.environment = env.environment();
+        this.environment.registerObserver(this);
+
         this.position = this.environment.findNodesByClassification('start')[0];
         this.ants = new Array(this.NO_OF_ANTS);
-        this.policy = new ACOAnglePolicy();
+        this.policy = null;
         this.evaporation = 0.0;
 
         // move these constants in the policy too?
@@ -58,13 +60,21 @@ class AntColony {
         for(i = 0; i < ants.length; i++){
             let antPosition = ants[i].position;
             let adjacentLinks = this.environment.findOutgoingLinks(antPosition);
-            let edge = this.policy.chooseNextLink(ants[i], adjacentLinks);
-            let update = this.policy.releasePheromone(edge, this.PHEROMONE);
-            updates[i] = update; // will be links
+            let link = this.policy.chooseNextLink(ants[i], adjacentLinks);
+            let update = this.policy.releasePheromone(link, this.PHEROMONE);
+            updates[i] = update;
         }
         this.policy.updatePheromones(updates);
         this.daemonActions();
-        }
+    }
+
+    daemonActions(){
+
+    }
+
+    notify(data){
+        // environment changed
+    }
 
     setPolicy(policy){
         this.policy = policy;

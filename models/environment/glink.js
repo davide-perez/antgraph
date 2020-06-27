@@ -1,4 +1,4 @@
-class GEdge {
+class GLink {
   constructor(source, target) {
     this.source = source;
     this.target = target;

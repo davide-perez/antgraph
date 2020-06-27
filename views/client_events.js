@@ -1,18 +1,28 @@
 var e = null;
 var controller = null;
-let colony = null;
+var colony = null;
 
 function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
+  colony = new AntColony(controller);
   setupClientEvents();
   setupDefaultGraph();
 }
 
 function setupDefaultGraph() {
-  controller.insertNode('node1', '170496', 'start');
-  controller.insertNode('node2', '109855');
+  controller.insertNode('starter', '170496', 'start');
+  var start = controller.environment().findNodeById('170496');
+  var node1 = controller.environment().addAnonymousNode();
+  var node2 = controller.environment().addAnonymousNode();
+  var node3 = controller.environment().addAnonymousNode();
+  var node4 = controller.environment().addAnonymousNode();
+  controller.insertLink(start,node1);
+  controller.insertLink(start,node2);
+  controller.insertLink(start,node3);
+  controller.insertLink(start,node4);
 }
+
 
 function setupClientEvents() {
   //document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
@@ -30,10 +40,12 @@ function testAntColony() {
   if (event.key !== 't')
     return;
   if (confirm('Release ants and start algorithm?')){
-    if (!colony){
-      colony = new AntColony(controller);
-      colony.run();
-    }
+    var policyMgr = new ACOPolicyManager();
+    var policy =new ACOAnglePolicy();
+    policyMgr.checkPolicy(policy);
+    colony.policy = policy;
+    colony.run();
+    
   }
 }
 

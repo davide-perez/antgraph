@@ -1,0 +1,89 @@
+- costo singolo per gli archi -> il costo introduce complessità nelle equazioni di evaporazione
+- angolo + feromone per la scelta della direzione
+- meccanismo di evaporazione
+- feromone sugli archi
+- aggiunta cibo sui nodi goal?
+- statistiche dettagliate per studiare il percorso
+- calbirare velocità di simulazione nei parametri iniziali
+- decidre strategia multithread: thread separati vs subset thread vs single thread
+
+- calirare importanza parametri angolo e feromone l'uno rispetto all'altro
+
+
+PROBLEMA: ogni ant worker rappresenta un singolo sandbox-thread, a cui viene passata una copia dell'ambiente. Ciò significa
+che ogni volta che fa uno step, dopo aver aggiornato la quantità di feromone su un arco deve notificare di ciò il main.
+A sua volta, il main deve notificare tutte le altre formiche che su uno degli archi la quantità di feromone è cambiata.
+Quindi, se ogni formica fa uno step ogni 3000ms circa, supponendo un valore iniziale di 100 formiche nei primi 10s di esecuzione si ha
+che il numero di messaggi è:
+
+N. messaggi singola formica per step = n. formiche = 100; al secondo = 300;
+Totale al secondo = 300 * 100 = 30000;
+Totale = 30000 * 10 = 300000;
+
+30000 messaggi al secondo sono un quantitivo eccessivo, anche perchè il thread che aggiorna tutte le formiche con il nuovo arco è comunque
+singolo.
+
+SOLUZIONE(?): è stato proposto come modello alternativo un modello "selettivo", che a ogni tick seleziona un subset di formiche e muove quelle.
+Le Promises internamente sembrano implementate così: permettono di effettuare operazioni con risultati non ancora disponibili.
+L'ordine della loro esecuzione non è noto e dipende dal motore js interno, così a ogni "tick" è come se venisse mossa una formica diversa
+a caso (?).
+
+https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/function*
+https://stackoverflow.com/questions/54478195/how-to-allow-web-workers-to-receive-new-data-while-it-still-performing-computati
+
+I web worker non funzioneranno. Non esiste un modo semplice di far ricevere nuovi dati al worker mentre sta ancora in loop,
+perchè ogni worker è comunque single-threaded e finchè processa non leggerà i messaaggi.
+Possibile creare un nuovo thread per singolo step e ucciderlo subito dopo?
+https://github.com/GordyD/js-aco/blob/master/client/js/aco/Colony.es6 --> con in più le promesse
+
+ALTRA SOLUZIONE: single thread più promesse. Ogni formica fa il prossimo step e deposita feromone.
+A ogni round vengono scelte x formiche casualmente, ed esse fanno un passo e aggiornano il grafo.
+Oppure lo stesso procedimento con tutte le formiche contemporaneamente.
+Altrimenti solo alcune si muvono, con un timer variabile (perchè nella realtà le formiche si fermano e vanno a scatti)
+
+ALTRA SOLUZIONE: oggetto "ant" che esegue ogni singolo step in un nuovo thread e aggiorna il grafico dopo ogni step
+https://medium.com/javascript-in-plain-english/javascript-event-loop-y-promises-951ba6845899
+
+ALTRA SOLUZIONE: do-and-die. Oggetto formica con currentPosition. A ogni step, viene creato un nuovo thread con parametri
+"outgoingEdges", "currentPosition", "STEPS_PER_TICK". Quest'ultimo rappresenta il numero di passi da eseguire (default = 1 ?).
+ Il thread si fa il suo calcolo e ritorna l'arco percorso e il feromone applicato. Viene poi eseguito/promesso un update sul graph. 
+ Il thread muore, verrà ricreato al prossimo step.
+
+ALTRA SOLUZIONE: a ogni step ogni formica trova un percorso, poi lo riporta e viene fatto l'update del grafo con i feromoni nuovi.
+
+Rappresentare le formiche semplicemente come array di archi, che rappresenta quindi un percorso :D
+Gestire la ricerca e gli step dalla AntColony!
+
+Feromone invece che 1/distanza_arco è costante? Come lo deposito? Devo  prima calcolare la lunghezza del percorso effettuato? Controlla il video --> COSTANTE
+
+Tetto massimo del feromone per evitare
+
+Design pattern importantissimo: dividi l'algoritmo in passi logici e fai in modo che sia
+facilmente modificabile (STRATEGY PATTERN, usa questo per riconfigurare l'algoritmo
+dinamicmaente) (esempio: step selezione formiche -> 
+
+classe astratta che esegue gli step dell'algoritmo senza implementarli, quelli verranno implementati nelle classi concrete.
+
+"registra da qualche parte le implementazoni del grafo, mettila in una combobox e lasciamele vedere
+e decidere, instanziando la classe via reflection" --> controlla reflection in javascript
+
+2-3 varianti algoritmo: k formiche senza angolo
+			k formiche con angolo
+			tutte le formiche insieme
+
+evitare che la formica torni indietro dall'arco da cui è appena arrivata!
+Implementare formiche di tipo diverso, tabu sugli ultimi k nodi
+
+calcolo prob: decidere quanto pesa feromone e quanto pesa angolo (fattori di peso, normalizzare
+perchè venga tutto tra 0 e 1, somma totale delle probabilità sugli archi uscenti deve essere 1, probabilità di tornare indietro è 0 perchè non posso tornare indietro, prova sperimentale)
+
+
+
+Varianti in scope formica: formiche senza angolo, formiche con angolo, memoria locale formiche?
+Varianti in scope colonia: tutte le formiche insieme, una formica alla volta...
+Spostare le formiche in una classe unica?
+
+
+function runColonyOptimization()
+begin
+end;
