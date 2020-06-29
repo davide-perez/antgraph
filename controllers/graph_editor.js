@@ -57,6 +57,10 @@ class GraphEditor {
       })
       .linkCanvasObjectMode(() => "after")
       .linkCanvasObject((link, ctx) => {
+
+        if (link.pheromone === 0)
+          return;
+
         const MAX_FONT_SIZE = 15;
         const LABEL_NODE_MARGIN = this.graphObj.nodeRelSize() * 1.5;
 
