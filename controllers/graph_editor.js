@@ -64,7 +64,8 @@ class GraphEditor {
         const end = link.target;
 
         // ignore unbound links
-        if (typeof start !== "object" || typeof end !== "object") return;
+        if (typeof start !== "object" || typeof end !== "object") 
+          return;
 
         // calculate label positioning
         const textPos = Object.assign(

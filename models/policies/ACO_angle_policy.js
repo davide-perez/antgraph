@@ -2,14 +2,6 @@ class ACOAnglePolicy {
 
     constructor(){
         this.name = 'ACO with angles';
-
-        this.PHEROMONE = 1;
-        this.NO_OF_ANTS = 10;
-        this.STEPS_PER_TICK = 1;
-        this.TICK_INTERVAL = 300;
-        this.NO_OF_ITERATIONS = 20;
-        this.TIMEOUT = 300;
-        this.SIZE_OF_SUBSET = 10;
     }
 
     // information needed to select the next nodes:
