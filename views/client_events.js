@@ -5,7 +5,6 @@ var colony = null;
 function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
-  colony = new AntColony(controller);
   setupClientEvents();
   setupDefaultGraph();
 }
@@ -43,7 +42,8 @@ function testAntColony() {
     var policyMgr = new ACOPolicyManager();
     var policy =new ACOAnglePolicy();
     policyMgr.checkPolicy(policy);
-    colony.policy = policy;
+    colony = new AntColony(controller);
+    colony.setPolicy(policy);
     colony.run();
     
   }
