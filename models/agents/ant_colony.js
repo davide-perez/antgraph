@@ -29,6 +29,7 @@ class AntColony {
         console.log('ACO starting with %s policy', this.policy.name)
         doACO(i);
 
+        //infinite loop :(
         function doACO(i) {
             setTimeout(function () {
                 that.ACO();
@@ -38,7 +39,7 @@ class AntColony {
                 }
             }, that.policy.TIMEOUT);
         }
-        
+
         console.log('ACO completed: ' + this.policy.NO_OF_ITERATIONS + ' iterations.');
     }
 
