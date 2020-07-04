@@ -66,8 +66,8 @@ class AntColony {
             let update = this.policy.releasePheromone(link, this.PHEROMONE);
             updates[i] = update;
         }
-        this.policy.updatePheromones(updates);
         this.daemonActions();
+        this.policy.updatePheromones(updates);
     }
 
     daemonActions(){
