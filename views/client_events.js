@@ -40,7 +40,7 @@ function testAntColony() {
     return;
   if (confirm('Release ants and start algorithm?')){
     var policyMgr = new ACOPolicyManager();
-    var policy =new ACOAnglePolicy();
+    var policy =new ACOStandardPolicy();
     policyMgr.checkPolicy(policy);
     colony = new AntColony(controller);
     colony.setPolicy(policy);

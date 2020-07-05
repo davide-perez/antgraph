@@ -1,7 +1,7 @@
 class ACOStandardPolicy {
 
     constructor(){
-        this.name = 'ACO with angles';
+        this.name = 'ACO';
     }
 
 // Required methods
@@ -9,19 +9,23 @@ class ACOStandardPolicy {
     // information needed to select the next nodes:
     // the adjacent links and a (minimal) memory. The visitedPath can consist of a single
     // edge too, if we want to keep the ant memory at the minimum.
-    chooseNextLink(ant, adjacentLinks){
-        /*
-        const random = adjacentLinks[Math.floor(Math.random() * adjacentLinks.length)];
-        ant.position = random.target;
-        ant.visited.push(random);
-        return random;
-        */
-
+    chooseNextLink(ant, adjacentLinks, parameters){
+        var alpha = 1;
+        var total = adjacentLinks.reduce((sum, link) => sum + Math.pow(link.pheromone,alpha),0);
+        var probabilities = adjacentLinks.map(link => {
+            return {link: link, prob: link.pheromone / total};
+        });
+        var cumulativeMap = probabilityMap.map(prob => {
+            let probToSum = probabilityMap.filter(elem => elem.link !== prob);
+            let sum = probabilityMap.reduce((total, probs) => total + probs.prob,0);
+            return sum;
+        })
+        console.log('Probability map:');
+        console.table(probabilityMap);
+        console.log('Cumulative please:');
+        console.table(cumulativeMap);
         
 
-       // sum of elements in this array must be 100, since it is a density function.
-       // elements of type {link, prob}, sum of probs must be 100.
-       var probabilityMap = [];
 
     }
 

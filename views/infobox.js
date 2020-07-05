@@ -12,6 +12,7 @@ function displayGraphInfo(graph) {
 }
 
 function displayNodeInfo(node) {
+  console.table(node);
   resetItemInfo("#item-info");
   if (!node)
     return;
@@ -26,7 +27,10 @@ function displayNodeInfo(node) {
     "<tr><td><b>Type</b></td><td>" + node.classification + "</td></tr>"
   );
   $("#item-info").append(
-    "<tr><td><b>Fbf</b></td><td>" + node.outgoingLinks.length + "</td></tr>"
+    "<tr><td><b>x</b></td><td>" + node.x + "</td></tr>"
+  );
+  $("#item-info").append(
+    "<tr><td><b>y</b></td><td>" + node.y + "</td></tr>"
   );
 }
 
@@ -58,9 +62,6 @@ function displayEdgeInfo(edge) {
   );
   $("#item-info").append(
     "<tr><td><b>Target node</b></td><td>" + edge.target.id + "</td></tr>"
-  );
-  $("#item-info").append(
-    "<tr><td><b>Cost</b></td><td>" + edge.cost + "</td></tr>"
   );
   $("#item-info").append(
     "<tr><td><b>Pheromone</b></td><td>" + edge.pheromone + "</td></tr>"
