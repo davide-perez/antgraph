@@ -15,13 +15,11 @@ class ACOStandardPolicy {
         var probabilities = adjacentLinks.map(link => {
             return {link: link, prob: link.pheromone / total};
         });
-        var cumulativeMap = probabilityMap.map(prob => {
-            let probToSum = probabilityMap.filter(elem => elem.link !== prob);
-            let sum = probabilityMap.reduce((total, probs) => total + probs.prob,0);
-            return sum;
-        })
+        var cumulativeMap = probabilities.map((p,i) => 
+        probabilities.filter((elem, j) => j <= i)
+                     .reduce((total, probs) => total + probs.prob,0));
         console.log('Probability map:');
-        console.table(probabilityMap);
+        console.table(probabilities);
         console.log('Cumulative please:');
         console.table(cumulativeMap);
         
