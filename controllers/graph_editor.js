@@ -58,7 +58,7 @@ class GraphEditor {
       .linkCanvasObjectMode(() => "after")
       .linkCanvasObject((link, ctx) => {
 
-        if (link.pheromone === 0)
+        if (link.pheromone === 1)
           return;
 
         const MAX_FONT_SIZE = 15;
