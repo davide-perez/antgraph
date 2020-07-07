@@ -12,7 +12,7 @@ class AntColony {
         this.NO_OF_ANTS = 10;
         this.STEPS_PER_TICK = 1;
         this.TICK_INTERVAL = 300;
-        this.NO_OF_ITERATIONS = 20;
+        this.NO_OF_ITERATIONS = 40;
         this.TIMEOUT = 300;
         this.SIZE_OF_SUBSET = 10;
 
@@ -60,8 +60,13 @@ class AntColony {
         var updates = new Array(ants.length);
         var i = 0;
         for(i = 0; i < ants.length; i++){
+            console.log('Turn of ' + i + '-th ant');
             let antPosition = ants[i].position;
             let adjacentLinks = this.environment.findOutgoingLinks(antPosition);
+            console.log('Processing links adjacent to node ');
+            console.table(ants[i].position);
+            console.log('Adjacent links are:');
+            console.table(adjacentLinks);
             let link = this.policy.chooseNextLink(ants[i], adjacentLinks);
             let update = this.policy.releasePheromone(link, this.PHEROMONE);
             updates[i] = update;

@@ -13,6 +13,7 @@ class ACOStandardPolicy {
     // Then creates a cumulative distribution function in an array to make a weighted choice.
     // Note: chosen the interval 0..100 because by standard js generates a rand between 0 and 1.
     chooseNextLink(ant, adjacentLinks){
+
         var alpha = 1;
         // sum of all pheromones (denominator)
         var total = adjacentLinks.reduce((sum, link) => sum + Math.pow(link.pheromone,alpha),0);
@@ -35,9 +36,15 @@ class ACOStandardPolicy {
         console.log('Searching rand index: ' + rand);
         var index = binarySearchLeft(rand, discreteCdf);
         console.log('Index found: ' + index);
-        console.log('Link found: ['+ probabilities[index].link.source + ' to ' + probabilities[index].link.target + ']');
+        console.log('Link found: ['+ probabilities[index].link.source.id + ' to ' + probabilities[index].link.target.id + ']');
 
-        return probabilities[index].link;
+        var chosen = probabilities[index].link;
+
+
+        ant.position = chosen.target;
+        ant.visited = chosen;
+
+        return chosen;
 
 
         // Binary search implementation which returns the index where "value" should be inserted to keep the list ordered.
@@ -53,27 +60,6 @@ class ACOStandardPolicy {
                     high = mid;
             }
             return low;
-        }
-
-        function binarySearch(value, list) {
-            let first = 0;    //left endpoint
-            let last = list.length - 1;   //right endpoint
-            let pos = -1;
-            let found = false;
-            let middle;
-         
-            while (found === false && first <= last) {
-                middle = Math.floor((first + last)/2);
-                if (list[middle] == value) {
-                    found = true;
-                    pos = middle;
-                } else if (list[middle] > value) {  //if in lower half
-                    last = middle - 1;
-                } else {  //in in upper half
-                    first = middle + 1;
-                }
-            }
-            return pos;
         }
     }
 
