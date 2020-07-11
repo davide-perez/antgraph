@@ -1,5 +1,5 @@
 
-//Class representing the graph model.
+//Class representing the graph model. It is kept to be as generic as possible, no reference to pheromones or ants or similar stuff
 class Graph {
 
     constructor(nodes, links) {
@@ -13,7 +13,7 @@ class Graph {
     //////////////////////////////////START MODIFY DATASET/////////////////////////////
 
     /**
-     * Generates a unique id code (wrt the application's domain) based on a timestamp and a random number.
+     * Generates a GUID.
      * @returns a string representing an id
     */
     generateId() {
@@ -63,12 +63,15 @@ class Graph {
         return true;
     }
 
+    // Each time a link is added, a reverse link is created and added too, to ensure bidirectionality.
+    // A reference to the related link is kept as attribute in the main link.
     addLink(link) {
         let nodes_exists = this.findNodeById(link.source.id) && this.findNodeById(link.target.id);
         let link_already_exists = this.findLinkBetweenNodes(link.source, link.target);
         if (!nodes_exists || link_already_exists)
             return false;
         var link2 = new GLink(link.target, link.source);
+        link2.isBackwardLink = true;
         this.links.push(link, link2); // to get bidirectionality
 
         this.notifyObservers({nodes: this.nodes, links: this.links});
@@ -131,6 +134,10 @@ class Graph {
 
     areAdjacentLinks(link1, link2) {
         return link1.target === link2.source || link1.source === link2.target;
+    }
+
+    findComplementaryLink(link){
+        return this.findLinkBetweenNodes(link.target,link.source)
     }
 
     //////////////////////////////////END QUERY DATASET///////////////////////////////

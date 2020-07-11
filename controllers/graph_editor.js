@@ -19,15 +19,17 @@ class GraphEditor {
       .width(1400)
       //.height(800)
       .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
-      .backgroundColor("white")
+      .nodeAutoColorBy('classification')
+      .backgroundColor('white')
       .cooldownTicks(0)
-      .linkColor((link) => (link === this.selectedLink ? "blue" : "grey"))
+      .linkColor((link) => (link === this.selectedLink ? 'blue' : 'grey'))
       .linkWidth((link) => (link === this.selectedLink ? 5 : 1))
-      .linkDirectionalParticles(0)
+      .linkDirectionalParticles((link) => {return link.pheromone})
       //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
       .linkDirectionalParticleSpeed(0.001)
-      .linkDirectionalParticleColor(() => "red")
-      .linkDirectionalParticleWidth(10);
+      .linkDirectionalParticleColor(() => 'red')
+      .linkDirectionalParticleWidth(10)
+      .linkVisibility(l => !l.isBackwardLink);
   }
 
   setupEvents() {
@@ -40,7 +42,7 @@ class GraphEditor {
   setupCanvas() {
     this.graphObj
       .nodeCanvasObjectMode((node) =>
-        this.selectedNodes.indexOf(node) !== -1 ? "before" : undefined
+        this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined
       )
       .nodeCanvasObject((node, ctx) => {
         ctx.beginPath();
@@ -52,13 +54,15 @@ class GraphEditor {
           2 * Math.PI,
           false
         );
-        ctx.fillStyle = "red";
+        ctx.fillStyle = 'red';
         ctx.fill();
       })
-      .linkCanvasObjectMode(() => "after")
+      .linkCanvasObjectMode(() => 'after')
+      // bug: there are actually two links to make graph undirected. Solution: add label to the 'invisible link' and
+      // exit from this event to avoid writing stuff on it? Or add pheromone on the 'main' link?
       .linkCanvasObject((link, ctx) => {
 
-        if (link.pheromone === 1)
+        if(link.isBackwardLink)
           return;
 
         const MAX_FONT_SIZE = 15;
@@ -68,12 +72,12 @@ class GraphEditor {
         const end = link.target;
 
         // ignore unbound links
-        if (typeof start !== "object" || typeof end !== "object") 
+        if (typeof start !== 'object' || typeof end !== 'object') 
           return;
 
         // calculate label positioning
         const textPos = Object.assign(
-          ...["x", "y"].map((c) => ({
+          ...['x', 'y'].map((c) => ({
             [c]: start[c] + (end[c] - start[c]) / 2, // calc middle point
           }))
         );
@@ -96,7 +100,7 @@ class GraphEditor {
         const label = `${link.pheromone}`;
 
         // estimate fontSize to fit in link length
-        ctx.font = "1px Sans-Serif";
+        ctx.font = '1px Sans-Serif';
         const fontSize = Math.min(
           MAX_FONT_SIZE,
           maxTextLength / ctx.measureText(label).width
@@ -112,16 +116,16 @@ class GraphEditor {
         ctx.translate(textPos.x, textPos.y);
         ctx.rotate(textAngle);
 
-        ctx.fillStyle = "rgba(255, 255, 255, 0.8)";
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
         ctx.fillRect(
           -bckgDimensions[0] / 2,
           -bckgDimensions[1] / 2,
           ...bckgDimensions
         );
 
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.fillStyle = "blue";
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'blue';
         ctx.fillText(label, 0, 0);
         ctx.restore();
       });
@@ -145,7 +149,7 @@ class GraphEditor {
         displayNode2Info(this.selectedNodes[1]);
       }
     }
-    this.domElem.style.cursor = node ? "-webkit-grab" : null;
+    this.domElem.style.cursor = node ? '-webkit-grab' : null;
   }
 
   handleLinkRightClick(link) {

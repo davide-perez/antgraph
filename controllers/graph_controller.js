@@ -1,4 +1,4 @@
-// careful with graph vs multigraph
+// also this is kept as generic as possible.
 class GraphController {
 
     constructor(domElem, graph) {
@@ -15,9 +15,25 @@ class GraphController {
         let node = new GNode(label);
         node.classification = classification;
         if (!this.graph.rename(node, id)) {
-            throw new Error('Node ' + id + 'already exists in this environment.');
+            throw new Error('Node ' + id + 'already exists.');
         };
         this.graph.addNode(node);
+    }
+
+    //test
+    insertAnonymousNode(){
+        var node = new GNode();
+        var id = this.graph.generateId();
+        if (this.graph.rename(node, id))
+            this.graph.addNode(node);
+        return node;
+    }
+
+    getNode(id) {
+        var node = this.graph.findNodeById(id);
+        if(!node)
+            throw new Error('Node ' + id + ' does not exist.');
+        return node;
     }
 
     // solution to avoid undefined: insert default graph with some sample data
@@ -52,6 +68,16 @@ class GraphController {
 
     }
 
+    emitParticleAcrossSelectedLink() {
+        let selectedLink = this.renderer.selectedLink;
+        if (!selectedLink)
+            return;
+        this.renderer.emitParticle(selectedLink);
+    }
+
+    updateDirectionalParticles(){
+        this.renderer.graphObj.linkDirectionalParticles((link) => Math.ceil(link.pheromone/5));
+    }
 
     deleteNodeFromUserSelection() {
         let selectedNodes = this.renderer.selectedNodes;
@@ -62,7 +88,6 @@ class GraphController {
         }
     }
 
-
     deleteLinkFromUserSelection() {
         let selectedLink = this.renderer.selectedLink;
         if (!selectedLink)
@@ -72,37 +97,20 @@ class GraphController {
         }
     }
 
-
-    emitParticleAcrossSelectedLink() {
-        let selectedLink = this.renderer.selectedLink;
-        if (!selectedLink)
-            return;
-        this.renderer.emitParticle(selectedLink);
+    findNodesByClassification(classification) {
+        return this.graph.nodes.filter(e => (e.classification === classification));
     }
 
 
-    computeAngleBetweenLinks(link1, link2) {
-        if (!this.graph.areAdjacentLinks(link1, link2))
-            return;
-        let p1 = { x: link1.source.x, y: link1.source.y };
-        let p2 = { x: link1.target.x, y: link1.target.y };
-        let q1 = { x: link2.source.x, y: link2.source.y };
-        let q2 = { x: link2.target.x, y: link2.target.y };
-
-        var r = function (x) {
-            let m = (p2.y - p1.y / p2.x - p1.x);
-            let q = p1.y - m * p1.x;
-            return m * x + q;
-        };
-
-        var s = function (x) {
-            let m = (q2.y - q1.y / q2.x - q1.x);
-            let q = q1.y - m * q1.x;
-            return m * x + q;
-        };
+    findOutgoingLinks(startNode) {
+        return this.graph.links.filter(e => e.source === startNode) || [];
     }
 
-    environment() {
-        return this.graph;
+    findComplementaryLink(link){
+        return this.graph.findLinkBetweenNodes(link.target,link.source)
+    }
+
+    registerObserverOnGraph(observer){
+        this.graph.registerObserver(observer);
     }
 }

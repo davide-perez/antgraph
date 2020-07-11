@@ -10,12 +10,12 @@ function loadEditor() {
 }
 
 function setupDefaultGraph() {
-  controller.insertNode('starter', '170496', 'start');
-  var start = controller.environment().findNodeById('170496');
-  var node1 = controller.environment().addAnonymousNode();
-  var node2 = controller.environment().addAnonymousNode();
-  var node3 = controller.environment().addAnonymousNode();
-  var node4 = controller.environment().addAnonymousNode();
+  controller.insertNode('starter', '170496', 'nest');
+  var start = controller.getNode('170496');
+  var node1 = controller.insertAnonymousNode();
+  var node2 = controller.insertAnonymousNode();
+  var node3 = controller.insertAnonymousNode();
+  var node4 = controller.insertAnonymousNode();
   controller.insertLink(start,node1);
   controller.insertLink(start,node2);
   controller.insertLink(start,node3);
@@ -40,7 +40,7 @@ function testAntColony() {
     return;
   if (confirm('Release ants and start algorithm?')){
     var policyMgr = new ACOPolicyManager();
-    var policy =new ACOStandardPolicy();
+    var policy = new ACOStandardPolicy();
     policyMgr.checkPolicy(policy);
     colony = new AntColony(controller);
     colony.setPolicy(policy);

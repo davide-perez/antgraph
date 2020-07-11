@@ -24,7 +24,6 @@ class ACOPolicyManager {
     checkPolicy(policy){
         let valid = (typeof policy.chooseNextLink === 'function') && (policy.chooseNextLink.length === 2) &&
                     (typeof policy.releasePheromone === 'function')  && (policy.releasePheromone.length === 2) &&
-                    (typeof policy.updatePheromones === 'function')  &&  (policy.updatePheromones.length === 1) &&
                     (typeof policy.selectAnts === 'function') && (policy.selectAnts.length === 2);
 
         return valid;

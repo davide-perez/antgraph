@@ -27,22 +27,21 @@ class ACOStandardPolicy {
                .reduce((total, probs) => total + probs.prob,0)
         );
         
-        console.log('Probabilities:');
+        /*console.log('Probabilities:');
         console.table(probabilities);
         console.log('Cumulative:');
-        console.table(discreteCdf);
+        console.table(discreteCdf);*/
 
         var rand = Math.random();
-        console.log('Searching rand index: ' + rand);
+        //console.log('Searching rand index: ' + rand);
         var index = binarySearchLeft(rand, discreteCdf);
-        console.log('Index found: ' + index);
-        console.log('Link found: ['+ probabilities[index].link.source.id + ' to ' + probabilities[index].link.target.id + ']');
+        //console.log('Index found: ' + index);
+        //console.log('Link found: ['+ probabilities[index].link.source.id + ' to ' + probabilities[index].link.target.id + ']');
 
         var chosen = probabilities[index].link;
 
-
-        ant.position = chosen.target;
-        ant.visited = chosen;
+        //ant.position = chosen.target;
+        //ant.visited[0] = chosen;
 
         return chosen;
 
@@ -64,17 +63,9 @@ class ACOStandardPolicy {
     }
 
     releasePheromone(link, totalPheromone){
-        // path here is an object of form {link}. All pheromone goes on the single edge.
+        // path here is an object of form {link}. All pheromone goes on the single edge. In canonical formula, length matters: 1/link.length
         return {link: link, pheromone: totalPheromone};
 
-    }
-
-    updatePheromones(updates){
-        updates.forEach(update => {
-            // update of form {link, pheromoneQty}
-            let link = update.link;
-            link.pheromone += update.pheromone;
-        });
     }
 
     // partial Fisher-Yates shuffle
