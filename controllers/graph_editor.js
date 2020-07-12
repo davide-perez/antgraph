@@ -24,12 +24,12 @@ class GraphEditor {
       .cooldownTicks(0)
       .linkColor((link) => (link === this.selectedLink ? 'blue' : 'grey'))
       .linkWidth((link) => (link === this.selectedLink ? 5 : 1))
-      .linkDirectionalParticles((link) => {return link.pheromone})
+      .linkDirectionalParticles(0)
       //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
       .linkDirectionalParticleSpeed(0.001)
       .linkDirectionalParticleColor(() => 'red')
-      .linkDirectionalParticleWidth(10)
-      .linkVisibility(l => !l.isBackwardLink);
+      .linkDirectionalParticleWidth(5);
+      //.linkVisibility(l => !l.isBackwardLink);
   }
 
   setupEvents() {
@@ -169,7 +169,7 @@ class GraphEditor {
   }
 
   update(graph) {
-    this.graphObj(this.domElem).graphData(graph);
+    this.graphObj(this.domElem).graphData(graph).nodeAutoColorBy('classification');
 
     this.resetSelection();
 

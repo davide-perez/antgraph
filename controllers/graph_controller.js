@@ -76,7 +76,8 @@ class GraphController {
     }
 
     updateDirectionalParticles(){
-        this.renderer.graphObj.linkDirectionalParticles((link) => Math.ceil(link.pheromone/5));
+        this.renderer.graphObj.linkDirectionalParticles((link) => Math.ceil(link.pheromone/5))
+                              .linkDirectionalParticleColor((link) => link.isBackwardLink ? 'purple' : 'red');
     }
 
     deleteNodeFromUserSelection() {
@@ -95,6 +96,13 @@ class GraphController {
         if (this.graph.removeLink(selectedLink)) {
             this.renderer.resetSelection();
         }
+    }
+
+    setNodeClassificationFromUserSelection(classification){
+        let selectedNodes = this.renderer.selectedNodes;
+        if(selectedNodes.length !== 1)
+            return;
+        this.graph.setNodeClassification(selectedNodes[0], classification);
     }
 
     findNodesByClassification(classification) {

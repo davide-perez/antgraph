@@ -12,6 +12,8 @@ class ACOStandardPolicy {
     // This version uses the classical version of the pheromone function (without considering length or other params).
     // Then creates a cumulative distribution function in an array to make a weighted choice.
     // Note: chosen the interval 0..100 because by standard js generates a rand between 0 and 1.
+    // Problem: pheromone can never be null. Otherwise you will have a div by zero. Makes sense, because each adjacent path
+    // has a chance to be taken. Which value to give as a starter?
     chooseNextLink(ant, adjacentLinks){
 
         var alpha = 1;
@@ -27,16 +29,16 @@ class ACOStandardPolicy {
                .reduce((total, probs) => total + probs.prob,0)
         );
         
-        /*console.log('Probabilities:');
+        console.log('Probabilities:');
         console.table(probabilities);
         console.log('Cumulative:');
-        console.table(discreteCdf);*/
+        console.table(discreteCdf);
 
         var rand = Math.random();
         //console.log('Searching rand index: ' + rand);
         var index = binarySearchLeft(rand, discreteCdf);
         //console.log('Index found: ' + index);
-        //console.log('Link found: ['+ probabilities[index].link.source.id + ' to ' + probabilities[index].link.target.id + ']');
+        console.log('Link found: ['+ probabilities[index].link.source.id + ' to ' + probabilities[index].link.target.id + ']');
 
         var chosen = probabilities[index].link;
 

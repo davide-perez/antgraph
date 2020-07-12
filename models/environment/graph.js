@@ -89,6 +89,13 @@ class Graph {
         return x_links.length != this.links.length;
     }
 
+    setNodeClassification(node, classification){
+        if(node.classification === classification)
+            return;
+        node.classification = classification;
+        this.notifyObservers({nodes: this.nodes, links: this.links});
+    }
+
     reset() {
         this.nodes = [];
         this.links = [];
