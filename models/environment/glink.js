@@ -4,6 +4,6 @@ class GLink {
     this.target = target;
     this.pheromone = 1;
     this.cost = 1;
-    this.isBackwardLink = false;
+    this.isMainLink = true;
   }
 }

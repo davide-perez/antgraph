@@ -71,7 +71,7 @@ class Graph {
         if (!nodes_exists || link_already_exists)
             return false;
         var link2 = new GLink(link.target, link.source);
-        link2.isBackwardLink = true;
+        link2.isMainLink = false;
         this.links.push(link, link2); // to get bidirectionality
 
         this.notifyObservers({nodes: this.nodes, links: this.links});

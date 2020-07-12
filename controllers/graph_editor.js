@@ -29,7 +29,7 @@ class GraphEditor {
       .linkDirectionalParticleSpeed(0.001)
       .linkDirectionalParticleColor(() => 'red')
       .linkDirectionalParticleWidth(5);
-      //.linkVisibility(l => !l.isBackwardLink);
+      //.linkVisibility(l => l.isMainLink);
   }
 
   setupEvents() {
@@ -62,7 +62,7 @@ class GraphEditor {
       // exit from this event to avoid writing stuff on it? Or add pheromone on the 'main' link?
       .linkCanvasObject((link, ctx) => {
 
-        if(link.isBackwardLink)
+        if(!link.isMainLink)
           return;
 
         const MAX_FONT_SIZE = 15;

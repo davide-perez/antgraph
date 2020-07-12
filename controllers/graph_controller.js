@@ -77,7 +77,7 @@ class GraphController {
 
     updateDirectionalParticles(){
         this.renderer.graphObj.linkDirectionalParticles((link) => Math.ceil(link.pheromone/5))
-                              .linkDirectionalParticleColor((link) => link.isBackwardLink ? 'purple' : 'red');
+                              .linkDirectionalParticleColor((link) => link.isMainLink ? 'red' : 'purple');
     }
 
     deleteNodeFromUserSelection() {
