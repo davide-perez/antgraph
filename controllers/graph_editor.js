@@ -32,6 +32,7 @@ class GraphEditor {
         let label = 'Id: ' + node.id + '<br>Type: ' + node.classification;
         if(node.noOfAnts)
           label += '<br>No. of ants: ' + node.noOfAnts;
+        return label;
       })
       .cooldownTicks(0)
       .linkColor((link) => (link === this.selectedLink ? 'blue' : 'grey'))

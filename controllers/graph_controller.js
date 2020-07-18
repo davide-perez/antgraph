@@ -133,6 +133,9 @@ class GraphController {
         return this.graph.findLinkBetweenNodes(link.target,link.source)
     }
 
+    findGraphDifferences(newGraph){
+    }
+
     registerObserverOnGraph(observer){
         this.graph.registerObserver(observer);
     }

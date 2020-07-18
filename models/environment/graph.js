@@ -64,7 +64,6 @@ class Graph {
     }
 
     // Each time a link is added, a reverse link is created and added too, to ensure bidirectionality.
-    // A reference to the related link is kept as attribute in the main link.
     addLink(link) {
         let nodes_exists = this.findNodeById(link.source.id) && this.findNodeById(link.target.id);
         let link_already_exists = this.findLinkBetweenNodes(link.source, link.target);

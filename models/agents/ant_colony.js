@@ -15,7 +15,7 @@ class AntColony {
 
         this.position = this.environment.findNodesByClassification('nest')[0];
         this.policy = null;
-        this.evaporation = 0.0;
+        this.updateNeeded = false;
 
         this.PHEROMONE = 0.4;
         this.EVAPORATION = 0.01;
@@ -72,7 +72,7 @@ class AntColony {
     // letting full personalization to every step.
     // JS lacks interfaces, so duck typing will suffice: it is sufficient that the strategy class
     // implements the required methods (with the right signature, otherwise undefined errors will rise)
-
+    // Represents a single step of the algorithm: all ants move by a single step.
     // problem: when coming back, pheromone should be added to the main link only.
     ACO(){
         var ants = this.policy.selectAnts(this.ants, this.SIZE_OF_SUBSET);
@@ -128,6 +128,8 @@ class AntColony {
         }
         this.daemonActions();
         this.updatePheromones(updates);
+
+        return ants;
     }
 
     daemonActions(){
@@ -148,7 +150,12 @@ class AntColony {
     }
 
     notify(data){
-        // environment changed
+        this.environment.findGraphDifferences(data);
+    }
+
+    relocateAnts(){
+        // if ants where on nodes that do not exist anymore, move them at home again
+        this.updateNeeded = false;
     }
 
     setPolicy(policy){
