@@ -1,17 +1,28 @@
 //Dyamically update particles -> https://github.com/vasturiano/force-graph/issues/116
 // Graph search -> https://github.com/vasturiano/force-graph/issues/16
+// TODO: remove "Pheromone" property reference to make everything more generic.
+// Set the property at runtime with some function.
+// Same goes for node noOfAnts.
 class GraphEditor {
   constructor(domElem) {
     this.domElem = domElem;
-    this.NODE_REL_SIZE = 15; // config file vs db setup table
+    this.NODE_REL_SIZE = 15;
     this.selectedNodes = [];
     this.selectedLink = null;
+    this.nodeLabelProperties = [];
+    this.linkLabelProperties = [];
     this.graphObj = ForceGraph();
 
     //this.setupGraphicEvents();
+    //this.initGraph();
+    //this.setupEvents();
+    //this.setupCanvas();
+  }
+
+  render(){
     this.initGraph();
     this.setupEvents();
-    this.setupCanvas();
+    this.setupCanvas();   
   }
 
   initGraph() {
@@ -21,13 +32,18 @@ class GraphEditor {
       .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
       .nodeAutoColorBy('classification')
       .backgroundColor('white')
+      .nodeLabel(node => {
+        var nodeLabel = 'Id: ' + node.id + '<br>Type: ' + node.classification + '<br>';
+        this.nodeLabelProperties.forEach(prop => nodeLabel += prop.caption + ': ' + node[prop.name] + '<br>'); 
+        return nodeLabel;
+      })
       .cooldownTicks(0)
       .linkColor((link) => (link === this.selectedLink ? 'blue' : 'grey'))
       .linkWidth((link) => (link === this.selectedLink ? 5 : 1))
       .linkDirectionalParticles(0)
-      //.linkDirectionalParticleWidth(edge=> edge === highlightedEdge ? 4 : 0)
       .linkDirectionalParticleSpeed(0.001)
-      .linkDirectionalParticleColor(() => 'red')
+      .linkDirectionalParticleColor((link) => link.isMainLink ? 'red' : 'purple')
+      //.linkDirectionalParticleColor(() => 'red')
       .linkDirectionalParticleWidth(5);
       //.linkVisibility(l => l.isMainLink);
   }
@@ -41,8 +57,13 @@ class GraphEditor {
 
   setupCanvas() {
     this.graphObj
+    /* set 'after' instead of undefined to draw labels on nodes.
       .nodeCanvasObjectMode((node) =>
-        this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined
+        this.selectedNodes.indexOf(node) !== -1 ? 'before' : 'after'
+      )
+      */
+      .nodeCanvasObjectMode((node) =>
+     this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined
       )
       .nodeCanvasObject((node, ctx) => {
         ctx.beginPath();
@@ -57,12 +78,30 @@ class GraphEditor {
         ctx.fillStyle = 'red';
         ctx.fill();
       })
+      /*
+      // node test
+      .nodeCanvasObject((node, ctx, globalScale) => {
+        const label = node.id;
+        const fontSize = 15; //12 / globalScale;
+        ctx.font = '2px Sans-Serif';
+        const textWidth = ctx.measureText(label).width;
+        const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = node.color;
+        ctx.fillText(label, node.x, node.y);
+        })
+      // node test
+      */
       .linkCanvasObjectMode(() => 'after')
-      // bug: there are actually two links to make graph undirected. Solution: add label to the 'invisible link' and
-      // exit from this event to avoid writing stuff on it? Or add pheromone on the 'main' link?
       .linkCanvasObject((link, ctx) => {
 
         if(!link.isMainLink)
+          return;
+
+        if(this.linkLabelProperties === [])
           return;
 
         const MAX_FONT_SIZE = 15;
@@ -96,8 +135,12 @@ class GraphEditor {
         if (textAngle > Math.PI / 2) textAngle = -(Math.PI - textAngle);
         if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
 
-        //const label = `${link.source.id} > ${link.target.id}`;
-        const label = `${link.pheromone}`;
+        // highlight how this is a visual render only! true value is not altered.
+        var propName = this.linkLabelProperties[0].name;
+        var value = link[propName];
+        if(!value)
+          return;
+        const label = value.toFixed(2);
 
         // estimate fontSize to fit in link length
         ctx.font = '1px Sans-Serif';

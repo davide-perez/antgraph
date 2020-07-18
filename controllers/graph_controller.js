@@ -8,6 +8,18 @@ class GraphController {
         this.graph.registerObserver(this.renderer);
     }
 
+    drawEnvironment(){
+        this.renderer.render();
+    }
+
+    addNodeLabelProperty(propertyName, propertyCaption){
+        this.renderer.nodeLabelProperties.push({name: propertyName, caption: propertyCaption});
+    }
+
+    addLinkLabelProperty(propertyName, propertyCaption){
+        this.renderer.linkLabelProperties.push({name: propertyName, caption: propertyCaption});
+    }
+
     insertNode(label, id, classification) {
         label = label || '';
         id = id || this.graph.generateId();
@@ -75,9 +87,8 @@ class GraphController {
         this.renderer.emitParticle(selectedLink);
     }
 
-    updateDirectionalParticles(){
-        this.renderer.graphObj.linkDirectionalParticles((link) => Math.ceil(link.pheromone/5))
-                              .linkDirectionalParticleColor((link) => link.isMainLink ? 'red' : 'purple');
+    updateDirectionalParticles(maxTreshold){
+        this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/5) : maxTreshold);
     }
 
     deleteNodeFromUserSelection() {
@@ -120,5 +131,17 @@ class GraphController {
 
     registerObserverOnGraph(observer){
         this.graph.registerObserver(observer);
+    }
+
+    addPropertyOnLinks(propName, propValue){
+        this.graph.links.map(link => {
+            link[propName] = propValue;
+        });
+    }
+
+    addPropertyOnNodes(propName, propValue){
+        this.graph.nodes.map(node => {
+            node[propName] = propValue;
+        });
     }
 }

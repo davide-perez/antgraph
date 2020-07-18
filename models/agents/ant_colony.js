@@ -17,20 +17,24 @@ class AntColony {
         this.policy = null;
         this.evaporation = 0.0;
 
-        this.PHEROMONE = 1;
+        this.PHEROMONE = 0.4;
+        this.EVAPORATION = 0.01;
         this.NO_OF_ANTS = 10;
         this.STEPS_PER_TICK = 1;
         this.TICK_INTERVAL = 300;
-        this.NO_OF_ITERATIONS = 50;
+        this.NO_OF_ITERATIONS = 500;
         this.TIMEOUT = 300;
         this.SIZE_OF_SUBSET = 3;
         this.PHEROMONE_MAX_TRESHOLD = 100;
+
+        // set pheromone property on all links
+        this.environment.addPropertyOnLinks('pheromone', 1);
+        this.environment.addPropertyOnNodes('noOfAnts', 0);
 
     }
 
 
     initAnts(){
-        // visited is an array to improve extensibility! More arcs can be added, not just the last one, depending on algorithm.
         this.ants = new Array(this.NO_OF_ANTS);
         var startPos = this.position;
         for(let i = 0; i < this.NO_OF_ANTS; i++){
@@ -103,7 +107,7 @@ class AntColony {
             let link = this.policy.chooseNextLink(ants[i], adjacentLinks);
             console.log('Ants chosed to go on link');
             console.table(link);
-            this.environment.updateDirectionalParticles(); // Where do I put this
+            this.environment.updateDirectionalParticles(this.PHEROMONE_MAX_TRESHOLD);
             let update = this.policy.releasePheromone(link, this.PHEROMONE);
             console.log('Ant updated with pheromone:');
             console.table(update);
@@ -111,6 +115,12 @@ class AntColony {
 
             ants[i].position = link.target;
             ants[i].lastVisited = link;
+
+            if(ants[i].position)
+                ants[i].position.noOfAnts += 1;
+            if(ants[i].lastVisited.start > 0)
+                ants[i].lastVisited.source.noOfAnts -=1;
+                
 
             console.log('Ants changed position: it is on ');
             console.table(ants[i].position);
@@ -121,7 +131,8 @@ class AntColony {
     }
 
     daemonActions(){
-        // evaporation. Look for formula
+        // for each link do
+        // formula: (1 - this.EVAPORATION) * link.pheromone;
     }
 
     updatePheromones(updates){
@@ -129,8 +140,10 @@ class AntColony {
             // update of form {link, pheromoneQty}
             let link = update.link;
             let complementaryLink = controller.findComplementaryLink(link);
-            link.pheromone += update.pheromone;
-            complementaryLink.pheromone += update.pheromone;
+            if(link.pheromone < this.PHEROMONE_MAX_TRESHOLD)
+                link.pheromone += update.pheromone;
+            if(complementaryLink.pheromone < this.PHEROMONE_MAX_TRESHOLD)
+                complementaryLink.pheromone += update.pheromone;
         });
     }
 

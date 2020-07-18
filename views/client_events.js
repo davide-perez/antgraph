@@ -15,6 +15,9 @@ var colony = null;
 function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
+  controller.addNodeLabelProperty('noOfAnts', 'No. Of Ants');
+  controller.addLinkLabelProperty('pheromone', 'Pheromone');
+  controller.drawEnvironment();
   setupClientEvents();
   setupDefaultGraph();
 }
