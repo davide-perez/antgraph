@@ -139,13 +139,15 @@ class GraphController {
 
     addPropertyOnLinks(propName, propValue){
         this.graph.links.map(link => {
-            link[propName] = propValue;
+            if(!link.hasOwnProperty(propName))
+                link[propName] = propValue;
         });
     }
 
     addPropertyOnNodes(propName, propValue){
         this.graph.nodes.map(node => {
-            node[propName] = propValue;
+            if(!node.hasOwnProperty(propName))
+                node[propName] = propValue;
         });
     }
 }

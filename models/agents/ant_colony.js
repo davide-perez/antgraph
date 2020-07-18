@@ -2,11 +2,12 @@
 // each edge is composed by two edges, to get bidirectionality.
 // Ants tend to move forward towards the goal. They lay pheromone on the edge they pass through, but only on forward node!
 // Ants skip last visited node, unless it is the only choice they have.
-// Once they reach the goal, they should change their goal type attribute and go backwards.
-// Problem 1) Currently pheromone is kept on forward edge only. Backward edge has no pheromone on it!
-// Solution 1) Instead of laying pheromone only on forward edge, lay it on both edges (when updating). But show quantity of forward links only.
-// Problem 2) 0 pheromone on links gives a lot of problem on mathematical formula for calculating. Keep it 1 as minimum value.
-// Problem 3) There's no a thing such a "backward link"! It depends from where the ant comes.
+// If an ant is on a node that is either isolated or deleted, then it starts from start position again. 
+
+// Problem: for newly added links, pheromone is NaN because property does not exist. Same for nodes ant noOfAnts.
+// Problem #2: noOfAnts is evaluated incorrectly (seems more like a counter)
+// Problem #3: looks like a property cannot be added easily on an existing constructor. So this approach I used is motivated.
+
 class AntColony {
 
     constructor(env) {
@@ -15,7 +16,6 @@ class AntColony {
 
         this.position = this.environment.findNodesByClassification('nest')[0];
         this.policy = null;
-        this.updateNeeded = false;
 
         this.PHEROMONE = 0.4;
         this.EVAPORATION = 0.01;
@@ -91,9 +91,13 @@ class AntColony {
             console.log('Ants is on position');
             console.table(ants[i].position);
             let outgoingLinks = this.environment.findOutgoingLinks(antPosition);
-            //skip ant if it is on an insulated node
-            if(!outgoingLinks)
+            console.table(outgoingLinks);
+            if(outgoingLinks.length === 0){
+                ants[i].position = this.position;
+                ants[i].goalType = 'food';
+                ants[i].lastVisited = null;
                 continue;
+            }
             let adjacentLinks = outgoingLinks.filter((link) => {
                 if(!ants[i].lastVisited)
                     return true;
@@ -150,7 +154,9 @@ class AntColony {
     }
 
     notify(data){
-
+        // add specific variables because they are not present at the moment of creation (add them to prototype instead?)
+        this.environment.addPropertyOnNodes('noOfAnts', 0);
+        this.environment.addPropertyOnLinks('pheromone', 1);
     }
 
     setPolicy(policy){
