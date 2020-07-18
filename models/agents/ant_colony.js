@@ -150,12 +150,7 @@ class AntColony {
     }
 
     notify(data){
-        this.environment.findGraphDifferences(data);
-    }
 
-    relocateAnts(){
-        // if ants where on nodes that do not exist anymore, move them at home again
-        this.updateNeeded = false;
     }
 
     setPolicy(policy){
