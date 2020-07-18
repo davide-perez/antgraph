@@ -1,8 +1,4 @@
-//Dyamically update particles -> https://github.com/vasturiano/force-graph/issues/116
 // Graph search -> https://github.com/vasturiano/force-graph/issues/16
-// TODO: remove "Pheromone" property reference to make everything more generic.
-// Set the property at runtime with some function.
-// Same goes for node noOfAnts.
 class GraphEditor {
   constructor(domElem) {
     this.domElem = domElem;
@@ -33,9 +29,9 @@ class GraphEditor {
       .nodeAutoColorBy('classification')
       .backgroundColor('white')
       .nodeLabel(node => {
-        var nodeLabel = 'Id: ' + node.id + '<br>Type: ' + node.classification + '<br>';
-        this.nodeLabelProperties.forEach(prop => nodeLabel += prop.caption + ': ' + node[prop.name] + '<br>'); 
-        return nodeLabel;
+        let label = 'Id: ' + node.id + '<br>Type: ' + node.classification;
+        if(node.noOfAnts)
+          label += '<br>No. of ants: ' + node.noOfAnts;
       })
       .cooldownTicks(0)
       .linkColor((link) => (link === this.selectedLink ? 'blue' : 'grey'))
@@ -43,7 +39,6 @@ class GraphEditor {
       .linkDirectionalParticles(0)
       .linkDirectionalParticleSpeed(0.001)
       .linkDirectionalParticleColor((link) => link.isMainLink ? 'red' : 'purple')
-      //.linkDirectionalParticleColor(() => 'red')
       .linkDirectionalParticleWidth(5);
       //.linkVisibility(l => l.isMainLink);
   }
@@ -136,11 +131,9 @@ class GraphEditor {
         if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
 
         // highlight how this is a visual render only! true value is not altered.
-        var propName = this.linkLabelProperties[0].name;
-        var value = link[propName];
-        if(!value)
+        if(!link.pheromone)
           return;
-        const label = value.toFixed(2);
+        const label = link.pheromone.toFixed(2);
 
         // estimate fontSize to fit in link length
         ctx.font = '1px Sans-Serif';

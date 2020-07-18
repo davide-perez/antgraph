@@ -131,7 +131,7 @@ class AntColony {
     }
 
     daemonActions(){
-        // for each link do
+        this.environment.doEvaporation(this.EVAPORATION);
         // formula: (1 - this.EVAPORATION) * link.pheromone;
     }
 

@@ -91,6 +91,10 @@ class GraphController {
         this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/5) : maxTreshold);
     }
 
+    doEvaporation(factor){
+        this.graph.links.map((link) => link.pheromone = (1 - factor) * link.pheromone);
+    }
+
     deleteNodeFromUserSelection() {
         let selectedNodes = this.renderer.selectedNodes;
         if (selectedNodes.length !== 1)
