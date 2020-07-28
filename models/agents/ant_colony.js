@@ -130,6 +130,7 @@ class AntColony {
             console.table(ants[i].position);
             console.log('========================================================================')
         }
+        this.pheromoneEvaporation();
         this.daemonActions();
         this.updatePheromones(updates);
 
@@ -137,8 +138,12 @@ class AntColony {
     }
 
     daemonActions(){
+
+    }
+
+    pheromoneEvaporation(){
         this.environment.doEvaporation(this.EVAPORATION);
-        // formula: (1 - this.EVAPORATION) * link.pheromone;
+        // formula: (1 - this.EVAPORATION) * link.pheromone;        
     }
 
     updatePheromones(updates){
