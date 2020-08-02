@@ -133,21 +133,34 @@ class GraphController {
         return this.graph.findLinkBetweenNodes(link.target,link.source)
     }
 
+    selectRandomNode(){
+        return this.graph.nodes[Math.floor(Math.random() * this.graph.nodes.length)]
+    }
+
+    selectRandomLink(){
+        return this.graph.links[Math.floor(Math.random() * this.graph.links.length)]
+    }
+
     registerObserverOnGraph(observer){
         this.graph.registerObserver(observer);
     }
 
     addPropertyOnLinks(propName, propValue){
         this.graph.links.map(link => {
-            if(!link.hasOwnProperty(propName))
+            //if(!link.hasOwnProperty(propName))
                 link[propName] = propValue;
         });
     }
 
     addPropertyOnNodes(propName, propValue){
         this.graph.nodes.map(node => {
-            if(!node.hasOwnProperty(propName))
+            //if(!node.hasOwnProperty(propName))
                 node[propName] = propValue;
         });
     }
+
+    resetEditor(){
+        this.renderer.update(this.graph);
+    }
+
 }

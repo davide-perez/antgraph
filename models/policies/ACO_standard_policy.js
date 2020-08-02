@@ -6,6 +6,21 @@ class ACOStandardPolicy {
 
 // Required methods
 
+    testOnlineStepPheromoneUpdate(){
+        // a kind of logic can be implemented here, depending on the problem
+        return true;
+    }
+
+    testOnlineDelayedPheromoneUpdate(){
+        return false;
+    }
+
+    testSolution(ant){
+        // some other context-dependent logic
+        return ant.position.classification === 'goal';
+    }
+
+
     // information needed to select the next nodes:
     // the adjacent links and a (minimal) memory. The visitedPath can consist of a single
     // edge too, if we want to keep the ant memory at the minimum.
@@ -14,13 +29,13 @@ class ACOStandardPolicy {
     // Note: chosen the interval 0..100 because by standard js generates a rand between 0 and 1.
     // Problem: pheromone can never be null. Otherwise you will have a div by zero. Makes sense, because each adjacent path
     // has a chance to be taken. Which value to give as a starter?
-    chooseNextLink(ant, adjacentLinks){
+    chooseNextLink(ant, routingTable){
 
         var alpha = 1;
         // sum of all pheromones (denominator)
-        var total = adjacentLinks.reduce((sum, link) => sum + Math.pow(link.pheromone,alpha),0);
-        // probability mass function
-        var probabilities = adjacentLinks.map(link => {
+        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,alpha),0);
+        // compute_transition_probabilities (probability mass function)
+        var probabilities = routingTable.map(link => {
             return {link: link, prob: link.pheromone / total};
         });
         // discrete cumulative density function
@@ -28,22 +43,14 @@ class ACOStandardPolicy {
             arr.filter((elem, j) => j <= i)
                .reduce((total, probs) => total + probs.prob,0)
         );
-        
-        console.log('Probabilities:');
-        console.table(probabilities);
-        console.log('Cumulative:');
-        console.table(discreteCdf);
 
+        // apply_ant_decision_policy
         var rand = Math.random();
         //console.log('Searching rand index: ' + rand);
         var index = binarySearchLeft(rand, discreteCdf);
         //console.log('Index found: ' + index);
-        console.log('Link found: ['+ probabilities[index].link.source.id + ' to ' + probabilities[index].link.target.id + ']');
 
         var chosen = probabilities[index].link;
-
-        //ant.position = chosen.target;
-        //ant.visited[0] = chosen;
 
         return chosen;
 
@@ -64,7 +71,7 @@ class ACOStandardPolicy {
         }
     }
 
-    releasePheromone(link, totalPheromone){
+    releasePheromone(currentAnt, link, totalPheromone){
         // path here is an object of form {link}. All pheromone goes on the single edge. In canonical formula, length matters: 1/link.length
         return {link: link, pheromone: totalPheromone};
 
