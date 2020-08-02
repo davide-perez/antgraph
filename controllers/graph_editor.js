@@ -23,8 +23,8 @@ class GraphEditor {
 
   initGraph() {
     this.graphObj
-      .width(1400)
-      //.height(800)
+      .width(800)
+      .height(800)
       .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
       .nodeAutoColorBy('classification')
       .backgroundColor('white')

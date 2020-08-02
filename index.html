@@ -1,70 +1,70 @@
 <!doctype HTML>
 <html>
 
-  <head>
-    <meta charset="UTF-8">
-    <style>
-      body {
-        margin: 0;
-      }
-    </style>
-    <link rel="stylesheet" href="./views/styles/editor.css">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" 
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" 
-      crossorigin="anonymous"
-    >
-    <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-    <script src="//unpkg.com/three"></script>
-    <script src="//unpkg.com/three-spritetext"></script>
-    <script src="//unpkg.com/3d-force-graph"></script>
-    <script src="//unpkg.com/force-graph"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
-      integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" 
-      crossorigin="anonymous">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      margin: 0;
+    }
+  </style>
+  <link rel="stylesheet" href="./views/styles/editor.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+  <script src="//unpkg.com/three"></script>
+  <script src="//unpkg.com/three-spritetext"></script>
+  <script src="//unpkg.com/3d-force-graph"></script>
+  <script src="//unpkg.com/force-graph"></script>
+  <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+    integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous">
     </script>
-    <script src="./models/environment/graph.js"></script>
-    <script src="./models/environment/glink.js"></script>
-    <script src="./models/environment/gnode.js"></script>
-    <script src="./controllers/graph_controller.js"></script>
-    <script src="./controllers/graph_editor.js"></script>
-    <script src="./views/client_events.js"></script>
-    <script src="./views/infobox.js"></script>
-    <script src="./models/agents/ant_colony.js"></script>
-    <script src="./controllers/ACO_policy_manager.js"></script>
-    <script src="./models/policies/ACO_angle_policy.js"></script>
-    <script src="./models/policies/ACO_standard_policy.js"></script>
-    <script>
-    </script>
-    <title>
-      Graph editor
-    </title>
-  </head>
+  <script src="./models/environment/graph.js"></script>
+  <script src="./models/environment/glink.js"></script>
+  <script src="./models/environment/gnode.js"></script>
+  <script src="./controllers/graph_controller.js"></script>
+  <script src="./controllers/graph_editor.js"></script>
+  <script src="./views/client_events.js"></script>
+  <script src="./views/infobox.js"></script>
+  <script src="./models/agents/ant_colony.js"></script>
+  <script src="./controllers/ACO_policy_manager.js"></script>
+  <script src="./models/policies/ACO_angle_policy.js"></script>
+  <script src="./models/policies/ACO_standard_policy.js"></script>
+  <script>
+  </script>
+  <title>
+    Graph editor
+  </title>
+</head>
 
-  <body onload="loadEditor()">
-    <div class="container-fluid">
-      <div id="graph" class="col-xs-6"></div>
-      <div id="cockpit-container" class="col-xs-6">
+<body onload="loadEditor()">
+  <div class="container-fluid">
+    <div class="row">
+      <div id="graph" class="col-md-8"></div>
+      <div id="cockpit-container" class="col-md-4">
         <div class="card text-center">
           <div class="card-header">
-              <ul class="nav nav-tabs card-header-tabs">
-                  <li class="nav-item">
-                      <a class="nav-link active" href="#">Active</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link" href="#">Link</a>
-                  </li>
-                  <li class="nav-item">
-                      <a class="nav-link disabled" href="#">Disabled</a>
-                  </li>
-              </ul>
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link active" href="#">Algorithm selection</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Environment settings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#">Reporting</a>
+              </li>
+            </ul>
           </div>
           <div class="card-body">
-              <h4 class="card-title">Card Title</h4>
-              <p class="card-text">Content of the card.</p>
-              <a href="#" class="btn btn-primary">More</a>
+            <h4 class="card-title">Card Title</h4>
+            <p class="card-text">Content of the card.</p>
+            <a href="#" class="btn btn-primary">More</a>
           </div>
-      </div>      
+        </div>
       </div>
     </div>
-  </body>
+  </div>
+</body>
+
 </html>
