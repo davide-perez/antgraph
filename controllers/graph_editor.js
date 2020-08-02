@@ -30,7 +30,7 @@ class GraphEditor {
       .backgroundColor('white')
       .nodeLabel(node => {
         let label = 'Id: ' + node.id + '<br>Type: ' + node.classification;
-        if(node.noOfAnts)
+        if(node.noOfAnts !== undefined)
           label += '<br>No. of ants: ' + node.noOfAnts;
         return label;
       })
@@ -53,11 +53,6 @@ class GraphEditor {
 
   setupCanvas() {
     this.graphObj
-    /* set 'after' instead of undefined to draw labels on nodes.
-      .nodeCanvasObjectMode((node) =>
-        this.selectedNodes.indexOf(node) !== -1 ? 'before' : 'after'
-      )
-      */
       .nodeCanvasObjectMode((node) =>
      this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined
       )
@@ -74,23 +69,6 @@ class GraphEditor {
         ctx.fillStyle = 'red';
         ctx.fill();
       })
-      /*
-      // node test
-      .nodeCanvasObject((node, ctx, globalScale) => {
-        const label = node.id;
-        const fontSize = 15; //12 / globalScale;
-        ctx.font = '2px Sans-Serif';
-        const textWidth = ctx.measureText(label).width;
-        const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2);
-        ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillStyle = node.color;
-        ctx.fillText(label, node.x, node.y);
-        })
-      // node test
-      */
       .linkCanvasObjectMode(() => 'after')
       .linkCanvasObject((link, ctx) => {
 

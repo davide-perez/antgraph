@@ -1,13 +1,3 @@
-// let those win over the local Colony Object variables?
-var PHEROMONE = 1;
-var NO_OF_ANTS = 1;
-var STEPS_PER_TICK = 1;
-var TICK_INTERVAL = 300;
-var NO_OF_ITERATIONS = 20;
-var TIMEOUT = 300;
-var SIZE_OF_SUBSET = 10;
-var PHEROMONE_MAX_TRESHOLD = 100;
-
 var e = null;
 var controller = null;
 var colony = null;
@@ -21,7 +11,7 @@ function loadEditor() {
 }
 
 function setupDefaultGraph2() {
-  controller.insertNode('starter', '170496', 'nest');
+  controller.insertNode('starter', '170496', 'start');
   var start = controller.getNode('170496');
   var node1 = controller.insertAnonymousNode();
   var node2 = controller.insertAnonymousNode();
@@ -34,8 +24,8 @@ function setupDefaultGraph2() {
 }
 
 function setupDefaultGraph() {
-  controller.insertNode('starter', '170496', 'nest');
-  controller.insertNode('ender', '000000', 'food');
+  controller.insertNode('starter', '170496', 'start');
+  controller.insertNode('ender', '000000', 'goal');
   var start = controller.getNode('170496');
   var end = controller.getNode('000000');
   var node1 = controller.insertAnonymousNode();
@@ -69,7 +59,12 @@ function testAntColony() {
     var policyMgr = new ACOPolicyManager();
     var policy = new ACOStandardPolicy();
     policyMgr.checkPolicy(policy);
-    colony = new AntColony(controller);
+    if(!colony)
+      colony = new AntColony(controller)
+    else{
+      colony.reset();
+      controller.resetEditor();
+    }
     colony.setPolicy(policy);
     colony.run();
     
@@ -124,10 +119,10 @@ function emitParticleOnKeyPress() {
 function setNodeClassificationOnKeyPress(){
   switch(event.key){
     case 'f':
-      controller.setNodeClassificationFromUserSelection('food'); 
+      controller.setNodeClassificationFromUserSelection('goal'); 
       break;
     case 'n':
-      controller.setNodeClassificationFromUserSelection('nest'); 
+      controller.setNodeClassificationFromUserSelection('start'); 
       break;
   }
 }
