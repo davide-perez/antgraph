@@ -19,20 +19,20 @@ class AntColony {
 
         this.position = this.environment.findNodesByClassification('start')[0];
         this.policy = null;
+        this.currentSolution = null;
 
         this.active = true;
 
         this.PHEROMONE = 0.2;
         this.EVAPORATION = 0.01;
-        this.NO_OF_ANTS = 100;
+        this.NO_OF_ANTS = 1;
         this.TICK_INTERVAL = 300;
         // this.NO_OF_ITERATIONS = Number.MAX_SAFE_INTEGER;
-        this.NO_OF_ITERATIONS = 100000;
+        this.NO_OF_ITERATIONS = Infinity;
         this.TIMEOUT = 300;
         this.SIZE_OF_SUBSET = 10;
         this.PHEROMONE_MAX_TRESHOLD = 100;
-        this.IMMORTAL_ANTS = false;
-        this.MEMORYLESS_ANTS = true; // just remember last step. Ants remembery full path can perform delayed pheromone update.
+        this.MEMORYLESS_ANTS = false; // just remember last step. Ants remembery full path can perform delayed pheromone update.
         this.RANDOM_START = false; // every ant starts on a random position
 
         // set pheromone property on all links
@@ -52,6 +52,7 @@ class AntColony {
                 startPosition: startPos,
                 position: startPos, 
                 visited: [], 
+                solution: [],
                 alive: true, 
                 foundSolution: false,
                 retracing: false
@@ -90,7 +91,7 @@ class AntColony {
     // problem: when coming back, pheromone should be added to the main link only.
     ACOMetaHeuristicStep(){
         // select alive ants only
-        var ants = this.policy.selectAnts(this.ants.filter(ant => this.IMMORTAL_ANTS ? true : ant.alive), this.SIZE_OF_SUBSET);
+        var ants = this.selectAnts(this.ants.filter(ant => ant.alive), this.SIZE_OF_SUBSET);
         // if no ants, prevent further processing
         if(ants.length === 0)
             this.active = false;
@@ -99,45 +100,38 @@ class AntColony {
         var i = 0;
         for(i = 0; i < ants.length; i++){
             let currentAnt = ants[i];
-            let doRetrace = canRetrace && currentAnt.retracing;
             // if ant is retracing and there are no visited nodes, it means it has finished
-            if(doRetrace && currentAnt.visited === []){
+            if(currentAnt.retracing && currentAnt.visited === []){
                 currentAnt.alive = false;
                 continue;
             }
             // test solution
             if(!currentAnt.foundSolution){
                 if(this.policy.testSolution(currentAnt)){
-                    if(canRetrace){
+                    this.currentSolution = this.currentSolution ? this.policy.compareSolutions(currentAnt.solution, this.currentSolution) : currentAnt.solution; // choose between the
+                    currentAnt.foundSolution = true;
+                    // best of two: the previous one or the new one found
+                    console.log('Solution is now: ');
+                    console.table(currentAnt.solution);
+                    if(canRetrace)
                         currentAnt.retracing = true;
-                    }
-                    else{
-                        // reset or kill ant
-                        currentAnt.position = currentAnt.startPosition;
-                        currentAnt.foundSolution = false;
-                        currentAnt.visited = [];
-                        if(!this.IMMORTAL_ANTS)
-                            currentAnt.alive = false;                                         
-                    }
+                    else
+                        currentAnt.alive = false;
                     continue;
                 }
             }
-
 
             let antPosition = currentAnt.position;
             // retracing could not always be successful, because path may vary and visited nodes may exist no more.
             // if retracing is active, ant attempts to give priority to retrace the path memorized. if not possible,
             // switches to standard.
             let outgoingLinks = this.environment.findOutgoingLinks(antPosition);
-            // if ant is isolated, kill it or reset it
+            // if ant is isolated, kill it
             if(outgoingLinks.length === 0){
-                currentAnt.position = currentAnt.startPosition;
-                currentAnt.foundSolution = false;
-                currentAnt.visited = [];
-                if(!this.IMMORTAL_ANTS)
-                    currentAnt.alive = false;
+                currentAnt.alive = false;
                 continue;
             }
+            // >> HERE SHOULD HAPPEN A BIG MODIFICATION
             // find links that can be taken. Exclude the last visited one
             let routingTable = outgoingLinks.filter((link) => {
                 let lastVisited = currentAnt.visited[currentAnt.visited.length - 1]
@@ -146,6 +140,7 @@ class AntColony {
                     return true;
                 return (link !== lastVisited) && (link !== this.environment.findComplementaryLink(lastVisited))
             });
+            // << HERE SHOULD HAPPEN A BIG MODIFICATION
             // if no adjacent link is found, include the visited one
             if(routingTable.length === 0)
                 routingTable = outgoingLinks;
@@ -159,9 +154,11 @@ class AntColony {
             // the last link chosen is popped: if it is among the adjacent links, then it
             // is chosen. If not, then a dynamic change occured and the path
             // the ant built is no longer feasible, so another link is taken.
-            if(doRetrace){
-                let preferredLink = currentAnt.visited.pop();
-                if(currentAnt.visited.find(link => link === preferredLink))
+            if(currentAnt.retracing){
+                let lastVisited = currentAnt.visited.pop();
+                let preferredLink = this.environment.findComplementaryLink(lastVisited);
+                // following line is wrong. I need to check if the node still exists in graph. How to?
+                if(preferredLink)
                     link = preferredLink
                 else
                     currentAnt.retracing = false;
@@ -176,8 +173,11 @@ class AntColony {
             if(currentAnt.position)
                 currentAnt.position.noOfAnts += 1;
 
-            // release pheromone
-            if(this.policy.testOnlineStepPheromoneUpdate() || doRetrace){
+            // call the same method for updating pheromone when retracing, with additional param to know whether it
+            // is retracing or not?
+
+            // release pheromone. ACO algs exist that do not release any pheromone online.
+            if(this.policy.testOnlineStepPheromoneUpdate() || currentAnt.retracing){
                 let update = this.policy.releasePheromone(currentAnt, link, this.PHEROMONE);
                 updates[i] = update;
                 this.environment.updateDirectionalParticles(this.PHEROMONE_MAX_TRESHOLD);
@@ -188,6 +188,9 @@ class AntColony {
                 currentAnt.visited.push(link)
             else
                 currentAnt.visited[0] = link;
+
+            // construct solution
+            currentAnt.solution.push(link);
         }
         this.pheromoneEvaporation();
         this.daemonActions();
@@ -217,8 +220,19 @@ class AntColony {
         });
     }
 
-    getResults(){
-        return this.ants.map();
+
+    // partial Fisher-Yates shuffle
+    selectAnts(ants, sizeOfSubset){
+        var selected = [];
+        var l = ants.length;
+        var taken = [];
+        var n = sizeOfSubset < l && sizeOfSubset > 0 ? sizeOfSubset : l;
+        while(n--){
+            var k = Math.floor(Math.random()*l);
+            selected[n] = ants[k in taken ? taken[k] : k];
+            taken[k] = --l in taken ? taken[l] : l;
+        }
+        return selected;
     }
 
     notify(data){

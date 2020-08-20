@@ -33,8 +33,9 @@ class GraphController {
     }
 
     //test
-    insertAnonymousNode(){
-        var node = new GNode();
+    insertAnonymousNode(label){
+        var node = new GNode(label);
+        label = label || '';
         var id = this.graph.generateId();
         if (this.graph.rename(node, id))
             this.graph.addNode(node);

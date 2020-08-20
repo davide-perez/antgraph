@@ -12,7 +12,7 @@ class ACOStandardPolicy {
     }
 
     testOnlineDelayedPheromoneUpdate(){
-        return false;
+        return true;
     }
 
     testSolution(ant){
@@ -77,18 +77,12 @@ class ACOStandardPolicy {
 
     }
 
-    // partial Fisher-Yates shuffle
-    selectAnts(ants, sizeOfSubset){
-        var selected = [];
-        var l = ants.length;
-        var taken = [];
-        var n = sizeOfSubset < l && sizeOfSubset > 0 ? sizeOfSubset : l;
-        while(n--){
-            var k = Math.floor(Math.random()*l);
-            selected[n] = ants[k in taken ? taken[k] : k];
-            taken[k] = --l in taken ? taken[l] : l;
-        }
-        return selected;
+    compareSolutions(solution1, solution2){
+        var l1 = solution1 && solution1.length > 0 ? solution1.length : Infinity;
+        var l2 = solution2 && solution2.length > 0 ? solution2.length : Infinity;
+        if(l1 < l2)
+            return solution1;
+        return solution2;
     }
 // Required methods
 }

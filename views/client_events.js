@@ -13,10 +13,10 @@ function loadEditor() {
 function setupDefaultGraph2() {
   controller.insertNode('starter', '170496', 'start');
   var start = controller.getNode('170496');
-  var node1 = controller.insertAnonymousNode();
-  var node2 = controller.insertAnonymousNode();
-  var node3 = controller.insertAnonymousNode();
-  var node4 = controller.insertAnonymousNode();
+  var node1 = controller.insertAnonymousNode('A');
+  var node2 = controller.insertAnonymousNode('B');
+  var node3 = controller.insertAnonymousNode('C');
+  var node4 = controller.insertAnonymousNode('D');
   controller.insertLink(start,node1);
   controller.insertLink(start,node2);
   controller.insertLink(start,node3);
