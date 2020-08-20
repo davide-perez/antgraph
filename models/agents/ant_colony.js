@@ -80,6 +80,8 @@ class AntColony {
         }
     }
 
+
+
     // TODO: algorithm to place ants at a starting position should be defined in policies? Or give
     // a configuration such as "random start" to randomize?
 
@@ -106,8 +108,6 @@ class AntColony {
                     this.currentSolution = this.currentSolution ? this.policy.compareSolutions(currentAnt.solution, this.currentSolution) : currentAnt.solution; // choose between the
                     currentAnt.foundSolution = true;
                     // best of two: the previous one or the new one found
-                    console.log('Solution is now: ');
-                    console.table(currentAnt.solution);
                     if(canRetrace)
                         currentAnt.retracing = true;
                     else

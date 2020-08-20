@@ -66,8 +66,7 @@ function testAntColony() {
       controller.resetEditor();
     }
     colony.setPolicy(policy);
-    colony.run();
-    
+    colony.run();    
   }
 }
 
