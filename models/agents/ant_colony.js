@@ -25,7 +25,7 @@ class AntColony {
 
         this.PHEROMONE = 0.2;
         this.EVAPORATION = 0.01;
-        this.NO_OF_ANTS = 1;
+        this.NO_OF_ANTS = 25;
         this.TICK_INTERVAL = 300;
         // this.NO_OF_ITERATIONS = Number.MAX_SAFE_INTEGER;
         this.NO_OF_ITERATIONS = Infinity;
@@ -100,11 +100,6 @@ class AntColony {
         var i = 0;
         for(i = 0; i < ants.length; i++){
             let currentAnt = ants[i];
-            // if ant is retracing and there are no visited nodes, it means it has finished
-            if(currentAnt.retracing && currentAnt.visited === []){
-                currentAnt.alive = false;
-                continue;
-            }
             // test solution
             if(!currentAnt.foundSolution){
                 if(this.policy.testSolution(currentAnt)){
@@ -156,6 +151,13 @@ class AntColony {
             // the ant built is no longer feasible, so another link is taken.
             if(currentAnt.retracing){
                 let lastVisited = currentAnt.visited.pop();
+                // if nothing to pop, then ant finished retracing. Ant dies.
+                if(!lastVisited){
+                    currentAnt.alive = false;
+                    if(currentAnt.position.noOfAnts > 0)
+                        currentAnt.position.noOfAnts -= 1;
+                    continue;
+                }
                 let preferredLink = this.environment.findComplementaryLink(lastVisited);
                 // following line is wrong. I need to check if the node still exists in graph. How to?
                 if(preferredLink)
@@ -183,14 +185,17 @@ class AntColony {
                 this.environment.updateDirectionalParticles(this.PHEROMONE_MAX_TRESHOLD);
             }
 
-            // update internal state
-            if(!this.MEMORYLESS_ANTS)
-                currentAnt.visited.push(link)
-            else
-                currentAnt.visited[0] = link;
+            // update internal state (if necessary)
+            if(!currentAnt.retracing){
+                if(!this.MEMORYLESS_ANTS)
+                    currentAnt.visited.push(link)
+                else
+                    currentAnt.visited[0] = link;
+            }
 
             // construct solution
-            currentAnt.solution.push(link);
+            if(!currentAnt.foundSolution)
+                currentAnt.solution.push(link);
         }
         this.pheromoneEvaporation();
         this.daemonActions();
