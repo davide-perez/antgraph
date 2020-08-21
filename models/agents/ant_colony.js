@@ -61,25 +61,37 @@ class AntColony {
         }
     }
 
+    
     run() {
         this.initAnts();
 
         var i = 0;
         var that = this;
-        ACOMetaHeuristic(i);
 
-        // needed to loop the function n times with a fixed interval
-        function ACOMetaHeuristic(i) {
-            setTimeout(function () {
+        let solution = new Promise((resolve, reject) => {
+            let solution = ACOMetaHeuristic();
+            if(solution)
+                resolve(solution)
+            else
+                reject([]);
+        });
+
+        solution.then(s => {
+            console.log('Solution: ');
+            console.table(s);
+        });
+
+        async function ACOMetaHeuristic(){
+            while(that.active && i < that.NO_OF_ITERATIONS){
                 that.ACOMetaHeuristicStep();
-                if (that.active && i < that.NO_OF_ITERATIONS) {
-                    i++;
-                    ACOMetaHeuristic(i);
-                }
-            }, that.TIMEOUT);
+                await new Promise(r => setTimeout(r, that.TIMEOUT));
+                i++;
+            }
+            if(that.active)
+                that.active = false;
+            return that.currentSolution;
         }
     }
-
 
 
     // TODO: algorithm to place ants at a starting position should be defined in policies? Or give
