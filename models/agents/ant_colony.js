@@ -61,16 +61,6 @@ class AntColony {
         }
     }
 
-    async run() {
-        return new Promise((resolve, reject) => {
-            let solution = this.ACOMetaHeuristic();
-            if (solution)
-                resolve(solution);
-            else
-                reject([]);
-        });
-    }
-
     async ACOMetaHeuristic(){
         var i = 0;
         var that = this;

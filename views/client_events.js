@@ -66,7 +66,8 @@ async function testAntColony() {
       controller.resetEditor();
     }
     colony.setPolicy(policy);
-    var solution = await colony.run();
+    //var solution = await colony.run();
+    var solution = await colony.ACOMetaHeuristic();
     console.log('HERES A SOLUTION:');
     console.table(solution);    
   }
