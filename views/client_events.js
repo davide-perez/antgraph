@@ -52,7 +52,7 @@ function setupClientEvents() {
 }
 
 
-function testAntColony() {
+async function testAntColony() {
   if (event.key !== 't')
     return;
   if (confirm('Release ants and start algorithm?')){
@@ -66,7 +66,9 @@ function testAntColony() {
       controller.resetEditor();
     }
     colony.setPolicy(policy);
-    colony.run();    
+    var solution = await colony.run();
+    console.log('HERES A SOLUTION:');
+    console.table(solution);    
   }
 }
 

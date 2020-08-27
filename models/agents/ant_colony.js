@@ -61,36 +61,154 @@ class AntColony {
         }
     }
 
-    
-    run() {
-        this.initAnts();
-
-        var i = 0;
-        var that = this;
-
-        let solution = new Promise((resolve, reject) => {
-            let solution = ACOMetaHeuristic();
-            if(solution)
-                resolve(solution)
+    async run() {
+        return new Promise((resolve, reject) => {
+            let solution = this.ACOMetaHeuristic();
+            if (solution)
+                resolve(solution);
             else
                 reject([]);
         });
+    }
 
-        solution.then(s => {
-            console.log('Solution: ');
-            console.table(s);
-        });
+    async ACOMetaHeuristic(){
+        var i = 0;
+        var that = this;
 
-        async function ACOMetaHeuristic(){
-            while(that.active && i < that.NO_OF_ITERATIONS){
-                that.ACOMetaHeuristicStep();
-                await new Promise(r => setTimeout(r, that.TIMEOUT));
-                i++;
-            }
-            if(that.active)
-                that.active = false;
-            return that.currentSolution;
+        this.initAnts();
+
+        while(this.active && i < this.NO_OF_ITERATIONS){
+            ACOMetaHeuristicStep();
+            await new Promise(r => setTimeout(r, that.TIMEOUT));
+            i++;
         }
+        if(this.active)
+            this.active = false;
+        return this.currentSolution;
+
+
+        // TODO: algorithm to place ants at a starting position should be defined in policies? Or give
+        // a configuration such as "random start" to randomize?
+
+        // "polymorphic" algorithm. that algorithm lets the implementation to the active policy,
+        // letting full personalization to every step.
+        // JS lacks interfaces, so duck typing will suffice: it is sufficient that the strategy class
+        // implements the required methods (with the right signature, otherwise undefined errors will rise)
+        // Represents a single step of the algorithm: all ants move by a single step.
+        // problem: when coming back, pheromone should be added to the main link only.
+        function ACOMetaHeuristicStep(){
+            // select alive ants only
+            var ants = that.selectAnts(that.ants.filter(ant => ant.alive), that.SIZE_OF_SUBSET);
+            // if no ants, prevent further processing
+            if(ants.length === 0)
+                that.active = false;
+            var updates = new Array(ants.length);
+            var canRetrace = that.policy.testOnlineDelayedPheromoneUpdate() && !that.MEMORYLESS_ANTS;
+            var i = 0;
+            for(i = 0; i < ants.length; i++){
+                let currentAnt = ants[i];
+                // test solution
+                if(!currentAnt.foundSolution){
+                    if(that.policy.testSolution(currentAnt)){
+                        that.currentSolution = that.currentSolution ? that.policy.compareSolutions(currentAnt.solution, that.currentSolution) : currentAnt.solution; // choose between the
+                        currentAnt.foundSolution = true;
+                        // best of two: the previous one or the new one found
+                        if(canRetrace)
+                            currentAnt.retracing = true;
+                        else
+                            currentAnt.alive = false;
+                        continue;
+                    }
+                }
+
+                let antPosition = currentAnt.position;
+                // retracing could not always be successful, because path may vary and visited nodes may exist no more.
+                // if retracing is active, ant attempts to give priority to retrace the path memorized. if not possible,
+                // switches to standard.
+                let outgoingLinks = that.environment.findOutgoingLinks(antPosition);
+                // if ant is isolated, kill it
+                if(outgoingLinks.length === 0){
+                    currentAnt.alive = false;
+                    continue;
+                }
+                // >> HERE SHOULD HAPPEN A BIG MODIFICATION
+                // find links that can be taken. Exclude the last visited one
+                let routingTable = outgoingLinks.filter((link) => {
+                    let lastVisited = currentAnt.visited[currentAnt.visited.length - 1]
+                    // if no last visited link, then ant still has to start
+                    if(!lastVisited)
+                        return true;
+                    return (link !== lastVisited) && (link !== that.environment.findComplementaryLink(lastVisited))
+                });
+                // << HERE SHOULD HAPPEN A BIG MODIFICATION
+                // if no adjacent link is found, include the visited one
+                if(routingTable.length === 0)
+                    routingTable = outgoingLinks;
+                // calculation is deferred to the current policy.
+                // Note that pheromone information is encapsulated in the link object:
+                // no need of explictly building a routing table.
+                // chooseNextLink is a combination of compute_transition_probabilities and apply_ant_decision_policy.
+                
+                let link = null;
+                // when retracing: attempt to re-do the path backwards.
+                // the last link chosen is popped: if it is among the adjacent links, then it
+                // is chosen. If not, then a dynamic change occured and the path
+                // the ant built is no longer feasible, so another link is taken.
+                if(currentAnt.retracing){
+                    let lastVisited = currentAnt.visited.pop();
+                    // if nothing to pop, then ant finished retracing. Ant dies.
+                    if(!lastVisited){
+                        currentAnt.alive = false;
+                        if(currentAnt.position.noOfAnts > 0)
+                            currentAnt.position.noOfAnts -= 1;
+                        continue;
+                    }
+                    let preferredLink = that.environment.findComplementaryLink(lastVisited);
+                    // following line is wrong. I need to check if the node still exists in graph. How to?
+                    if(preferredLink)
+                        link = preferredLink
+                    else
+                        currentAnt.retracing = false;
+                }
+                if(!link)
+                    link = that.policy.chooseNextLink(currentAnt, routingTable);
+
+                // move ant
+                if(currentAnt.position.noOfAnts > 0)
+                    currentAnt.position.noOfAnts -= 1;
+                currentAnt.position = link.target;
+                if(currentAnt.position)
+                    currentAnt.position.noOfAnts += 1;
+
+                // call the same method for updating pheromone when retracing, with additional param to know whether it
+                // is retracing or not?
+
+                // release pheromone. ACO algs exist that do not release any pheromone online.
+                if(that.policy.testOnlineStepPheromoneUpdate() || currentAnt.retracing){
+                    let update = that.policy.releasePheromone(currentAnt, link, that.PHEROMONE);
+                    updates[i] = update;
+                    that.environment.updateDirectionalParticles(that.PHEROMONE_MAX_TRESHOLD);
+                }
+
+                // update internal state (if necessary)
+                if(!currentAnt.retracing){
+                    if(!that.MEMORYLESS_ANTS)
+                        currentAnt.visited.push(link)
+                    else
+                        currentAnt.visited[0] = link;
+                }
+
+                // construct solution
+                if(!currentAnt.foundSolution)
+                    currentAnt.solution.push(link);
+            }
+            that.pheromoneEvaporation();
+            that.daemonActions();
+            that.updatePheromones(updates);
+
+            return ants;
+        }
+        
     }
 
 
