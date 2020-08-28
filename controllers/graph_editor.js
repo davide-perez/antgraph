@@ -3,16 +3,13 @@ class GraphEditor {
   constructor(domElem) {
     this.domElem = domElem;
     this.NODE_REL_SIZE = 15;
+    this.CANVAS_WIDTH = CANVAS_WIDTH || 1000;
+    this.CANVAS_HEIGHT = CANVAS_HEIGHT || 800;
     this.selectedNodes = [];
     this.selectedLink = null;
     this.nodeLabelProperties = [];
     this.linkLabelProperties = [];
     this.graphObj = ForceGraph();
-
-    //this.setupGraphicEvents();
-    //this.initGraph();
-    //this.setupEvents();
-    //this.setupCanvas();
   }
 
   render(){
@@ -23,8 +20,8 @@ class GraphEditor {
 
   initGraph() {
     this.graphObj
-      .width(800)
-      .height(800)
+      .width(this.CANVAS_WIDTH)
+      .height(this.CANVAS_HEIGHT)
       .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
       .nodeAutoColorBy('classification')
       .backgroundColor('white')
@@ -157,12 +154,6 @@ class GraphEditor {
       if (this.selectedNodes.length > 2) {
         this.selectedNodes.shift();
       }
-      //change this stuff. Seriously, change it.
-      //Maybe a check to see whether tbody item information is already populated?
-      displayNodeInfo(this.selectedNodes[0]);
-      if (this.selectedNodes.length === 2) {
-        displayNode2Info(this.selectedNodes[1]);
-      }
     }
     this.domElem.style.cursor = node ? '-webkit-grab' : null;
   }
@@ -170,10 +161,8 @@ class GraphEditor {
   handleLinkRightClick(link) {
     if (link) {
       if (this.selectedLink === link) this.selectedLink = null;
-      else {
+      else
         this.selectedLink = link;
-        displayEdgeInfo(link);
-      }
     }
   }
 
@@ -185,10 +174,7 @@ class GraphEditor {
 
   update(graph) {
     this.graphObj(this.domElem).graphData(graph).nodeAutoColorBy('classification');
-
     this.resetSelection();
-
-    displayGraphInfo(graph); // move this in controller and call it from client_events.js
   }
 
   notify(data){

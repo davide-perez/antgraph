@@ -134,9 +134,9 @@ class AntColony {
                 // Note that pheromone information is encapsulated in the link object:
                 // no need of explictly building a routing table.
 
-                // if ant is isolated, kill it
+                // if ant is insulated, kill it
                 if(routingTable.length === 0){
-                    ant.alive = false;
+                    currentAnt.alive = false;
                     continue;
                 }
                                
@@ -239,8 +239,8 @@ class AntColony {
 
     notify(data){
         // add specific variables because they are not present at the moment of creation (add them to prototype instead?)
-        this.environment.addPropertyOnNodes('noOfAnts', 0);
-        this.environment.addPropertyOnLinks('pheromone', 1);
+        //this.environment.addPropertyOnNodes('noOfAnts', 0);
+        //this.environment.addPropertyOnLinks('pheromone', 1);
     }
 
     reset(){

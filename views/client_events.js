@@ -1,3 +1,6 @@
+var CANVAS_WIDTH = 1200;
+var CANVAS_HEIGHT = 1000;
+
 var e = null;
 var controller = null;
 var colony = null;
@@ -78,7 +81,8 @@ function insertNodeOnKeyPress() {
 function insertNodeOnClick() {
   let x = event.clientX;
   let y = event.clientY;
-  controller.insertNodeAt('', null, 'normal', x, y);
+  if (x < CANVAS_WIDTH && y < CANVAS_HEIGHT)
+    controller.insertNodeAt('', null, 'normal', x, y);
 }
 
 
