@@ -7,3 +7,25 @@ canvas {
     border-color: black;
     border-width: 3px 3px 3px 3px;
 }
+
+#start-btn{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.algorithm-parameters{
+    border-style: solid;
+    border-color: black;
+    border-width: 1px 1px 1px 1px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    padding-top: 5px;
+    padding-right: 5px;
+    padding-bottom: 5px;
+    padding-left: 5px; 
+}
+
+.algorithm-param{
+    margin-top: 5px;
+    margin-bottom: 25px; 
+}

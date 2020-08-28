@@ -98,6 +98,8 @@ class Graph {
     reset() {
         this.nodes = [];
         this.links = [];
+
+        this.notifyObservers({nodes: this.nodes, links: this.links});
     }
 
     //////////////////////////////////END MODIFY DATASET//////////////////////////////

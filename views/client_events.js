@@ -13,19 +13,6 @@ function loadEditor() {
   setupDefaultGraph();
 }
 
-function setupDefaultGraph2() {
-  controller.insertNode('starter', '170496', 'start');
-  var start = controller.getNode('170496');
-  var node1 = controller.insertAnonymousNode('A');
-  var node2 = controller.insertAnonymousNode('B');
-  var node3 = controller.insertAnonymousNode('C');
-  var node4 = controller.insertAnonymousNode('D');
-  controller.insertLink(start,node1);
-  controller.insertLink(start,node2);
-  controller.insertLink(start,node3);
-  controller.insertLink(start,node4);
-}
-
 function setupDefaultGraph() {
   controller.insertNode('starter', '170496', 'start');
   controller.insertNode('ender', '000000', 'goal');
@@ -34,41 +21,48 @@ function setupDefaultGraph() {
   var node1 = controller.insertAnonymousNode();
   var node2 = controller.insertAnonymousNode();
   var node3 = controller.insertAnonymousNode();
-  controller.insertLink(start,node1);
-  controller.insertLink(node1,node2);
-  controller.insertLink(node2,end);
-  controller.insertLink(start,node3);
-  controller.insertLink(node3,end);
+  controller.insertLink(start, node1);
+  controller.insertLink(node1, node2);
+  controller.insertLink(node2, end);
+  controller.insertLink(start, node3);
+  controller.insertLink(node3, end);
 }
 
 
 function setupClientEvents() {
-  //document.addEventListener('keydown', (event) => insertNodeOnKeyPress());
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
   document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
   document.addEventListener('keydown', (event) => emitParticleOnKeyPress());
   document.addEventListener('click', (event) => insertNodeOnClick());
   document.addEventListener('keydown', (event) => setNodeClassificationOnKeyPress());
+}
 
-  document.addEventListener('keypress', (event) => testAntColony());
+function initAntColony(){
+  var selectedAlgorithm = getSelectedAlgorithm();
+  switch (selectedAlgorithm) {
+    case 'S-ACO':
+      colony = new AntColonyShortestPath(controller);
+      break;
+    case 'AS-ACO':
+      colony = new AntColonyShortestPath(controller);
+      break;
+    default:
+      alert('No valid algorithm selected.');
+      return;
+  }
+  fetchAlgorithmParams(colony);
 }
 
 
-async function testAntColony() {
-  if (event.key !== 't')
+async function run() {
+  if(!confirm('Run "' + colony.name + '" with the selected settings?'))
     return;
-  if (confirm('Release ants and start algorithm?')){
-    if(!colony)
-      colony = new AntColonyShortestPath(controller)
-    else{
-      colony.reset();
-      controller.resetEditor();
-    }
-    var solution = await colony.ACOMetaHeuristic();
-    console.log('HERES A SOLUTION:');
-    console.table(solution);    
-  }
+  disableAlgorithmButtons();
+  var solution = await colony.ACOMetaHeuristic();
+  console.log('HERES A SOLUTION:');
+  console.table(solution);
+  enableAlgorithmButtons();
 }
 
 function insertNodeOnKeyPress() {
@@ -117,13 +111,13 @@ function emitParticleOnKeyPress() {
   }
 }
 
-function setNodeClassificationOnKeyPress(){
-  switch(event.key){
+function setNodeClassificationOnKeyPress() {
+  switch (event.key) {
     case 'f':
-      controller.setNodeClassificationFromUserSelection('goal'); 
+      controller.setNodeClassificationFromUserSelection('goal');
       break;
     case 'n':
-      controller.setNodeClassificationFromUserSelection('start'); 
+      controller.setNodeClassificationFromUserSelection('start');
       break;
   }
 }

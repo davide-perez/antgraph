@@ -146,6 +146,10 @@ class GraphController {
         this.graph.registerObserver(observer);
     }
 
+    removeObserverOnGraph(observer){
+        this.graph.unregisterObserver(observer);
+    }
+
     addPropertyOnLinks(propName, propValue){
         this.graph.links.map(link => {
             //if(!link.hasOwnProperty(propName))
@@ -162,6 +166,10 @@ class GraphController {
 
     resetEditor(){
         this.renderer.update(this.graph);
+    }
+
+    reset(){
+        this.graph.reset();
     }
 
 }

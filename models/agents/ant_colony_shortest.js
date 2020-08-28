@@ -3,6 +3,10 @@ class AntColonyShortestPath extends AntColony {
     constructor(env) {
         super(env);
 
+        this.name = 'S-ACO';
+        this.ALPHA = 1;
+        this.BETA = 1;
+        this.RHO = 0.01;
         this.ONLINE_STEP_UPDATE = true;
         this.ONLINE_DELAYED_UPDATE = true;
     }
@@ -11,20 +15,7 @@ class AntColonyShortestPath extends AntColony {
     }
 
     pheromoneEvaporation(){
-        this.environment.doEvaporation(this.EVAPORATION);
-        // formula: (1 - this.EVAPORATION) * link.pheromone;        
-    }
-
-    updatePheromones(updates){
-        updates.forEach(update => {
-            // update of form {link, pheromoneQty}
-            let link = update.link;
-            let complementaryLink = controller.findComplementaryLink(link);
-            if(link.pheromone < this.PHEROMONE_MAX_TRESHOLD)
-                link.pheromone += update.pheromone;
-            if(complementaryLink.pheromone < this.PHEROMONE_MAX_TRESHOLD)
-                complementaryLink.pheromone += update.pheromone;
-        });
+        this.environment.doEvaporation(this.RHO);
     }
 
     updateRoutingTable(ant){
@@ -61,9 +52,8 @@ class AntColonyShortestPath extends AntColony {
     // has a chance to be taken. Which value to give as a starter?
     applyProbabilisticRule(ant, routingTable){
 
-        var alpha = 1;
         // sum of all pheromones (denominator)
-        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,alpha),0);
+        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,this.ALPHA),0);
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
             return {link: link, prob: link.pheromone / total};

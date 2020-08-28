@@ -30,7 +30,6 @@ class AntColony {
         this.ONLINE_DELAYED_UPDATE = false;
 
         this.PHEROMONE = 0.2;
-        this.EVAPORATION = 0.01;
         this.NO_OF_ANTS = 25;
         this.TICK_INTERVAL = 300;
         // this.NO_OF_ITERATIONS = Number.MAX_SAFE_INTEGER;
@@ -205,11 +204,12 @@ class AntColony {
         throw new Error('abstract function');
     }
 
+
     pheromoneEvaporation(){
-        this.environment.doEvaporation(this.EVAPORATION);
-        // formula: (1 - this.EVAPORATION) * link.pheromone;        
+        throw new Error('abstract function');     
     }
 
+    
     updatePheromones(updates){
         updates.forEach(update => {
             // update of form {link, pheromoneQty}
@@ -239,8 +239,8 @@ class AntColony {
 
     notify(data){
         // add specific variables because they are not present at the moment of creation (add them to prototype instead?)
-        //this.environment.addPropertyOnNodes('noOfAnts', 0);
-        //this.environment.addPropertyOnLinks('pheromone', 1);
+        this.environment.addPropertyOnNodes('noOfAnts', 0);
+        this.environment.addPropertyOnLinks('pheromone', 1);
     }
 
     reset(){

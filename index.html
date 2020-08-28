@@ -34,10 +34,9 @@
   <script src="./controllers/graph_controller.js"></script>
   <script src="./controllers/graph_editor.js"></script>
   <script src="./views/client_events.js"></script>
+  <script src="./views/cockpit.js"></script>
   <script src="./models/agents/ant_colony_base.js"></script>
   <script src="./models/agents/ant_colony_shortest.js"></script>
-  <script src="./models/policies/ACO_angle_policy.js"></script>
-  <script src="./models/policies/ACO_standard_policy.js"></script>
   <script>
   </script>
   <title>
@@ -63,23 +62,58 @@
         </ul>
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="algorithm" role="tabpanel" aria-labelledby="algorithm-tab">
+            <p>
+              Select an algorithm from the ones available in the list and click the button to start the simulation.
+            </p>
             <div class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input" id="rbS-ACO" name="algorithmRadios" checked>
+              <input type="radio" class="custom-control-input" id="rbS-ACO" name="algorithm-radios" onclick="initAntColony()" value="S-ACO">
               <label class="custom-control-label" for="rbS-ACO">S-ACO algorithm</label>
             </div>            
             <div class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input" id="rbAS-ACO" name="algorithmRadios">
+              <input type="radio" class="custom-control-input" id="rbAS-ACO" name="algorithm-radios" onclick="initAntColony()" value="AS-ACO">
               <label class="custom-control-label" for="rbAS-ACO">AS-ACO algorithm</label>
             </div>
+            <div class="form-group algorithm-parameters">
+              <div class="algorithm-param">
+                <label for="noOfAntsParam">No. of ants</label>
+                <input type="number" id="noOfAntsParam" class="form-control">
+              </div>
+              <div class="algorithm-param">
+                <label for="noOfIterationsParam">No. of iterations</label>
+                <input type="number" id="noOfIterationsParam" class="form-control">
+              </div>
+              <div class="algorithm-param">
+                <label for="pheromoneParam">Pheromone unit</label>
+                <input type="number" id="pheromoneParam" class="form-control">
+              </div>
+              <div class="algorithm-param">
+                <label for="alphaParam">alpha</label>
+                <input type="number" id="alphaParam" class="form-control">
+              </div>
+              <div class="algorithm-param">
+                <label for="betaParam">beta</label>
+                <input type="number" id="betaParam" class="form-control">
+              </div>
+              <div class="algorithm-param">
+                <label for="rhoParam">rho</label>
+                <input type="number" id="rhoParam" class="form-control">
+              </div>                    
+            </div>
+            <button type="button" class="btn btn-primary" id="start-btn" onclick="run()">Start simulation</button>
           </div>
-          <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">Food truck fixie
-            locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit,
-            blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
-            Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum
-            PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS
-            salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit,
-            sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-            stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.</div>
+          <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">
+            <p>
+              Food truck fixie
+              locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit,
+              blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
+              Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum
+              PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS
+              salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit,
+              sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
+              stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+            </p>
+            <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset environment</button>
+          </div>
           <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">Etsy mixtape
             wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack
             lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard
