@@ -56,17 +56,12 @@ async function testAntColony() {
   if (event.key !== 't')
     return;
   if (confirm('Release ants and start algorithm?')){
-    var policyMgr = new ACOPolicyManager();
-    var policy = new ACOStandardPolicy();
-    policyMgr.checkPolicy(policy);
     if(!colony)
-      colony = new AntColony(controller)
+      colony = new AntColonyShortestPath(controller)
     else{
       colony.reset();
       controller.resetEditor();
     }
-    colony.setPolicy(policy);
-    //var solution = await colony.run();
     var solution = await colony.ACOMetaHeuristic();
     console.log('HERES A SOLUTION:');
     console.table(solution);    
