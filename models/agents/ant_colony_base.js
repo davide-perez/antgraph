@@ -52,15 +52,7 @@ class AntColony {
         for(let i = 0; i < this.NO_OF_ANTS; i++){
             if(this.RANDOM_START)
                 startPos = this.environment.selectRandomNode();
-            let ant = {
-                startPosition: startPos,
-                position: startPos, 
-                visited: [], 
-                solution: [],
-                alive: true, 
-                foundSolution: false,
-                retracing: false
-            };
+            let ant = this.createAnt(startPos);
             this.ants[i] = ant;
         }
     }
@@ -75,6 +67,8 @@ class AntColony {
             foundSolution: false,
             retracing: false
         };
+
+        return ant;
     }
 
     testSolution(){

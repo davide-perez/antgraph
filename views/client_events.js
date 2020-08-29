@@ -45,7 +45,7 @@ function initAntColony(){
       colony = new AntColonyShortestPath(controller);
       break;
     case 'AS-ACO':
-      colony = new AntColonyShortestPath(controller);
+      colony = new AntColonyShortestPathAngle(controller);
       break;
     default:
       alert('No valid algorithm selected.');
@@ -59,6 +59,7 @@ async function run() {
   if(!confirm('Run "' + colony.name + '" with the selected settings?'))
     return;
   setAlgorithmParams(colony);
+  colony.reset();
   disableAlgorithmButtons();
   var solution = await colony.ACOMetaHeuristic();
   console.log('HERES A SOLUTION:');
@@ -121,13 +122,4 @@ function setNodeClassificationOnKeyPress() {
       controller.setNodeClassificationFromUserSelection('start');
       break;
   }
-}
-
-function findLinkLine(link){
-  var node1 = link.source;
-  var node2 = link.target;
-  var x1 = node1.x;
-  var y1 = node1.y;
-  var x2 = node2.x;
-  var y2 = node2.y; 
 }
