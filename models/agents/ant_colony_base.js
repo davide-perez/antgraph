@@ -41,7 +41,7 @@ class AntColony {
         this.RANDOM_START = false; // every ant starts on a random position
 
         // set pheromone property on all links
-        this.environment.addPropertyOnLinks('pheromone', 1);
+        this.environment.addPropertyOnLinks('pheromone', this.PHEROMONE);
         this.environment.addPropertyOnNodes('noOfAnts', 0);
     }
 
@@ -63,6 +63,18 @@ class AntColony {
             };
             this.ants[i] = ant;
         }
+    }
+
+    createAnt(startPos){
+        let ant = {
+            startPosition: startPos,
+            position: startPos, 
+            visited: [], 
+            solution: [],
+            alive: true, 
+            foundSolution: false,
+            retracing: false
+        };
     }
 
     testSolution(){
@@ -240,7 +252,7 @@ class AntColony {
     notify(data){
         // add specific variables because they are not present at the moment of creation (add them to prototype instead?)
         this.environment.addPropertyOnNodes('noOfAnts', 0);
-        this.environment.addPropertyOnLinks('pheromone', 1);
+        this.environment.addPropertyOnLinks('pheromone', this.PHEROMONE);
     }
 
     reset(){
@@ -248,7 +260,7 @@ class AntColony {
         this.ants = null;
         this.currentSolution = null;
         this.environment.addPropertyOnLinks('noOfAnts', 0);
-        this.environment.addPropertyOnNodes('pheromone', 1);
+        this.environment.addPropertyOnNodes('pheromone', this.PHEROMONE);
     }
 
 

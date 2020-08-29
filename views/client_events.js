@@ -58,6 +58,7 @@ function initAntColony(){
 async function run() {
   if(!confirm('Run "' + colony.name + '" with the selected settings?'))
     return;
+  setAlgorithmParams(colony);
   disableAlgorithmButtons();
   var solution = await colony.ACOMetaHeuristic();
   console.log('HERES A SOLUTION:');
@@ -120,4 +121,13 @@ function setNodeClassificationOnKeyPress() {
       controller.setNodeClassificationFromUserSelection('start');
       break;
   }
+}
+
+function findLinkLine(link){
+  var node1 = link.source;
+  var node2 = link.target;
+  var x1 = node1.x;
+  var y1 = node1.y;
+  var x2 = node2.x;
+  var y2 = node2.y; 
 }
