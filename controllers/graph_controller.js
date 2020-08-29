@@ -61,7 +61,7 @@ class GraphController {
             node.y = pos.y;
         }
         if (!this.graph.rename(node, id)) {
-            throw new Error('Node ' + id + 'already exists in this environment.');
+            throw new Error('node ' + id + 'already exists in this environment.');
         };
         this.graph.addNode(node);
     }
@@ -151,8 +151,13 @@ class GraphController {
         this.renderer.update(this.graph);
     }
 
-    reset(){
+    reinit(){
         this.graph.reset();
+    }
+
+    reset(pheromoneDefault){
+        this.graph.nodes.map(node => node.noOfAnts = 0);
+        this.graph.links.map(link => link.pheromone = pheromoneDefault);
     }
 
 }

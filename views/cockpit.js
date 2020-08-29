@@ -16,7 +16,7 @@ function getSelectedAlgorithm(){
 function resetEnvironment(){
     if(!confirm('Reset environment? All nodes and links will be deleted.'))
         return;
-    controller.reset();
+    controller.reinit();
 }
 
 function setAlgorithm(name){
