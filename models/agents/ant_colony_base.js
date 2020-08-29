@@ -39,10 +39,6 @@ class AntColony {
         this.PHEROMONE_MAX_TRESHOLD = 100;
         this.MEMORYLESS_ANTS = false; // just remember last step. Ants remembery full path can perform delayed pheromone update.
         this.RANDOM_START = false; // every ant starts on a random position
-
-        // set pheromone property on all links
-        this.environment.addPropertyOnLinks('pheromone', this.PHEROMONE);
-        this.environment.addPropertyOnNodes('noOfAnts', 0);
     }
 
 
@@ -244,17 +240,12 @@ class AntColony {
     }
 
     notify(data){
-        // add specific variables because they are not present at the moment of creation (add them to prototype instead?)
-        this.environment.addPropertyOnNodes('noOfAnts', 0);
-        this.environment.addPropertyOnLinks('pheromone', this.PHEROMONE);
     }
 
     reset(){
         this.active = true;
         this.ants = null;
         this.currentSolution = null;
-        this.environment.addPropertyOnLinks('noOfAnts', 0);
-        this.environment.addPropertyOnNodes('pheromone', this.PHEROMONE);
     }
 
 

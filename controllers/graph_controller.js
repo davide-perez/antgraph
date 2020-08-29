@@ -24,7 +24,7 @@ class GraphController {
         label = label || '';
         id = id || this.graph.generateId();
         classification = classification || 'normal';
-        let node = new GNode(label);
+        let node = new AntNode(label);
         node.classification = classification;
         if (!this.graph.rename(node, id)) {
             throw new Error('Node ' + id + 'already exists.');
@@ -34,7 +34,7 @@ class GraphController {
 
     //test
     insertAnonymousNode(label){
-        var node = new GNode(label);
+        var node = new AntNode(label);
         label = label || '';
         var id = this.graph.generateId();
         if (this.graph.rename(node, id))
@@ -53,7 +53,7 @@ class GraphController {
     insertNodeAt(label, id, classification, x, y) {
         label = label || '';
         id = id || this.graph.generateId();
-        let node = new GNode(label);
+        let node = new AntNode(label);
         node.classification = classification || 'normal';
         if (!this.graph.empty() && (x && y)) {
             let pos = this.renderer.graphObj.screen2GraphCoords(x, y);
@@ -68,8 +68,11 @@ class GraphController {
 
 
     insertLink(startNode, endNode) {
-        let link = new GLink(startNode, endNode);
+        let link = new AntLink(startNode, endNode);
+        let reverseLink = new AntLink(endNode, startNode);
+        reverseLink.isMainLink = false;
         this.graph.addLink(link);
+        this.graph.addLink(reverseLink);
     }
 
 
@@ -79,13 +82,6 @@ class GraphController {
             return;
         this.insertLink(selectedNodes[0], selectedNodes[1]);
 
-    }
-
-    emitParticleAcrossSelectedLink() {
-        let selectedLink = this.renderer.selectedLink;
-        if (!selectedLink)
-            return;
-        this.renderer.emitParticle(selectedLink);
     }
 
     updateDirectionalParticles(maxTreshold){
@@ -107,9 +103,10 @@ class GraphController {
 
     deleteLinkFromUserSelection() {
         let selectedLink = this.renderer.selectedLink;
-        if (!selectedLink)
+        let reverseLink = this.findComplementaryLink(selectedLink);
+        if (!selectedLink || !reverseLink)
             return;
-        if (this.graph.removeLink(selectedLink)) {
+        if (this.graph.removeLink(selectedLink) && this.graph.removeLink(reverseLink)) {
             this.renderer.resetSelection();
         }
     }
@@ -148,20 +145,6 @@ class GraphController {
 
     removeObserverOnGraph(observer){
         this.graph.unregisterObserver(observer);
-    }
-
-    addPropertyOnLinks(propName, propValue){
-        this.graph.links.map(link => {
-            //if(!link.hasOwnProperty(propName))
-                link[propName] = propValue;
-        });
-    }
-
-    addPropertyOnNodes(propName, propValue){
-        this.graph.nodes.map(node => {
-            //if(!node.hasOwnProperty(propName))
-                node[propName] = propValue;
-        });
     }
 
     resetEditor(){

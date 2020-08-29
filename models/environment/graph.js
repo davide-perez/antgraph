@@ -39,8 +39,9 @@ class Graph {
         return true;
     }
 
+    // test
     addAnonymousNode(){
-        var node = new GNode();
+        var node = new AntNode();
         var id = this.generateId();
         if (this.rename(node, id))
             this.addNode(node);
@@ -69,9 +70,7 @@ class Graph {
         let link_already_exists = this.findLinkBetweenNodes(link.source, link.target);
         if (!nodes_exists || link_already_exists)
             return false;
-        var link2 = new GLink(link.target, link.source);
-        link2.isMainLink = false;
-        this.links.push(link, link2); // to get bidirectionality
+        this.links.push(link);
 
         this.notifyObservers({nodes: this.nodes, links: this.links});
 
@@ -80,8 +79,7 @@ class Graph {
 
     removeLink(link) {
         let x_links = this.links.slice();
-        var link2 = this.findLinkBetweenNodes(link.target, link.source);
-        this.links = x_links.filter(e => (e !== link) && (e !== link2));
+        this.links = x_links.filter(e => (e !== link));
 
         this.notifyObservers({nodes: this.nodes, links: this.links});
 
