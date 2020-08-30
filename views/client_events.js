@@ -1,5 +1,6 @@
 var CANVAS_WIDTH = 1200;
 var CANVAS_HEIGHT = 1000;
+var INTERACTIVE_MODE = true;
 
 var e = null;
 var controller = null;
@@ -9,7 +10,6 @@ function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
   controller.drawEnvironment();
-  console.table(controller.renderer.graphObj);
   setupClientEvents();
   setupDefaultGraph();
   updateEnvironmentInfo();
@@ -57,12 +57,36 @@ function initAntColony(){
 
 
 async function run() {
+  if(!colony){
+    alert('No algorithm selected. Please select an algorithm from the corresponding tab.');
+    return;
+  }
   if(!confirm('Run "' + colony.name + '" with the selected settings?'))
     return;
   setAlgorithmParams(colony);
   colony.reset();
   disableAlgorithmButtons();
   var solution = await colony.ACOMetaHeuristic();
+  console.log('HERES A SOLUTION:');
+  console.table(solution);
+  reportResults();
+  enableAlgorithmButtons();
+}
+
+async function runReportingMode() {
+  if(!colony){
+    alert('No algorithm selected. Please select an algorithm from the corresponding tab.');
+    return;
+  }
+  if(!confirm('Run "' + colony.name + '" with the selected settings in reporting mode?'))
+    return;
+  var reportEngine = new ReportingEngine(colony);
+  INTERACTIVE_MODE = false;
+  controller.disableGraphicsInteraction();
+  setAlgorithmParams(colony);
+  colony.reset();
+  disableAlgorithmButtons();
+  var solution = await reportEngine.report();
   console.log('HERES A SOLUTION:');
   console.table(solution);
   reportResults();
@@ -78,6 +102,8 @@ function insertNodeOnKeyPress() {
 }
 
 function insertNodeOnClick() {
+  if(!INTERACTIVE_MODE)
+    return;
   let x = event.clientX;
   let y = event.clientY;
   if (x < CANVAS_WIDTH && y < CANVAS_HEIGHT)
@@ -87,6 +113,8 @@ function insertNodeOnClick() {
 
 
 function insertLinkOnKeyPress() {
+  if(!INTERACTIVE_MODE)
+    return;
   let key = event.key;
   if (key === '-') {
     controller.insertLinkFromUserSelection();
@@ -96,6 +124,8 @@ function insertLinkOnKeyPress() {
 
 
 function deleteNodeOnKeyPress() {
+  if(!INTERACTIVE_MODE)
+    return;
   let key = event.key;
   if (key === 'Delete') {
     controller.deleteNodeFromUserSelection();
@@ -106,6 +136,8 @@ function deleteNodeOnKeyPress() {
 
 
 function deleteLinkOnKeyPress() {
+  if(!INTERACTIVE_MODE)
+    return;
   let key = event.key;
   if (key === 'Backspace') {
     controller.deleteLinkFromUserSelection();
@@ -115,6 +147,8 @@ function deleteLinkOnKeyPress() {
 
 
 function setNodeClassificationOnKeyPress() {
+  if(!INTERACTIVE_MODE)
+    return;
   switch (event.key) {
     case 'f':
       controller.setNodeClassificationFromUserSelection('goal');

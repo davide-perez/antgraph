@@ -1,4 +1,4 @@
-// add options to disable graphics.
+// add options to disable graphics. (renderer.pauseAnimation)
 class GraphController {
 
     constructor(domElem, graph) {
@@ -10,6 +10,14 @@ class GraphController {
 
     drawEnvironment(){
         this.renderer.render();
+    }
+
+    disableGraphicsInteraction(){
+        this.renderer.disableInteraction();
+    }
+
+    enableGraphicsInteraction(){
+        this.renderer.enableInteraction();
     }
 
     addNodeLabelProperty(propertyName, propertyCaption){
@@ -85,7 +93,8 @@ class GraphController {
     }
 
     updateDirectionalParticles(maxTreshold){
-        this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/5) : maxTreshold);
+        if(INTERACTIVE_MODE)
+            this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/5) : maxTreshold);
     }
 
     doEvaporation(factor){

@@ -7,8 +7,6 @@ class GraphEditor {
     this.CANVAS_HEIGHT = CANVAS_HEIGHT || 800;
     this.selectedNodes = [];
     this.selectedLink = null;
-    this.nodeLabelProperties = [];
-    this.linkLabelProperties = [];
     this.graphObj = ForceGraph();
   }
 
@@ -16,6 +14,23 @@ class GraphEditor {
     this.initGraph();
     this.setupEvents();
     this.setupCanvas();   
+  }
+
+  disableInteraction(){
+    this.graphObj
+      .linkDirectionalParticles(0)
+      .enableNodeDrag(false)
+      .enableZoomPanInteraction(false)
+      .enablePointerInteraction(false)
+      .pauseAnimation();
+  }
+
+  enableInteraction(){
+    this.graphObj
+      .enableNodeDrag(true)
+      .enableZoomPanInteraction(true)
+      .enablePointerInteraction(true)
+      .resumeAnimation();
   }
 
   initGraph() {
@@ -71,10 +86,10 @@ class GraphEditor {
       .linkCanvasObjectMode(() => 'after')
       .linkCanvasObject((link, ctx) => {
 
-        if(!link.isMainLink)
+        if(!INTERACTIVE_MODE)
           return;
 
-        if(this.linkLabelProperties === [])
+        if(!link.isMainLink)
           return;
 
         const MAX_FONT_SIZE = 15;

@@ -33,6 +33,7 @@
   <script src="./models/environment/ant_node.js"></script>
   <script src="./controllers/graph_controller.js"></script>
   <script src="./controllers/graph_editor.js"></script>
+  <script src="./controllers/reporting_engine.js"></script>
   <script src="./views/client_events.js"></script>
   <script src="./views/cockpit.js"></script>
   <script src="./models/agents/ant_colony_base.js"></script>
@@ -123,7 +124,8 @@
           </div>
             <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
             <div id="no-results">No reporting results. Run an algorithm to obtain results.
-              Idea: run same algorithm n times, and gather info about % of success.
+              Here it is possible to run some reporting tasks on the selected algorithm. Set a number of times the algorithm will be executed and it will run the defined amount of times,
+              giving then some useful insights on the effectiveness of such algorithm with the current configuration.
             </div>
             <div class="reporting-entry">
               Best solution length: <div class="reporting-entry" id="bestSolutionLengthEntry"></div>
@@ -131,6 +133,7 @@
             <div class="reporting-entry">
               Solution path: <div class="reporting-entry" id="bestSolutionPathEntry"></div>
             </div>
+            <button type="button" class="btn btn-primary" id="reporting-btn" onclick="runReportingMode()">Start reporting</button>
           </div>
         </div>
       </div>

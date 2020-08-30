@@ -2,11 +2,13 @@
 function disableAlgorithmButtons(){
     $('input[name=algorithm-radios]').attr("disabled",true);
     $('#start-btn').attr("disabled",true);
+    $('#report-btn').attr("disabled",true);
 }
 
 function enableAlgorithmButtons(){
     $('input[name=algorithm-radios]').attr("disabled",false);
-    $('#start-btn').attr("disabled",false);   
+    $('#start-btn').attr("disabled",false);
+    $('#report-btn').attr("disabled",false);
 }
 
 function getSelectedAlgorithm(){
