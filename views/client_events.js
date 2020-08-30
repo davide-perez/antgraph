@@ -9,8 +9,10 @@ function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
   controller.drawEnvironment();
+  console.table(controller.renderer.graphObj);
   setupClientEvents();
   setupDefaultGraph();
+  updateEnvironmentInfo();
 }
 
 function setupDefaultGraph() {
@@ -33,7 +35,6 @@ function setupClientEvents() {
   document.addEventListener('keydown', (event) => insertLinkOnKeyPress());
   document.addEventListener('keydown', (event) => deleteNodeOnKeyPress());
   document.addEventListener('keydown', (event) => deleteLinkOnKeyPress());
-  document.addEventListener('keydown', (event) => emitParticleOnKeyPress());
   document.addEventListener('click', (event) => insertNodeOnClick());
   document.addEventListener('keydown', (event) => setNodeClassificationOnKeyPress());
 }
@@ -64,6 +65,7 @@ async function run() {
   var solution = await colony.ACOMetaHeuristic();
   console.log('HERES A SOLUTION:');
   console.table(solution);
+  reportResults();
   enableAlgorithmButtons();
 }
 
@@ -71,6 +73,7 @@ function insertNodeOnKeyPress() {
   let key = event.key;
   if (key === '+') {
     controller.insertNode('');
+    updateEnvironmentInfo();
   }
 }
 
@@ -79,6 +82,7 @@ function insertNodeOnClick() {
   let y = event.clientY;
   if (x < CANVAS_WIDTH && y < CANVAS_HEIGHT)
     controller.insertNodeAt('', null, 'normal', x, y);
+    updateEnvironmentInfo();
 }
 
 
@@ -86,6 +90,7 @@ function insertLinkOnKeyPress() {
   let key = event.key;
   if (key === '-') {
     controller.insertLinkFromUserSelection();
+    updateEnvironmentInfo();   
   }
 }
 
@@ -94,6 +99,7 @@ function deleteNodeOnKeyPress() {
   let key = event.key;
   if (key === 'Delete') {
     controller.deleteNodeFromUserSelection();
+    updateEnvironmentInfo();
   }
 
 }
@@ -103,15 +109,10 @@ function deleteLinkOnKeyPress() {
   let key = event.key;
   if (key === 'Backspace') {
     controller.deleteLinkFromUserSelection();
+    updateEnvironmentInfo();
   }
 }
 
-function emitParticleOnKeyPress() {
-  let key = event.key;
-  if (key === 'Control') {
-    controller.emitParticleAcrossSelectedLink();
-  }
-}
 
 function setNodeClassificationOnKeyPress() {
   switch (event.key) {

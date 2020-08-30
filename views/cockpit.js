@@ -56,3 +56,27 @@ function setAlgorithmParams(colony){
     colony.BETA = betaParam;
     colony.RHO = rhoParam;
 }
+
+
+function updateEnvironmentInfo(){
+    $('#noOfNodesInfo').text(controller.graph.nodes.length);
+    $('#noOfLinksInfo').text(controller.graph.links.length / 2);
+}
+
+
+function reportResults(){
+    var solution = colony.currentSolution;
+    if(!solution)
+        return;
+    $('#no-results').hide();
+    $('#bestSolutionLengthEntry').text(solution.length);
+    var pathString = '';
+    solution.forEach((link,index) => {
+        if(index === 0){
+            pathString += 'node ' + link.source.id;
+            return;
+        }
+        pathString += '- node ' + link.target.id;
+    });
+    $('#bestSolutionPathEntry').text(pathString);
+}

@@ -1,4 +1,4 @@
-// also this is kept as generic as possible.
+// add options to disable graphics.
 class GraphController {
 
     constructor(domElem, graph) {

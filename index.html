@@ -64,15 +64,18 @@
         <div class="tab-content" id="myTabContent">
           <div class="tab-pane fade show active" id="algorithm" role="tabpanel" aria-labelledby="algorithm-tab">
             <p>
-              Select an algorithm from the ones available in the list and click the button to start the simulation. Algorithm will start with the selected
+              Select an algorithm from the ones available in the list and click the button to start the simulation.
+              Algorithm will start with the selected
               settings.
             </p>
             <div class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input" id="rbS-ACO" name="algorithm-radios" onclick="initAntColony()" value="S-ACO">
+              <input type="radio" class="custom-control-input" id="rbS-ACO" name="algorithm-radios"
+                onclick="initAntColony()" value="S-ACO">
               <label class="custom-control-label" for="rbS-ACO">S-ACO algorithm</label>
-            </div>            
+            </div>
             <div class="custom-control custom-radio">
-              <input type="radio" class="custom-control-input" id="rbAS-ACO" name="algorithm-radios" onclick="initAntColony()" value="AS-ACO">
+              <input type="radio" class="custom-control-input" id="rbAS-ACO" name="algorithm-radios"
+                onclick="initAntColony()" value="AS-ACO">
               <label class="custom-control-label" for="rbAS-ACO">AS-ACO algorithm</label>
             </div>
             <div class="form-group algorithm-parameters">
@@ -99,30 +102,36 @@
               <div class="algorithm-param">
                 <label for="rhoParam">rho</label>
                 <input type="number" id="rhoParam" class="form-control" min="0" step=".01">
-              </div>                   
+              </div>
             </div>
             <button type="button" class="btn btn-primary" id="start-btn" onclick="run()">Start simulation</button>
           </div>
           <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">
             <p>
-              Food truck fixie
-              locavore, accusamus mcsweeney's marfa nulla single-origin coffee squid. Exercitation +1 labore velit,
-              blog sartorial PBR leggings next level wes anderson artisan four loko farm-to-table craft beer twee.
-              Qui photo booth letterpress, commodo enim craft beer mlkshk aliquip jean shorts ullamco ad vinyl cillum
-              PBR. Homo nostrud organic, assumenda labore aesthetic magna delectus mollit. Keytar helvetica VHS
-              salvia yr, vero magna velit sapiente labore stumptown. Vegan fanny pack odio cillum wes anderson 8-bit,
-              sustainable jean shorts beard ut DIY ethical culpa terry richardson biodiesel. Art party scenester
-              stumptown, tumblr butcher vero sint qui sapiente accusamus tattooed echo park.
+              TODO: add feature to save environment
             </p>
-            <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset environment</button>
+            <div class="environment-parameters">
+              <div class="environment-param">
+                No. of nodes: <div class="env-info" id="noOfNodesInfo"></div>
+              </div>
+              <div class="environment-param">
+                No. of links: <div class="env-info" id="noOfLinksInfo"></div>
+              </div>
+            </div>
+            <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset
+              environment</button>
           </div>
-          <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">Etsy mixtape
-            wayfarers, ethical wes anderson tofu before they sold out mcsweeney's organic lomo retro fanny pack
-            lo-fi farm-to-table readymade. Messenger bag gentrify pitchfork tattooed craft beer, iphone skateboard
-            locavore carles etsy salvia banksy hoodie helvetica. DIY synth PBR banksy irony. Leggings gentrify
-            squid 8-bit cred pitchfork. Williamsburg banh mi whatever gluten-free, carles pitchfork biodiesel fixie
-            etsy retro mlkshk vice blog. Scenester cred you probably haven't heard of them, vinyl craft beer blog
-            stumptown. Pitchfork sustainable tofu synth chambray yr.</div>
+            <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
+            <div id="no-results">No reporting results. Run an algorithm to obtain results.
+              Idea: run same algorithm n times, and gather info about % of success.
+            </div>
+            <div class="reporting-entry">
+              Best solution length: <div class="reporting-entry" id="bestSolutionLengthEntry"></div>
+            </div>
+            <div class="reporting-entry">
+              Solution path: <div class="reporting-entry" id="bestSolutionPathEntry"></div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

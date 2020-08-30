@@ -37,7 +37,9 @@ class GraphEditor {
       .linkDirectionalParticles(0)
       .linkDirectionalParticleSpeed(0.001)
       .linkDirectionalParticleColor((link) => link.isMainLink ? 'red' : 'purple')
-      .linkDirectionalParticleWidth(5);
+      .linkDirectionalParticleWidth(5)
+      .linkDirectionalArrowLength(10)
+      .linkDirectionalArrowRelPos(1);
       //.linkVisibility(l => l.isMainLink);
   }
 
