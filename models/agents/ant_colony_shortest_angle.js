@@ -4,9 +4,6 @@ class AntColonyShortestPathAngle extends AntColony {
         super(env);
 
         this.name = 'AS-ACO';
-        this.ALPHA = 1;
-        this.BETA = 1;
-        this.RHO = 0.01;
         this.ONLINE_STEP_UPDATE = true;
         this.ONLINE_DELAYED_UPDATE = false;
     }
@@ -31,27 +28,6 @@ class AntColonyShortestPathAngle extends AntColony {
 
     pheromoneEvaporation(){
         this.environment.doEvaporation(this.RHO);
-    }
-
-    updateRoutingTable(ant){
-        var antPosition = ant.position;
-        // retracing could not always be successful, because path may vary and visited nodes may exist no more.
-        // if retracing is active, ant attempts to give priority to retrace the path memorized. if not possible,
-        // switches to standard.
-        var outgoingLinks = this.environment.findOutgoingLinks(antPosition);
-        // find links that can be taken. Exclude the last visited one
-        var routingTable = outgoingLinks.filter((link) => {
-            let lastVisited = ant.visited[ant.visited.length - 1]
-            // if no last visited link, then ant still has to start
-            if(!lastVisited)
-                return true;
-            return (link !== lastVisited) && (link !== this.environment.findComplementaryLink(lastVisited))
-        });
-        // if no adjacent link is found, include the visited one
-        if(routingTable.length === 0)
-            routingTable = outgoingLinks;
-        
-        return routingTable;
     }
 
     testSolution(ant){
@@ -111,14 +87,6 @@ class AntColonyShortestPathAngle extends AntColony {
             }
             return low;
         }
-    }
-
-
-    releasePheromone(currentAnt, link, totalPheromone){
-        // path here is an object of form {link}. All pheromone goes on the single edge. In canonical formula, length matters: 1/link.length
-        // required to release an object of such form, where on each link is specified how much pheromone to deposit
-        return {link: link, pheromone: totalPheromone};
-
     }
 
 

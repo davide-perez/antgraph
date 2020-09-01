@@ -39,6 +39,9 @@ class AntColony {
         this.PHEROMONE_MAX_TRESHOLD = 100;
         this.MEMORYLESS_ANTS = false; // just remember last step. Ants remembery full path can perform delayed pheromone update.
         this.RANDOM_START = false; // every ant starts on a random position
+        this.ALPHA = 1;
+        this.BETA = 1;
+        this.RHO = 0.01;
     }
 
 
@@ -82,10 +85,6 @@ class AntColony {
 
     // compute probabilities using routingTable, ant memory and other constraints if any
     applyProbabilisticRule(ant, routingTable){
-        throw new Error('abstract function');
-    }
-
-    releasePheromone(){
         throw new Error('abstract function');
     }
 
@@ -138,6 +137,8 @@ class AntColony {
                 // if ant is insulated, kill it
                 if(routingTable.length === 0){
                     currentAnt.alive = false;
+                    if(currentAnt.position.noOfAnts > 0)
+                        currentAnt.position.noOfAnts -= 1;
                     continue;
                 }
                                
@@ -159,8 +160,13 @@ class AntColony {
                     // following line is wrong. I need to check if the node still exists in graph. How to?
                     if(preferredLink)
                         link = preferredLink
-                    else
-                        currentAnt.retracing = false;
+                    else{
+                    // cannot retrace because path does not exist anymore
+                        currentAnt.alive = false;
+                        if(currentAnt.position.noOfAnts > 0)
+                            currentAnt.position.noOfAnts -= 1;
+                        continue;
+                    }
                 }
                 if(!link)
                     link = that.applyProbabilisticRule(currentAnt, routingTable);
@@ -177,7 +183,7 @@ class AntColony {
 
                 // release pheromone. ACO algs exist that do not release any pheromone online.
                 if(that.ONLINE_STEP_UPDATE || currentAnt.retracing){
-                    let update = that.releasePheromone(currentAnt, link, that.PHEROMONE);
+                    let update = that.releasePheromone(link, that.PHEROMONE);
                     updates[i] = update;
                     that.environment.updateDirectionalParticles(that.PHEROMONE_MAX_TRESHOLD);
                 }
@@ -209,6 +215,34 @@ class AntColony {
 
     pheromoneEvaporation(){
         throw new Error('abstract function');     
+    }
+
+    updateRoutingTable(ant){
+        var antPosition = ant.position;
+        // retracing could not always be successful, because path may vary and visited nodes may exist no more.
+        // if retracing is active, ant attempts to give priority to retrace the path memorized. if not possible,
+        // switches to standard.
+        var outgoingLinks = this.environment.findOutgoingLinks(antPosition);
+        // find links that can be taken. Exclude the last visited one
+        var routingTable = outgoingLinks.filter((link) => {
+            let lastVisited = ant.visited[ant.visited.length - 1]
+            // if no last visited link, then ant still has to start
+            if(!lastVisited)
+                return true;
+            return (link !== lastVisited) && (link !== this.environment.findComplementaryLink(lastVisited))
+        });
+        // if no adjacent link is found, include the visited one
+        if(routingTable.length === 0)
+            routingTable = outgoingLinks;
+        
+        return routingTable;
+    }
+
+    releasePheromone(link, totalPheromone){
+        // path here is an object of form {link}. All pheromone goes on the single edge. In canonical formula, length matters: 1/link.length
+        // required to release an object of such form, where on each link is specified how much pheromone to deposit
+        return {link: link, pheromone: totalPheromone};
+
     }
 
     
