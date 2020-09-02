@@ -31,7 +31,7 @@ class AntColony {
 
         this.PHEROMONE = 0.2;
         this.NO_OF_ANTS = 25;
-        this.TICK_INTERVAL = 300;
+        this.TICK_INTERVAL = 100;
         // this.NO_OF_ITERATIONS = Number.MAX_SAFE_INTEGER;
         this.NO_OF_ITERATIONS = Infinity;
         this.TIMEOUT = 300;

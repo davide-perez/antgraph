@@ -169,4 +169,8 @@ class GraphController {
         this.graph.links.map(link => link.pheromone = pheromoneDefault);
     }
 
+    getGraphComponents(){
+        return {nodes: this.graph.nodes, edges: this.graph.edges};
+    }
+
 }

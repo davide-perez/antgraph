@@ -1,6 +1,6 @@
 // when in report mode, disable graphics and dynamic changes.
 class ReportingEngine {
-    constructor (colony){
+    constructor(colony) {
         this.colony = colony;
         this.iterations = 0;
         this.bestKnownSolution = null;
@@ -8,17 +8,17 @@ class ReportingEngine {
         this.totalAnts = 0;
     }
 
-    async report(){
+    async report() {
         var oldTimeout = this.colony.TIMEOUT;
         this.colony.TIMEOUT = 0;
-        for(let i = 0; i <= this.iterations; i++){
+        for (let i = 0; i <= this.iterations; i++) {
             let currSolution = await this.colony.ACOMetaHeuristic();
-            if(!currSolution)
+            if (!currSolution)
                 continue;
             let ants = this.colony.ants;
             this.totalAnts += ants.length;
             ants.forEach(ant => {
-                this.solutions.push(ant.solution);    
+                this.solutions.push(ant.solution);
             });
             this.colony.reset();
         }
@@ -31,7 +31,7 @@ class ReportingEngine {
         return this.bestKnownSolution;
     }
 
-    reset(){
+    reset() {
         this.colony.reset();
         this.iterations = 0;
         this.bestKnownSolution = null;
@@ -39,7 +39,46 @@ class ReportingEngine {
         this.totalAnts = 0;
     }
 
-    // find the shortest path and use it as test to check how many times solution is found
-    dijkstra(){
+    djikstraAlgorithm(graph) {
+        var nodes = graph.nodes;
+        var links = graph.links;
+        var startNode = nodes.find(n => n.classification === 'start');
+        var goalNode = nodes.find(n => n.classification === 'goal');
+        var queue = [];
+        if(!startNode || !goalNode)
+            return null;
+        var distances = nodes.map(node =>{
+            let dist = node.classification !== 'start' ? Infinity : 0;
+            return {node: node, previous: null, distance: dist}
+        });
+        queue.push(distances.find(d => d.node.classification === 'start'));
+
+        while (queue.length > 0) {
+            let currNode = queue.shift();
+            let weight = minNode.priority;
+            let neighbours = findNeighbours(currNode);
+            let outgoingLinks = outgoingLinks(node);
+            outgoingLinks.forEach(neighbor => {
+                let alt = distances[currNode] + neighbor.weight;
+                if (alt < distances[neighbor.node]) {
+                    distances[neighbor.node] = alt;
+                    prev[neighbor.node] = currNode;
+                    pq.enqueue(neighbor.node, distances[neighbor.node]);
+                }
+            });
+        }
+        return distances;
+
+        function outgoingLinks(node){
+            return links.filter(link => link.source === node);
+        }
+
+
+        function findNeighbours(node){
+            var outgoingLinks = outgoingLinks(node);
+            return nodes.filter(node => outgoingLinks.find(link => link.target === node));
+        }
+
+
     }
 }
