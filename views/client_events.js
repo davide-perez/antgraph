@@ -43,10 +43,10 @@ function initAntColony(){
   var selectedAlgorithm = getSelectedAlgorithm();
   switch (selectedAlgorithm) {
     case 'S-ACO':
-      colony = new AntColonyShortestPath(controller);
+      colony = new AntColonySACO(controller);
       break;
     case 'AS-ACO':
-      colony = new AntColonyShortestPathAngle(controller);
+      colony = new AntColonyASACO(controller);
       break;
     default:
       alert('No valid algorithm selected.');

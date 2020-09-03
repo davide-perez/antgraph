@@ -1,11 +1,26 @@
-class AntColonyShortestPath extends AntColony {
+class AntColonyASACO extends AntColony {
 
     constructor(env) {
         super(env);
 
-        this.name = 'S-ACO';
+        this.name = 'AS-ACO';
         this.ONLINE_STEP_UPDATE = true;
-        this.ONLINE_DELAYED_UPDATE = true;
+        this.ONLINE_DELAYED_UPDATE = false;
+    }
+
+    createAnt(startPos){
+        let ant = {
+            startPosition: startPos,
+            position: startPos, 
+            visited: [], 
+            solution: [],
+            alive: true, 
+            foundSolution: false,
+            retracing: false,
+            lastAngle: null
+        };
+
+        return ant;
     }
 
     daemonActions(){
@@ -28,11 +43,18 @@ class AntColonyShortestPath extends AntColony {
     // has a chance to be taken. Which value to give as a starter?
     applyProbabilisticRule(ant, routingTable){
 
+        var lastAngle = ant.lastAngle;
+
         // sum of all pheromones (denominator)
-        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,this.ALPHA),0);
+        var total1 = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,this.ALPHA),0);
+        // sum of all angle differences (denominator)
+        var total2 = 0;
+        if(ant.lastAngle)
+            total2 = routingTable.reduce((sum, link) => sum + Math.pow(this.slopeHeuristic(lastAngle, this.findAssociatedLineSlope(link)),this.BETA),0);
+        var total = total1 + total2;
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
-            return {link: link, prob: link.pheromone / total};
+            return {link: link, prob: (link.pheromone / total + this.slopeHeuristic(lastAngle, this.findAssociatedLineSlope(link)))};
         });
         // discrete cumulative density function
         var discreteCdf = probabilities.map((p,i,arr) => 
@@ -76,6 +98,25 @@ class AntColonyShortestPath extends AntColony {
         return solution2;
     }
 
+    findAssociatedLineSlope(link){
+        var node1 = link.source;
+        var node2 = link.target;
+        var x1 = node1.x;
+        var y1 = node1.y;
+        var x2 = node2.x;
+        var y2 = node2.y;
+        var deltaY = y2 - y1;
+        var deltaX = x2 - x1;
+        if(deltaX === 0)
+            return 0;
+        return (deltaY/deltaX);
+    }
 
+
+    slopeHeuristic(angle1, angle2){
+        var diff = 0;
+        diff = Math.abs(angle1) - Math.abs(angle2);
+        return diff !== 0 ? 1 / diff : 1;
+    }
 
 }

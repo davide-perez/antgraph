@@ -85,7 +85,6 @@ class GraphEditor {
       })
       .linkCanvasObjectMode(() => 'after')
       .linkCanvasObject((link, ctx) => {
-        return;
 
         if(!INTERACTIVE_MODE)
           return;
