@@ -18,6 +18,7 @@ class GraphController {
 
     enableGraphicsInteraction(){
         this.renderer.enableInteraction();
+        this.renderer.render();
     }
 
     addNodeLabelProperty(propertyName, propertyCaption){
@@ -170,7 +171,7 @@ class GraphController {
     }
 
     getGraphComponents(){
-        return {nodes: this.graph.nodes, edges: this.graph.edges};
+        return {nodes: this.graph.nodes, links: this.graph.links};
     }
 
 }
