@@ -46,3 +46,9 @@ canvas {
     margin-top: 5px;
     margin-bottom: 25px; 
 }
+
+.env-buttons > button {
+    display: block;
+    margin-top: 5px;
+    margin-bottom: 10px;
+}

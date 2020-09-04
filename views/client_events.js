@@ -13,13 +13,14 @@ function loadEditor() {
   controller = new GraphController(e);
   controller.drawEnvironment();
   setupClientEvents();
-  setupDefaultGraph();
+  //setupDefaultGraph();
+  controller.refresh();
   updateEnvironmentInfo();
 }
 
 function setupDefaultGraph() {
-  controller.insertNode('starter', '170496', 'start');
-  controller.insertNode('ender', '000000', 'goal');
+  //controller.insertNode('starter', '170496', 'start');
+  /*controller.insertNode('ender', '000000', 'goal');
   var start = controller.getNode('170496');
   var end = controller.getNode('000000');
   var node1 = controller.insertAnonymousNode();
@@ -30,6 +31,7 @@ function setupDefaultGraph() {
   controller.insertLink(node2, end);
   controller.insertLink(start, node3);
   controller.insertLink(node3, end);
+  */
   controller.refresh();
 }
 
@@ -80,9 +82,11 @@ async function run() {
   setAlgorithmParams(colony);
   colony.reset();
   disableAlgorithmButtons();
+  disableEnvButtons();
   var solution = await colony.ACOMetaHeuristic();
   updateAlgorithmResult();
   enableAlgorithmButtons();
+  enableEnvButtons();
 }
 
 async function runReportingMode() {
@@ -97,10 +101,12 @@ async function runReportingMode() {
   setReportingParams(reportingEngine);
   colony.reset();
   disableAlgorithmButtons();
+  disableEnvButtons();
   var solution = await reportingEngine.report();
   updateReportingResult();
   switchInteractiveMode();
   enableAlgorithmButtons();
+  enableEnvButtons();
 }
 
 function insertNodeOnKeyPress() {

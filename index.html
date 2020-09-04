@@ -110,7 +110,6 @@
           </div>
           <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">
             <p class = "env-captions">
-              TODO: add feature to save environment  <br>
               <b>LIST OF COMMANDS</b><br><br>
               <b>Right click on one or two nodes:</b> select or deselect nodes. <br>
               <b>Right click on an edge:</b> select or deselect edge. <br>
@@ -135,10 +134,13 @@
                 No. of links: <div class="env-info" id="noOfLinksInfo"></div>
               </div>
             </div>
-            <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset
-              environment</button>
-            <button type="button" class="btn btn-primary" id="interactive-btn" onclick="switchInteractiveMode()">Switch
-              interactive mode</button>
+            <div class="env-buttons">
+              <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset environment</button>
+              <button type="button" class="btn btn-primary" id="interactive-btn" onclick="switchInteractiveMode()">Switch interactive mode</button>
+              <button type="button" class="btn btn-primary" id="export-btn" onclick="downloadGraphAsJSON()">Export to file</button>
+              <button type="button" class="btn btn-primary" id="import-btn" onclick="importFileFromClient()">Import from file</button>
+              <input type="file" id="file-selector" name="file-selector" accept='.json' onchange="importGraphFromJSON(event)" hidden/>
+            </div>
           </div>
             <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
             <div id="reporting-result">No reporting results. Run an algorithm to obtain results. </div>

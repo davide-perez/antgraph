@@ -1,43 +1,63 @@
-
-function disableAlgorithmButtons(){
-    $('input[name=algorithm-radios]').attr("disabled",true);
-    $('#start-btn').attr("disabled",true);
-    $('#reporting-btn').attr("disabled",true);
+function disableEnvButtons() {
+    $('#reset-btn').attr("disabled", true);
+    $('#interactive-btn').attr("disabled", true);
+    $('#export-btn').attr("disabled", true);
+    $('#import-btn').attr("disabled", true);
 }
 
-function enableAlgorithmButtons(){
-    $('input[name=algorithm-radios]').attr("disabled",false);
-    $('#start-btn').attr("disabled",false);
-    $('#reporting-btn').attr("disabled",false);
+function enableEnvButtons() {
+    $('#reset-btn').attr("disabled", false);
+    $('#interactive-btn').attr("disabled", false);
+    $('#export-btn').attr("disabled", false);
+    $('#import-btn').attr("disabled", false);}
+
+
+function enableEnvButtons() {
+    $('input[name=algorithm-radios]').attr("disabled", false);
+    $('#start-btn').attr("disabled", false);
+    $('#reporting-btn').attr("disabled", false);
 }
 
-function getSelectedAlgorithm(){
+
+function disableAlgorithmButtons() {
+    $('input[name=algorithm-radios]').attr("disabled", true);
+    $('#start-btn').attr("disabled", true);
+    $('#reporting-btn').attr("disabled", true);
+}
+
+function enableAlgorithmButtons() {
+    $('input[name=algorithm-radios]').attr("disabled", false);
+    $('#start-btn').attr("disabled", false);
+    $('#reporting-btn').attr("disabled", false);
+}
+
+function getSelectedAlgorithm() {
     return $('input[name=algorithm-radios]:checked').val();
 }
 
-function resetEnvironment(){
-    if(!confirm('Reset environment? All nodes and links will be deleted.'))
+function resetEnvironment() {
+    if (!confirm('Reset environment? All nodes and links will be deleted.'))
         return;
     controller.reinit();
 }
 
-function switchInteractiveMode(){
-    if(INTERACTIVE_MODE){
+function switchInteractiveMode() {
+    if (INTERACTIVE_MODE) {
         INTERACTIVE_MODE = false;
         controller.disableGraphicsInteraction();
     }
-    else{
+    else {
         INTERACTIVE_MODE = true;
         controller.enableGraphicsInteraction();
     }
 }
 
-function setAlgorithm(name){
+function setAlgorithm(name) {
     name = 'rb' + name;
     $(name).attr('checked', true);
 }
 
-function fetchAlgorithmParams(colony){
+function fetchAlgorithmParams(colony) {
     $('#noOfAntsParam').val(colony.NO_OF_ANTS);
     $('#noOfIterationsParam').val(colony.NO_OF_ITERATIONS);
     $('#pheromoneParam').val(colony.PHEROMONE);
@@ -46,7 +66,7 @@ function fetchAlgorithmParams(colony){
     $('#rhoParam').val(colony.RHO);
 }
 
-function setAlgorithmParams(colony){
+function setAlgorithmParams(colony) {
     var noOfAnts = parseInt($('#noOfAntsParam').val());
     var noOfIterationsParam = parseInt($('#noOfIterationsParam').val());
     var pheromoneParam = parseFloat($('#pheromoneParam').val());
@@ -70,10 +90,10 @@ function setAlgorithmParams(colony){
     colony.RHO = rhoParam;
 }
 
-function fetchReportingParams(reportingEngine){
+function fetchReportingParams(reportingEngine) {
     $('#noOfReportingIterations').val(reportingEngine.noOfIterations);
 
-    switch(reportingEngine.reportingMode){
+    switch (reportingEngine.reportingMode) {
         case 'agent':
             setReportingMode('Agent');
             break;
@@ -83,7 +103,7 @@ function fetchReportingParams(reportingEngine){
     }
 }
 
-function setReportingParams(reportingEngine){
+function setReportingParams(reportingEngine) {
     var noOfReportingIterations = parseInt($('#noOfReportingIterations').val());
     noOfReportingIterations = (isNaN(noOfReportingIterations) || noOfReportingIterations < 1) ? 100 : noOfReportingIterations;
 
@@ -93,28 +113,28 @@ function setReportingParams(reportingEngine){
     reportingEngine.reportingMode = selectedMode;
 }
 
-function setReportingMode(name){
+function setReportingMode(name) {
     mode = '#rb' + name;
     $(mode).attr('checked', true);
 }
 
-function getSelectedReportingMode(){
+function getSelectedReportingMode() {
     return $('input[name=reporting-radios]:checked').val();
 }
 
-function updateEnvironmentInfo(){
+function updateEnvironmentInfo() {
     $('#noOfNodesInfo').text(controller.graph.nodes.length);
     $('#noOfLinksInfo').text(controller.graph.links.length / 2);
 }
 
 
-function updateAlgorithmResult(){
+function updateAlgorithmResult() {
     var solution = colony.currentSolution;
-    if(!solution)
+    if (!solution)
         return;
     var pathString = '';
-    solution.forEach((link,index) => {
-        if(index === 0){
+    solution.forEach((link, index) => {
+        if (index === 0) {
             pathString += '[ node ' + link.source.id + ' - node ' + link.target.id;
             return;
         }
@@ -125,7 +145,7 @@ function updateAlgorithmResult(){
     $('#algorithm-result').html(resultText);
 }
 
-function updateReportingResult(){
+function updateReportingResult() {
     var resultText = `Report completed. <b>${reportingEngine.colony.name}</b> has been run ${reportingEngine.noOfIterations} times.<br><br>\
                     <b>ALGORITHM CONFIGURATION</b><br><b>No. of ants:</b> ${reportingEngine.colony.NO_OF_ANTS}<br>\
                     <b>No. of iterations: </b> ${reportingEngine.colony.NO_OF_ITERATIONS}<br>\
@@ -134,13 +154,64 @@ function updateReportingResult(){
                     <b>beta: </b> ${reportingEngine.colony.BETA}<br>\
                     <b>rho: </b> ${reportingEngine.colony.RHO}<br>`
     var successRate = reportingEngine.noOfBestSolutions / reportingEngine.solutions.length * 100;
-    if(reportingEngine.reportingMode === 'agent'){
+    if (reportingEngine.reportingMode === 'agent') {
         resultText += `<br>A total number of ${reportingEngine.solutions.length} solutions were found by ants.\
                        Optimal solution was found by ${reportingEngine.noOfBestSolutions} ants, with an accuracy rate of ${successRate.toFixed(2)}%.`;
     }
-    else{
+    else {
         resultText += `<br>A total number of ${reportingEngine.solutions.length} solutions were found by ${reportingEngine.colony.name} algorithm.\
                         Optimal solution was found ${reportingEngine.noOfBestSolutions} times, with a success rate of ${successRate.toFixed(2)}%.`;
     }
     $('#reporting-result').html(resultText);
+}
+
+function downloadGraphAsJSON() {
+    if (!controller.graph)
+        return;
+    if (!confirm('Download the current graph configuration?'))
+        return;
+
+    var graph = controller.getGraphComponents();
+    var nodesToExport = graph.nodes;
+    var linksToExport = graph.links.filter(l => l.isMainLink);
+
+    var name = 'graph_' + new Date().toLocaleString();
+    var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ nodes: nodesToExport, links: linksToExport }));
+    var downloadAnchorNode = document.createElement('a');
+    downloadAnchorNode.setAttribute("href", dataStr);
+    downloadAnchorNode.setAttribute("download", name + ".json");
+    document.body.appendChild(downloadAnchorNode);
+    downloadAnchorNode.click();
+    downloadAnchorNode.remove();
+}
+
+function importFileFromClient() {
+    $('#file-selector').click();
+}
+
+
+function importGraphFromJSON(event) {
+    var input = event.target;
+
+    var reader = new FileReader();
+    reader.onload = function () {
+        var graphJSON = reader.result;
+        var importedGraph = JSON.parse(graphJSON);
+        console.table(importedGraph);
+        insertImportedGraph(importedGraph);
+    };
+    reader.readAsText(input.files[0]);
+};
+
+function insertImportedGraph(importedGraph) {
+
+    controller.reinit();
+
+    importedGraph.nodes.forEach(node => controller.insertNodeAt(node.label, node.id, node.classification, node.x, node.y));
+
+    importedGraph.links.filter(l => l.isMainLink).forEach(link => {
+        let source = controller.getNode(link.source.id);
+        let target = controller.getNode(link.target.id);
+        controller.insertLink(source, target);
+    })
 }
