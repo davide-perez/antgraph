@@ -2,7 +2,7 @@
 class ReportingEngine {
     constructor(colony) {
         this.colony = colony;
-        this.iterations = 100;
+        this.noOfIterations = 100;
         this.bestSolutionComputed = null;
         this.solutions = [];
         this.reportingMode = 'agent';
@@ -21,16 +21,16 @@ class ReportingEngine {
         var oldTimeout = this.colony.TIMEOUT;
         this.colony.TIMEOUT = 0;
         showWaitDialog('Reporting...');
-        for (let i = 0; i <= this.iterations; i++) {
+        for (let i = 1; i <= this.noOfIterations; i++) {
+            let count = 0;
+            count = count + 1;
             let currSolution = await this.colony.ACOMetaHeuristic();
             if (!currSolution)
                 continue;
             let ants = this.colony.ants;
             this.totalAnts += ants.length;
             if(this.reportingMode === 'algorithm'){
-                ants.forEach(ant => {
-                    this.solutions.push(currSolution);
-                });
+                this.solutions.push(currSolution);
             }
             else{
                 ants.forEach(ant => {
@@ -42,6 +42,7 @@ class ReportingEngine {
         this.colony.TIMEOUT = oldTimeout;
         this.computeResults();
         hideWaitDialog();
+        return this.bestSolutionComputed;
     }
 
     computeResults(){
@@ -51,7 +52,7 @@ class ReportingEngine {
             else
                 this.noOfWrongSolutions++;
         })
-        alert('On a total of ' + this.solutions.length + ' solution found complessively with ' + this.iterations + ' runs of ' + colony.name + ' ,  optimal solution has been found ' + this.noOfBestSolutions + ' times.');
+        //alert('On a total of ' + this.solutions.length + ' solution found complessively with ' + this.noOfIterations + ' runs of ' + colony.name + ' ,  optimal solution has been found ' + this.noOfBestSolutions + ' times.');
     }
 
     areSolutionsEqual(s1, s2){
@@ -66,10 +67,13 @@ class ReportingEngine {
 
     reset() {
         this.colony.reset();
-        this.iterations = 0;
+        this.noOfIterations = 100;
         this.bestSolution = null;
-        this.solutions = null;
+        this.solutions = [];
         this.totalAnts = 0;
+
+        this.noOfBestSolutions = 0;
+        this.noOfWrongSolutions = 0;
     }
 
     bfs(graph){

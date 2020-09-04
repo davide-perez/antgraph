@@ -87,12 +87,15 @@ function setReportingParams(reportingEngine){
     var noOfReportingIterations = parseInt($('#noOfReportingIterations').val());
     noOfReportingIterations = (isNaN(noOfReportingIterations) || noOfReportingIterations < 1) ? 100 : noOfReportingIterations;
 
+    var selectedMode = getSelectedReportingMode();
+
     reportingEngine.noOfIterations = noOfReportingIterations;
+    reportingEngine.reportingMode = selectedMode;
 }
 
 function setReportingMode(name){
-    mode = 'rb' + name;
-    $(name).attr('checked', true);
+    mode = '#rb' + name;
+    $(mode).attr('checked', true);
 }
 
 function getSelectedReportingMode(){
@@ -105,19 +108,39 @@ function updateEnvironmentInfo(){
 }
 
 
-function reportResults(){
+function updateAlgorithmResult(){
     var solution = colony.currentSolution;
     if(!solution)
         return;
-    $('#no-results').hide();
-    $('#bestSolutionLengthEntry').text(solution.length);
     var pathString = '';
     solution.forEach((link,index) => {
         if(index === 0){
-            pathString += 'node ' + link.source.id;
+            pathString += '[ node ' + link.source.id + ' - node ' + link.target.id;
             return;
         }
-        pathString += '- node ' + link.target.id;
+        pathString += ' - node ' + link.source.id + ' - node ' + link.target.id;
     });
-    $('#bestSolutionPathEntry').text(pathString);
+    pathString += ' ]';
+    var resultText = `Last run of ${colony.name} completed evaluating a path of length ${solution.length}. <br>Path found: ${pathString}`;
+    $('#algorithm-result').html(resultText);
+}
+
+function updateReportingResult(){
+    var resultText = `Report completed. <b>${reportingEngine.colony.name}</b> has been run ${reportingEngine.noOfIterations} times.<br><br>\
+                    <b>ALGORITHM CONFIGURATION</b><br><b>No. of ants:</b> ${reportingEngine.colony.NO_OF_ANTS}<br>\
+                    <b>No. of iterations: </b> ${reportingEngine.colony.NO_OF_ITERATIONS}<br>\
+                    <b>Pheromone unit: </b> ${reportingEngine.colony.PHEROMONE}<br>\
+                    <b>alpha: </b> ${reportingEngine.colony.ALPHA}<br>\
+                    <b>beta: </b> ${reportingEngine.colony.BETA}<br>\
+                    <b>rho: </b> ${reportingEngine.colony.RHO}<br>`
+    var successRate = reportingEngine.noOfBestSolutions / reportingEngine.solutions.length * 100;
+    if(reportingEngine.reportingMode === 'agent'){
+        resultText += `<br>A total number of ${reportingEngine.solutions.length} solutions were found by ants.\
+                       Optimal solution was found by ${reportingEngine.noOfBestSolutions} ants, with an accuracy rate of ${successRate.toFixed(2)}%.`;
+    }
+    else{
+        resultText += `<br>A total number of ${reportingEngine.solutions.length} solutions were found by ${reportingEngine.colony.name} algorithm.\
+                        Optimal solution was found ${reportingEngine.noOfBestSolutions} times, with a success rate of ${successRate.toFixed(2)}%.`;
+    }
+    $('#reporting-result').html(resultText);
 }

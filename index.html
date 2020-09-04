@@ -105,6 +105,7 @@
                 <input type="number" id="rhoParam" class="form-control" min="0" step=".01">
               </div>
             </div>
+            <div id="algorithm-result"></div>
             <button type="button" class="btn btn-primary" id="start-btn" onclick="run()">Start simulation</button>
           </div>
           <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">
@@ -140,7 +141,8 @@
               interactive mode</button>
           </div>
             <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
-            <div id="no-results">No reporting results. Run an algorithm to obtain results. </div>
+            <div id="reporting-result">No reporting results. Run an algorithm to obtain results. </div>
+            <br><br>
               <div class="form-group reporting-parameters">
                 <div class="reporting-param">
                   <label for="noOfReportingIterations">No. of iterations</label>
@@ -148,13 +150,11 @@
                 </div>
                 <br>
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="rbAgent" name="reporting-radios"
-                    onclick="initAntColony()" value="agent">
+                  <input type="radio" class="custom-control-input" id="rbAgent" name="reporting-radios" value="agent">
                   <label class="custom-control-label" for="rbAgent">Agent-level</label>
                 </div>
                 <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="rbAlgorithm" name="reporting-radios"
-                    onclick="initAntColony()" value="algorithm">
+                  <input type="radio" class="custom-control-input" id="rbAlgorithm" name="reporting-radios" value="algorithm">
                   <label class="custom-control-label" for="rbAlgorithm">Algorithm-level</label>
                 </div>
               </div>

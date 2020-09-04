@@ -280,7 +280,7 @@ class AntColony {
         this.active = true;
         this.ants = null;
         this.currentSolution = null;
-        this.environment.reset(this.PHEROMONE);
+        this.environment.reset();
     }
 
 

@@ -18,7 +18,7 @@ class GraphController {
 
     enableGraphicsInteraction(){
         this.renderer.enableInteraction();
-        this.renderer.render();
+        this.refresh();
     }
 
     addNodeLabelProperty(propertyName, propertyCaption){
@@ -173,9 +173,14 @@ class GraphController {
         this.graph.reset();
     }
 
-    reset(pheromoneDefault){
+    reset(){
         this.graph.nodes.map(node => node.noOfAnts = 0);
-        this.graph.links.map(link => link.pheromone = pheromoneDefault);
+        this.graph.links.map(link => link.pheromone = PHEROMONE_DEFAULT);
+        this.refresh();
+    }
+
+    refresh(){
+        this.renderer.update(this.graph);
     }
 
     getGraphComponents(){

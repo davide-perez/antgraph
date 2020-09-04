@@ -1,6 +1,7 @@
 var CANVAS_WIDTH = 1200;
 var CANVAS_HEIGHT = 1000;
 var INTERACTIVE_MODE = true;
+var PHEROMONE_DEFAULT = 0.10;
 
 var e = null;
 var controller = null;
@@ -29,6 +30,7 @@ function setupDefaultGraph() {
   controller.insertLink(node2, end);
   controller.insertLink(start, node3);
   controller.insertLink(node3, end);
+  controller.refresh();
 }
 
 
@@ -44,9 +46,17 @@ function initAntColony(){
   var selectedAlgorithm = getSelectedAlgorithm();
   switch (selectedAlgorithm) {
     case 'S-ACO':
+      if(!controller.findNodesByClassification('start') || !controller.findNodesByClassification('goal')){
+        alert('Environment must have a start node and a goal node for S-ACO to be run on it.');
+        return;
+      }
       colony = new AntColonySACO(controller);
       break;
     case 'AS-ACO':
+      if(!controller.findNodesByClassification('start') || !controller.findNodesByClassification('goal')){
+        alert('Environment must have a start node and a goal node for AS-ACO to be run on it.');
+        return;
+      }
       colony = new AntColonyASACO(controller);
       break;
     default:
@@ -71,7 +81,7 @@ async function run() {
   colony.reset();
   disableAlgorithmButtons();
   var solution = await colony.ACOMetaHeuristic();
-  reportResults();
+  updateAlgorithmResult();
   enableAlgorithmButtons();
 }
 
@@ -82,16 +92,14 @@ async function runReportingMode() {
   }
   if(!confirm('Run "' + colony.name + '" with the selected settings in reporting mode?'))
     return;
-  INTERACTIVE_MODE = false;
-  controller.disableGraphicsInteraction();
+  switchInteractiveMode();
   setAlgorithmParams(colony);
+  setReportingParams(reportingEngine);
   colony.reset();
   disableAlgorithmButtons();
-  var solution = await reportEngine.report();
-  console.log('HERES A SOLUTION:');
-  console.table(solution);
-  reportResults();
-  controller.enableGraphicsInteraction();
+  var solution = await reportingEngine.report();
+  updateReportingResult();
+  switchInteractiveMode();
   enableAlgorithmButtons();
 }
 
