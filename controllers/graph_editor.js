@@ -38,8 +38,17 @@ class GraphEditor {
       .width(this.CANVAS_WIDTH)
       .height(this.CANVAS_HEIGHT)
       .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
-      .nodeAutoColorBy('classification')
       .backgroundColor('white')
+      .nodeColor(node =>{
+        switch(node.classification){
+          case 'start':
+            return 'gold';
+          case 'goal':
+            return 'coral';
+          default:
+            return 'lightblue';
+        }
+      })
       .nodeLabel(node => {
         let label = 'Id: ' + node.id + '<br>Type: ' + node.classification;
         if(node.noOfAnts !== undefined)
@@ -190,7 +199,7 @@ class GraphEditor {
   }
 
   update(graph) {
-    this.graphObj(this.domElem).graphData(graph).nodeAutoColorBy('classification');
+    this.graphObj(this.domElem).graphData(graph);
     this.resetSelection();
   }
 

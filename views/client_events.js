@@ -5,6 +5,7 @@ var INTERACTIVE_MODE = true;
 var e = null;
 var controller = null;
 var colony = null;
+var reportingEngine = null;
 
 function loadEditor() {
   e = document.getElementById("graph");
@@ -52,7 +53,10 @@ function initAntColony(){
       alert('No valid algorithm selected.');
       return;
   }
+  reportingEngine = new ReportingEngine(colony);
   fetchAlgorithmParams(colony);
+  fetchReportingParams(reportingEngine);
+ 
 }
 
 
@@ -67,8 +71,6 @@ async function run() {
   colony.reset();
   disableAlgorithmButtons();
   var solution = await colony.ACOMetaHeuristic();
-  console.log('HERES A SOLUTION:');
-  console.table(solution);
   reportResults();
   enableAlgorithmButtons();
 }
@@ -80,7 +82,6 @@ async function runReportingMode() {
   }
   if(!confirm('Run "' + colony.name + '" with the selected settings in reporting mode?'))
     return;
-  var reportEngine = new ReportingEngine(colony);
   INTERACTIVE_MODE = false;
   controller.disableGraphicsInteraction();
   setAlgorithmParams(colony);
@@ -151,11 +152,14 @@ function setNodeClassificationOnKeyPress() {
   if(!INTERACTIVE_MODE)
     return;
   switch (event.key) {
-    case 'f':
-      controller.setNodeClassificationFromUserSelection('goal');
+    case 'g':
+      controller.setNodeClassificationFromUserSelection('goal', true);
+      break;
+    case 's':
+      controller.setNodeClassificationFromUserSelection('start', true);
       break;
     case 'n':
-      controller.setNodeClassificationFromUserSelection('start');
+      controller.setNodeClassificationFromUserSelection('normal', false);
       break;
   }
 }

@@ -2,9 +2,10 @@
 class ReportingEngine {
     constructor(colony) {
         this.colony = colony;
-        this.iterations = 3;
+        this.iterations = 100;
         this.bestSolutionComputed = null;
-        this.solutions = []; // for all run take all solution from all ants
+        this.solutions = [];
+        this.reportingMode = 'agent';
         this.totalAnts = 0;
 
         this.noOfBestSolutions = 0;
@@ -26,9 +27,16 @@ class ReportingEngine {
                 continue;
             let ants = this.colony.ants;
             this.totalAnts += ants.length;
-            ants.forEach(ant => {
-                this.solutions.push(ant.solution);
-            });
+            if(this.reportingMode === 'algorithm'){
+                ants.forEach(ant => {
+                    this.solutions.push(currSolution);
+                });
+            }
+            else{
+                ants.forEach(ant => {
+                    this.solutions.push(ant.solution);
+                });                
+            }
             this.colony.reset();
         }
         this.colony.TIMEOUT = oldTimeout;
@@ -43,7 +51,7 @@ class ReportingEngine {
             else
                 this.noOfWrongSolutions++;
         })
-        alert('On a total of ' + this.solutions.length + ' solution found complessively with ' + this.iterations + ' runs of ' + colony.name + ' ,  ' + this.noOfBestSolutions + ' ants found the optimal solution');
+        alert('On a total of ' + this.solutions.length + ' solution found complessively with ' + this.iterations + ' runs of ' + colony.name + ' ,  optimal solution has been found ' + this.noOfBestSolutions + ' times.');
     }
 
     areSolutionsEqual(s1, s2){

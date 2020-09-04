@@ -108,9 +108,24 @@
             <button type="button" class="btn btn-primary" id="start-btn" onclick="run()">Start simulation</button>
           </div>
           <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">
-            <p>
-              TODO: add feature to save environment
+            <p class = "env-captions">
+              TODO: add feature to save environment  <br>
+              <b>LIST OF COMMANDS</b><br><br>
+              <b>Right click on one or two nodes:</b> select or deselect nodes. <br>
+              <b>Right click on an edge:</b> select or deselect edge. <br>
+              <b>Key "-" with two selected nodes:</b> create an edge. <br>
+              <b>Key "Delete" with a selected node:</b> delete node. <br>
+              <b>Key "Backspace" with a selected edge:</b> delete edge. <br>
+              <b>Key "s" with a selected node:</b> set node as start node. <br>
+              <b>Key "g" with a selected node:</b> set node as goal node. <br>
+              <b>Key "n" with a selected node:</b> set node as normal node. <br>
+              <b>Left click on editor:</b> create a node in that point. <br>
+              <b>Left click on node, hold and drag:</b> move node. <br>
+              <b>Left click on edge, hold and drag:</b> move whole graph. <br>
+              <b>Left click on empty space, hold and drag:</b> pan viewport. <br>
+              <b>Mouse wheel:</b> zoom viewport
             </p>
+            <br>
             <div class="environment-parameters">
               <div class="environment-param">
                 No. of nodes: <div class="env-info" id="noOfNodesInfo"></div>
@@ -121,18 +136,28 @@
             </div>
             <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset
               environment</button>
+            <button type="button" class="btn btn-primary" id="interactive-btn" onclick="switchInteractiveMode()">Switch
+              interactive mode</button>
           </div>
             <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
-            <div id="no-results">No reporting results. Run an algorithm to obtain results.
-              Here it is possible to run some reporting tasks on the selected algorithm. Set a number of times the algorithm will be executed and it will run the defined amount of times,
-              giving then some useful insights on the effectiveness of such algorithm with the current configuration.
-            </div>
-            <div class="reporting-entry">
-              Best solution length: <div class="reporting-entry" id="bestSolutionLengthEntry"></div>
-            </div>
-            <div class="reporting-entry">
-              Solution path: <div class="reporting-entry" id="bestSolutionPathEntry"></div>
-            </div>
+            <div id="no-results">No reporting results. Run an algorithm to obtain results. </div>
+              <div class="form-group reporting-parameters">
+                <div class="reporting-param">
+                  <label for="noOfReportingIterations">No. of iterations</label>
+                  <input type="number" id="noOfReportingIterations" class="form-control" min="1" step="1">
+                </div>
+                <br>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" id="rbAgent" name="reporting-radios"
+                    onclick="initAntColony()" value="agent">
+                  <label class="custom-control-label" for="rbAgent">Agent-level</label>
+                </div>
+                <div class="custom-control custom-radio">
+                  <input type="radio" class="custom-control-input" id="rbAlgorithm" name="reporting-radios"
+                    onclick="initAntColony()" value="algorithm">
+                  <label class="custom-control-label" for="rbAlgorithm">Algorithm-level</label>
+                </div>
+              </div>
             <button type="button" class="btn btn-primary" id="reporting-btn" onclick="runReportingMode()">Start reporting</button>
           </div>
         </div>

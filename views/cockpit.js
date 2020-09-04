@@ -2,13 +2,13 @@
 function disableAlgorithmButtons(){
     $('input[name=algorithm-radios]').attr("disabled",true);
     $('#start-btn').attr("disabled",true);
-    $('#report-btn').attr("disabled",true);
+    $('#reporting-btn').attr("disabled",true);
 }
 
 function enableAlgorithmButtons(){
     $('input[name=algorithm-radios]').attr("disabled",false);
     $('#start-btn').attr("disabled",false);
-    $('#report-btn').attr("disabled",false);
+    $('#reporting-btn').attr("disabled",false);
 }
 
 function getSelectedAlgorithm(){
@@ -19,6 +19,17 @@ function resetEnvironment(){
     if(!confirm('Reset environment? All nodes and links will be deleted.'))
         return;
     controller.reinit();
+}
+
+function switchInteractiveMode(){
+    if(INTERACTIVE_MODE){
+        INTERACTIVE_MODE = false;
+        controller.disableGraphicsInteraction();
+    }
+    else{
+        INTERACTIVE_MODE = true;
+        controller.enableGraphicsInteraction();
+    }
 }
 
 function setAlgorithm(name){
@@ -59,6 +70,34 @@ function setAlgorithmParams(colony){
     colony.RHO = rhoParam;
 }
 
+function fetchReportingParams(reportingEngine){
+    $('#noOfReportingIterations').val(reportingEngine.noOfIterations);
+
+    switch(reportingEngine.reportingMode){
+        case 'agent':
+            setReportingMode('Agent');
+            break;
+        case 'algorithm':
+            setReportingMode('Algorithm');
+            break;
+    }
+}
+
+function setReportingParams(reportingEngine){
+    var noOfReportingIterations = parseInt($('#noOfReportingIterations').val());
+    noOfReportingIterations = (isNaN(noOfReportingIterations) || noOfReportingIterations < 1) ? 100 : noOfReportingIterations;
+
+    reportingEngine.noOfIterations = noOfReportingIterations;
+}
+
+function setReportingMode(name){
+    mode = 'rb' + name;
+    $(name).attr('checked', true);
+}
+
+function getSelectedReportingMode(){
+    return $('input[name=reporting-radios]:checked').val();
+}
 
 function updateEnvironmentInfo(){
     $('#noOfNodesInfo').text(controller.graph.nodes.length);

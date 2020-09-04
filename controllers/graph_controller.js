@@ -121,11 +121,19 @@ class GraphController {
         }
     }
 
-    setNodeClassificationFromUserSelection(classification){
+    setNodeClassificationFromUserSelection(classification, uniquenessConstraint){
         let selectedNodes = this.renderer.selectedNodes;
         if(selectedNodes.length !== 1)
-            return;
+            return false;
+        if(!classification){
+            return false;
+        }
+        let otherExist = this.findNodesByClassification(classification).length !== 0;
+        if(uniquenessConstraint && otherExist){
+            return false;
+        }
         this.graph.setNodeClassification(selectedNodes[0], classification);
+        return true;
     }
 
     findNodesByClassification(classification) {
