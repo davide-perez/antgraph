@@ -135,7 +135,7 @@ function updateAlgorithmResult() {
         pathString += ' - node ' + link.source.id + ' - node ' + link.target.id;
     });
     pathString += ' ]';
-    var resultText = `Last run of ${colony.name} completed evaluating a path of length ${solution.length}. <br>Path found: ${pathString}`;
+    var resultText = `Last run of ${colony.name} completed evaluating a path of length ${solution.length}. <br><b>Path found:</b> ${pathString}`;
     $('#algorithm-result').html(resultText);
 }
 

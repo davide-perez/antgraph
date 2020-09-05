@@ -95,7 +95,7 @@ class GraphController {
 
     updateDirectionalParticles(maxTreshold){
         if(INTERACTIVE_MODE)
-            this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/5) : maxTreshold);
+            this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/3) : maxTreshold);
     }
 
     doEvaporation(factor){

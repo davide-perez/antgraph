@@ -13,6 +13,7 @@ class ReportingEngine {
     }
 
     async report() {
+        this.reset();
         this.bestSolutionComputed = this.bfs(colony.environment.getGraphComponents());
         if(!this.bestSolutionComputed){
             alert('Reporting error: cannot compute a solution for this graph.');
@@ -67,7 +68,6 @@ class ReportingEngine {
 
     reset() {
         this.colony.reset();
-        this.noOfIterations = 100;
         this.bestSolution = null;
         this.solutions = [];
         this.totalAnts = 0;
