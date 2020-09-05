@@ -11,7 +11,7 @@ var reportingEngine = null;
 function loadEditor() {
   e = document.getElementById("graph");
   controller = new GraphController(e);
-  controller.drawEnvironment();
+  controller.drawEnvironment();  
   setupClientEvents();
   setupDefaultGraph();
   updateEnvironmentInfo();
@@ -110,9 +110,10 @@ function insertNodeOnClick() {
     return;
   let x = event.clientX;
   let y = event.clientY;
-  if (x < CANVAS_WIDTH && y < CANVAS_HEIGHT)
+  if(event.target.tagName === 'CANVAS'){
     controller.insertNodeAt('', null, 'normal', x, y);
     updateEnvironmentInfo();
+  }
 }
 
 
