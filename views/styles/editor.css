@@ -52,3 +52,7 @@ canvas {
     margin-top: 5px;
     margin-bottom: 10px;
 }
+
+.container{
+    padding: 50px;
+}
