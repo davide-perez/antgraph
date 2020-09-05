@@ -13,26 +13,14 @@ function loadEditor() {
   controller = new GraphController(e);
   controller.drawEnvironment();
   setupClientEvents();
-  //setupDefaultGraph();
-  controller.refresh();
+  setupDefaultGraph();
   updateEnvironmentInfo();
 }
 
 function setupDefaultGraph() {
-  //controller.insertNode('starter', '170496', 'start');
-  /*controller.insertNode('ender', '000000', 'goal');
-  var start = controller.getNode('170496');
-  var end = controller.getNode('000000');
-  var node1 = controller.insertAnonymousNode();
-  var node2 = controller.insertAnonymousNode();
-  var node3 = controller.insertAnonymousNode();
-  controller.insertLink(start, node1);
-  controller.insertLink(node1, node2);
-  controller.insertLink(node2, end);
-  controller.insertLink(start, node3);
-  controller.insertLink(node3, end);
-  */
-  controller.refresh();
+  $.getJSON('resources/graph_default.json', function(data){
+    loadGraphFromParsedJSON(data);
+  });
 }
 
 

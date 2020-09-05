@@ -164,11 +164,7 @@ class GraphController {
     removeObserverOnGraph(observer){
         this.graph.unregisterObserver(observer);
     }
-
-    resetEditor(){
-        this.renderer.update(this.graph);
-    }
-
+    
     reinit(){
         this.graph.reset();
     }

@@ -9,13 +9,7 @@ function enableEnvButtons() {
     $('#reset-btn').attr("disabled", false);
     $('#interactive-btn').attr("disabled", false);
     $('#export-btn').attr("disabled", false);
-    $('#import-btn').attr("disabled", false);}
-
-
-function enableEnvButtons() {
-    $('input[name=algorithm-radios]').attr("disabled", false);
-    $('#start-btn').attr("disabled", false);
-    $('#reporting-btn').attr("disabled", false);
+    $('#import-btn').attr("disabled", false);
 }
 
 
@@ -165,15 +159,15 @@ function updateReportingResult() {
     $('#reporting-result').html(resultText);
 }
 
-function downloadGraphAsJSON() {
+function exportGraphToJSON() {
     if (!controller.graph)
         return;
     if (!confirm('Download the current graph configuration?'))
         return;
 
     var graph = controller.getGraphComponents();
-    var nodesToExport = graph.nodes;
-    var linksToExport = graph.links.filter(l => l.isMainLink);
+    var nodesToExport = graph.nodes.map(node => convertNodeToExport(node));
+    var linksToExport = graph.links.map(link => convertLinkToExport(link));
 
     var name = 'graph_' + new Date().toLocaleString();
     var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ nodes: nodesToExport, links: linksToExport }));
@@ -183,6 +177,28 @@ function downloadGraphAsJSON() {
     document.body.appendChild(downloadAnchorNode);
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
+
+
+    function convertNodeToExport(node) {
+        var expNode = {};
+        expNode.label = node.label;
+        expNode.id = node.id;
+        expNode.classification = node.classification;
+        expNode.x = node.x;
+        expNode.y = node.y;
+        return expNode;
+    }
+
+    function convertLinkToExport(link) {
+        var expLink = {};
+        var sourceId = link.source.id;
+        var targetId = link.target.id;
+        expLink.source = sourceId;
+        expLink.target = targetId;
+        expLink.isMainLink = link.isMainLink;
+        expLink.cost = link.cost;
+        return expLink;
+    }
 }
 
 function importFileFromClient() {
@@ -192,16 +208,47 @@ function importFileFromClient() {
 
 function importGraphFromJSON(event) {
     var input = event.target;
-
     var reader = new FileReader();
     reader.onload = function () {
         var graphJSON = reader.result;
-        var importedGraph = JSON.parse(graphJSON);
-        console.table(importedGraph);
-        insertImportedGraph(importedGraph);
+        var parsedGraph = JSON.parse(graphJSON);
+        loadGraphFromParsedJSON(parsedGraph);
     };
     reader.readAsText(input.files[0]);
+
 };
+
+function loadGraphFromParsedJSON(parsedGraph) {
+    var newNodes = [];
+    var newLinks = [];
+    parsedGraph.nodes.forEach(node => newNodes.push(convertNodeToImport(node)));
+    parsedGraph.links.forEach(link => newLinks.push(convertLinkToImport(link, newNodes)));
+
+    controller.reinit();
+    controller.graph.setNewComponents(newNodes, newLinks);
+    updateEnvironmentInfo();
+
+
+    function convertLinkToImport(link, importedNodes) {
+        var source = importedNodes.find(node => node.id === link.source);
+        var target = importedNodes.find(node => node.id === link.target);
+        var impLink = new AntLink(source, target);
+        impLink.isMainLink = link.isMainLink;
+        impLink.cost = link.cost;
+        return impLink;
+
+    }
+
+    function convertNodeToImport(node) {
+        var impNode = new AntNode();
+        impNode.id = node.id;
+        impNode.label = node.label;
+        impNode.classification = node.classification;
+        impNode.x = node.x;
+        impNode.y = node.y;
+        return impNode;
+    }
+}
 
 function insertImportedGraph(importedGraph) {
 

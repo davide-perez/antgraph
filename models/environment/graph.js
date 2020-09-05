@@ -100,6 +100,25 @@ class Graph {
         this.notifyObservers({nodes: this.nodes, links: this.links});
     }
 
+    setNewComponents(nodes, links){
+        // ensure no duplicated ids
+        var ids = this.nodes.map(node => node.id).sort();
+        for(let i = 0; i < ids.length - 1; i++){
+            if(ids[i+1] == ids[i])
+                throw new Error('the nodes to add contain one or more duplicate ids');
+        }
+        // ensure links are valid
+        this.links.forEach(link =>{
+            if(!nodes.find(node => node.id === link.source.id) || !nodes.find(node => node.id === link.target.id))
+                throw new Error('one or more links to add are not valid');
+        })
+
+        this.nodes = nodes;
+        this.links = links;
+
+        this.notifyObservers({nodes: this.nodes, links: this.links});
+    }
+
     //////////////////////////////////END MODIFY DATASET//////////////////////////////
 
 
