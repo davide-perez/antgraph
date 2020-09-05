@@ -1,5 +1,5 @@
-var CANVAS_WIDTH = 1200;
-var CANVAS_HEIGHT = 1000;
+var CANVAS_WIDTH = 1000;
+var CANVAS_HEIGHT = 800;
 var INTERACTIVE_MODE = true;
 var PHEROMONE_DEFAULT = 0.10;
 
@@ -17,10 +17,15 @@ function loadEditor() {
   updateEnvironmentInfo();
 }
 
-function setupDefaultGraph() {
+function setupDefaultGraphFromFile() {
+  // does not work without a local server due to CORS policy
   $.getJSON('resources/graph_default.json', function(data){
     loadGraphFromParsedJSON(data);
   });
+}
+
+function setupDefaultGraph(){
+  loadGraphFromParsedJSON(DEFAULT_GRAPH_JSON);
 }
 
 
