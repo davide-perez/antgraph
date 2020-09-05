@@ -63,7 +63,8 @@ class GraphEditor {
       .linkDirectionalParticleColor((link) => link.isMainLink ? 'red' : 'purple')
       .linkDirectionalParticleWidth(5)
       .linkDirectionalArrowLength(10)
-      .linkDirectionalArrowRelPos(1);
+      .linkDirectionalArrowRelPos(1)
+      .zoomToFit();
       //.linkVisibility(l => l.isMainLink);
   }
 
@@ -199,7 +200,7 @@ class GraphEditor {
   }
 
   update(graph) {
-    this.graphObj(this.domElem).graphData(graph);
+    this.graphObj(this.domElem).graphData(graph).zoomToFit();
     this.resetSelection();
   }
 
