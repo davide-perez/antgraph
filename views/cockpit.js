@@ -52,17 +52,21 @@ function setAlgorithm(name) {
 }
 
 function fetchAlgorithmParams(colony) {
+    $('#noOfSelectedAntsParam').val(colony.SIZE_OF_SUBSET);
     $('#noOfAntsParam').val(colony.NO_OF_ANTS);
     $('#noOfIterationsParam').val(colony.NO_OF_ITERATIONS);
     $('#pheromoneParam').val(colony.PHEROMONE);
+    $('#noOfAntsAsUpperboundParam').prop('checked', colony.NO_OF_ANTS_AS_UPPERBOUND);
     $('#alphaParam').val(colony.ALPHA);
     $('#betaParam').val(colony.BETA);
     $('#rhoParam').val(colony.RHO);
 }
 
 function setAlgorithmParams(colony) {
+    var noOfSelectedAnts = parseInt($('#noOfSelectedAntsParam').val());
     var noOfAnts = parseInt($('#noOfAntsParam').val());
     var noOfIterationsParam = parseInt($('#noOfIterationsParam').val());
+    var useNoOfSelectedAntsAsUpperBound = $('#noOfAntsAsUpperboundParam').prop('checked');
     var pheromoneParam = parseFloat($('#pheromoneParam').val());
     var alphaParam = parseFloat($('#alphaParam').val());
     var betaParam = parseFloat($('#betaParam').val());
@@ -70,14 +74,17 @@ function setAlgorithmParams(colony) {
 
     // validate params
     noOfAnts = noOfAnts < 1 ? 1 : noOfAnts;
+    noOfSelectedAnts = noOfAnts > noOfAnts ? noOfAnts : noOfSelectedAnts;
     noOfIterationsParam = (isNaN(noOfIterationsParam) || noOfIterationsParam < 1) ? Infinity : noOfIterationsParam;
     pheromoneParam = pheromoneParam < 0 ? 0 : pheromoneParam;
     alphaParam = alphaParam < 0 ? 0 : alphaParam;
     betaParam = betaParam < 0 ? 0 : betaParam;
     rhoParam = rhoParam < 0 ? 0 : rhoParam;
 
+    colony.SIZE_OF_SUBSET = noOfSelectedAnts;
     colony.NO_OF_ANTS = noOfAnts;
     colony.NO_OF_ITERATIONS = noOfIterationsParam;
+    colony.NO_OF_ANTS_AS_UPPERBOUND = useNoOfSelectedAntsAsUpperBound;
     colony.PHEROMONE = pheromoneParam;
     colony.ALPHA = alphaParam;
     colony.BETA = betaParam;

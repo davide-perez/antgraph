@@ -50,9 +50,9 @@ class GraphEditor {
         }
       })
       .nodeLabel(node => {
-        let label = 'Id: ' + node.id + '<br>Type: ' + node.classification;
+        let label = `Id: ${node.id}<br>Type: ${node.classification}<br>Coords: (${node.x.toFixed(2)},${node.y.toFixed(2)})`;
         if(node.noOfAnts !== undefined)
-          label += '<br>No. of ants: ' + node.noOfAnts;
+          label += `<br>No. of ants: ${node.noOfAnts}`;
         return label;
       })
       .cooldownTicks(0)

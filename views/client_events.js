@@ -25,7 +25,7 @@ function setupDefaultGraphFromFile() {
 }
 
 function setupDefaultGraph(){
-  loadGraphFromParsedJSON(DEFAULT_GRAPH_JSON);
+  loadGraphFromParsedJSON(AS_ACO_DEFAULT_GRAPH_JSON);
 }
 
 
