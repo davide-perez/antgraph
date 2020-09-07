@@ -24,7 +24,7 @@ class AntColony {
         this.position = this.environment.findNodesByClassification('start')[0];
         this.currentSolution = null;
 
-        this.active = true;
+        this.active = false;
         this.currentIterationNo = 0;
 
         this.ONLINE_STEP_UPDATE = false;
@@ -98,6 +98,7 @@ class AntColony {
 
     async ACOMetaHeuristic() {
         var that = this;
+        this.active = true;
 
         this.initAnts();
 
@@ -316,7 +317,7 @@ class AntColony {
     }
 
     reset() {
-        this.active = true;
+        this.active = false;
         this.ants = null;
         this.currentSolution = null;
         this.currentIterationNo = 0;

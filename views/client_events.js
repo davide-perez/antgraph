@@ -102,6 +102,17 @@ async function runReportingMode() {
   enableEnvButtons();
 }
 
+function stop(){
+  if(!colony){
+    alert('No algorithm selected. Please select an algorithm from the corresponding tab.');
+    return;
+  }
+  if(!confirm('Reset the simulation?'))
+    return;
+  colony.active = false;
+  colony.reset();
+}
+
 function insertNodeOnKeyPress() {
   let key = event.key;
   if (key === '+') {
