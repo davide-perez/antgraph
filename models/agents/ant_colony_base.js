@@ -21,6 +21,7 @@ class AntColony {
         this.environment = env;
         this.environment.registerObserverOnGraph(this);
         this.ants = null;
+        this.currentlySelectedAnts = null;
         this.position = this.environment.findNodesByClassification('start')[0];
         this.currentSolution = null;
 
@@ -36,6 +37,7 @@ class AntColony {
         this.RANDOM_PURGE = true;
         this.PURGE_PROBABILITY = 5;
         this.IMMORTAL_ANTS = false;
+        this.MEMORYLESS_ANTS = false;
 
         this.TICK_INTERVAL = 100;
 
@@ -198,7 +200,7 @@ class AntColony {
                 if (that.ONLINE_STEP_UPDATE || currentAnt.retracing) {
                     let update = that.releasePheromone(link, that.PHEROMONE);
                     updates[i] = update;
-                    that.environment.updateDirectionalParticles(that.PHEROMONE_MAX_TRESHOLD);
+                    //that.environment.updateDirectionalParticles(that.PHEROMONE_MAX_TRESHOLD);
                 }
 
                 // update internal state (if necessary)

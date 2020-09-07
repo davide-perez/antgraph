@@ -17,7 +17,7 @@ class AntColonyASACO extends AntColony {
             alive: true, 
             foundSolution: false,
             retracing: false,
-            lastAngle: null
+            lastDirection: null
         };
 
         return ant;
@@ -43,7 +43,7 @@ class AntColonyASACO extends AntColony {
     // has a chance to be taken. Which value to give as a starter?
     applyProbabilisticRule(ant, routingTable){
 
-        var lastAngle = ant.lastAngle;
+        var lastDirection = ant.lastDirection;
 
         // sum of all pheromones (denominator)
         var total1 = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,this.ALPHA),0);
@@ -98,22 +98,19 @@ class AntColonyASACO extends AntColony {
         return solution2;
     }
 
-    findAssociatedLineSlope(link){
+    findDirection(link){
         var node1 = link.source;
         var node2 = link.target;
         var x1 = node1.x;
         var y1 = node1.y;
         var x2 = node2.x;
         var y2 = node2.y;
-        var deltaY = y2 - y1;
-        var deltaX = x2 - x1;
-        if(deltaX === 0)
-            return 0;
-        return (deltaY/deltaX);
+        
+        return Math.atan2(x1*y2-y1*x2,x1*x2+y1*y2);
     }
 
 
-    slopeHeuristic(angle1, angle2){
+    slopeHeuristic(direction1, direction2){
         var diff = 0;
         diff = Math.abs(angle1) - Math.abs(angle2);
         return diff !== 0 ? 1 / diff : 1;
