@@ -46,22 +46,18 @@ class AntColonyASACO extends AntColony {
         var lastDirection = ant.lastDirection;
 
         // sum of all pheromones (denominator)
-        var total1 = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone,this.ALPHA),0);
-        // sum of all angle differences (denominator)
-        var total2 = 0;
-        if(ant.lastAngle)
-            total2 = routingTable.reduce((sum, link) => sum + Math.pow(this.angleHeuristic(lastDirection, this.findAssociatedAngle(link)),this.BETA),0);
-        var total = total1 + total2;
+        var total = routingTable.reduce((sum, link) => sum + Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)),0);
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
-            return {link: link, prob: (link.pheromone / total + this.angleHeuristic(lastDirection, this.findAssociatedAngle(link)))};
+            return {link: link, prob: Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)) / total};
         });
         // discrete cumulative density function
         var discreteCdf = probabilities.map((p,i,arr) => 
             arr.filter((elem, j) => j <= i)
                .reduce((total, probs) => total + probs.prob,0)
         );
-
+        console.log('Function:');
+        console.table(discreteCdf)
         // apply_ant_decision_policy
         var rand = Math.random();
         //console.log('Searching rand index: ' + rand);
@@ -69,6 +65,7 @@ class AntColonyASACO extends AntColony {
         //console.log('Index found: ' + index);
 
         var chosen = probabilities[index].link;
+        ant.lastDirection = chosen;
 
         return chosen;
 
@@ -98,22 +95,35 @@ class AntColonyASACO extends AntColony {
         return solution2;
     }
 
-    findAssociatedAngle(link){
-        var node1 = link.source;
-        var node2 = link.target;
-        var x1 = node1.x;
-        var y1 = node1.y;
-        var x2 = node2.x;
-        var y2 = node2.y;
+
+    angleHeuristic(link1, link2){
+        if(!link1 || !link2)
+            return 0;
+        if(link1.target !== link2.source)
+            return 0;
+        var a = link1.source;
+        var b = link1.target;
+        var c = link2.target;
+
+        var x0 = a.x;
+        var y0 = a.y;
+        var x1 = b.x;
+        var y1 = b.y;
+        var x2 = c.x;
+        var y2 = c.y;
+
+        var xb = x1-x0;
+        var yb = y1-y0;
+        var xc = x2-x1;
+        var yc = y2-y1;
+
+        var numTheta = xb * xc + yb * yc;
+        var denomTheta = Math.sqrt( Math.pow(xb,2) + Math.pow(yb, 2)) * Math.sqrt( Math.pow(xc,2) + Math.pow(yc,2));
         
-        return Math.atan2(x1*y2-y1*x2,x1*x2+y1*y2);
-    }
 
+        var theta = Math.acos(numTheta / denomTheta);
 
-    angleHeuristic(angle1, angle2){
-        var diff = 0;
-        diff = angle1 - angle2;
-        return diff !== 0 ? (1 / diff) : 1;
-    }
+        return 1 - (theta / Math.PI);
+    }   
 
 }

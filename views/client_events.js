@@ -2,6 +2,7 @@ var CANVAS_WIDTH = 700;
 var CANVAS_HEIGHT = 700;
 var INTERACTIVE_MODE = true;
 var PHEROMONE_DEFAULT = 0.10;
+var PHEROMONE_MAX_TRESHOLD = 100;
 
 var e = null;
 var controller = null;

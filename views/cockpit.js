@@ -56,6 +56,9 @@ function fetchAlgorithmParams(colony) {
     $('#noOfAntsParam').val(colony.NO_OF_ANTS);
     $('#noOfIterationsParam').val(colony.NO_OF_ITERATIONS);
     $('#pheromoneParam').val(colony.PHEROMONE);
+    $('#pheromoneMinTreshold').val(PHEROMONE_DEFAULT);
+    $('#pheromoneMaxTreshold').val(PHEROMONE_MAX_TRESHOLD);
+    $('#purgeProbability').val(colony.PURGE_PROBABILITY);
     $('#noOfAntsAsUpperboundParam').prop('checked', colony.NO_OF_ANTS_AS_UPPERBOUND);
     $('#alphaParam').val(colony.ALPHA);
     $('#betaParam').val(colony.BETA);
@@ -71,6 +74,9 @@ function setAlgorithmParams(colony) {
     var alphaParam = parseFloat($('#alphaParam').val());
     var betaParam = parseFloat($('#betaParam').val());
     var rhoParam = parseFloat($('#rhoParam').val());
+    var pheromoneMinTreshold = parseFloat($('#pheromoneMinTreshold').val());
+    var pheromoneMaxTreshold = parseFloat($('#pheromoneMaxTreshold').val());
+    var purgeProbability = parseFloat($('#purgeProbability').val());
 
     // validate params
     noOfAnts = noOfAnts < 1 ? 1 : noOfAnts;
@@ -80,6 +86,9 @@ function setAlgorithmParams(colony) {
     alphaParam = alphaParam < 0 ? 0 : alphaParam;
     betaParam = betaParam < 0 ? 0 : betaParam;
     rhoParam = rhoParam < 0 ? 0 : rhoParam;
+    pheromoneMinTreshold = pheromoneMinTreshold < 0.1 ? 0.1 : pheromoneMinTreshold;
+    pheromoneMaxTreshold = pheromoneMaxTreshold < 1 ? 100 : pheromoneMaxTreshold;
+    purgeProbability = purgeProbability < 0 ? 0 : purgeProbability;
 
     colony.SIZE_OF_SUBSET = noOfSelectedAnts;
     colony.NO_OF_ANTS = noOfAnts;
@@ -89,6 +98,9 @@ function setAlgorithmParams(colony) {
     colony.ALPHA = alphaParam;
     colony.BETA = betaParam;
     colony.RHO = rhoParam;
+    colony.PURGE_PROBABILITY = purgeProbability;
+    PHEROMONE_DEFAULT = pheromoneMinTreshold;
+    PHEROMONE_MAX_TRESHOLD = pheromoneMaxTreshold;
 }
 
 function fetchReportingParams(reportingEngine) {

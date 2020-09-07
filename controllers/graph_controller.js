@@ -99,7 +99,11 @@ class GraphController {
     }
 
     doEvaporation(factor){
-        this.graph.links.map((link) => link.pheromone = (1 - factor) * link.pheromone);
+        this.graph.links.map((link) => {
+            link.pheromone = (1 - factor) * link.pheromone;
+            if(link.pheromone < PHEROMONE_DEFAULT)
+                link.pheromone = PHEROMONE_DEFAULT;
+        });
     }
 
     deleteNodeFromUserSelection() {
