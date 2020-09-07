@@ -50,11 +50,11 @@ class AntColonyASACO extends AntColony {
         // sum of all angle differences (denominator)
         var total2 = 0;
         if(ant.lastAngle)
-            total2 = routingTable.reduce((sum, link) => sum + Math.pow(this.slopeHeuristic(lastAngle, this.findAssociatedLineSlope(link)),this.BETA),0);
+            total2 = routingTable.reduce((sum, link) => sum + Math.pow(this.angleHeuristic(lastDirection, this.findAssociatedAngle(link)),this.BETA),0);
         var total = total1 + total2;
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
-            return {link: link, prob: (link.pheromone / total + this.slopeHeuristic(lastAngle, this.findAssociatedLineSlope(link)))};
+            return {link: link, prob: (link.pheromone / total + this.angleHeuristic(lastDirection, this.findAssociatedAngle(link)))};
         });
         // discrete cumulative density function
         var discreteCdf = probabilities.map((p,i,arr) => 
@@ -98,7 +98,7 @@ class AntColonyASACO extends AntColony {
         return solution2;
     }
 
-    findDirection(link){
+    findAssociatedAngle(link){
         var node1 = link.source;
         var node2 = link.target;
         var x1 = node1.x;
@@ -110,10 +110,10 @@ class AntColonyASACO extends AntColony {
     }
 
 
-    slopeHeuristic(direction1, direction2){
+    angleHeuristic(angle1, angle2){
         var diff = 0;
-        diff = Math.abs(angle1) - Math.abs(angle2);
-        return diff !== 0 ? 1 / diff : 1;
+        diff = angle1 - angle2;
+        return diff !== 0 ? (1 / diff) : 1;
     }
 
 }
