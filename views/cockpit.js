@@ -99,7 +99,11 @@ function setAlgorithmParams(colony) {
     colony.BETA = betaParam;
     colony.RHO = rhoParam;
     colony.PURGE_PROBABILITY = purgeProbability;
+
     PHEROMONE_DEFAULT = pheromoneMinTreshold;
+    //controller.graph.links.forEach(link => link.pheromone = PHEROMONE_DEFAULT);
+    //controller.graph.notifyObservers({nodes: controller.graph.nodes, links: controller.graph.links});
+
     PHEROMONE_MAX_TRESHOLD = pheromoneMaxTreshold;
 }
 

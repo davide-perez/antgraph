@@ -43,21 +43,30 @@ class AntColonyASACO extends AntColony {
     // has a chance to be taken. Which value to give as a starter?
     applyProbabilisticRule(ant, routingTable){
 
+        if(routingTable.length === 1){
+            ant.lastDirection = routingTable[0];
+            return routingTable[0];
+        }
+
         var lastDirection = ant.lastDirection;
 
         // sum of all pheromones (denominator)
-        var total = routingTable.reduce((sum, link) => sum + Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)),0);
+        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD, this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)),0);
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
-            return {link: link, prob: Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)) / total};
+            let weightedProb = Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD,this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA))
+            return {link: link, prob: weightedProb / total};
         });
+        console.log('Probabilities:');
+        console.table(probabilities);
+
         // discrete cumulative density function
         var discreteCdf = probabilities.map((p,i,arr) => 
             arr.filter((elem, j) => j <= i)
                .reduce((total, probs) => total + probs.prob,0)
         );
-        console.log('Function:');
-        console.table(discreteCdf)
+        //console.log('Function:');
+        //console.table(discreteCdf)
         // apply_ant_decision_policy
         var rand = Math.random();
         //console.log('Searching rand index: ' + rand);
