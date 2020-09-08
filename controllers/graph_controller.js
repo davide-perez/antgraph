@@ -98,6 +98,11 @@ class GraphController {
             this.renderer.graphObj.linkDirectionalParticles((link) => link.pheromone < maxTreshold ? Math.ceil(link.pheromone/3) : maxTreshold);
     }
 
+    updateLinkWidth(){
+        if(INTERACTIVE_MODE)
+            this.renderer.graphObj.linkWidth((link) => link.pheromone === PHEROMONE_MAX_TRESHOLD ? MAX_LINK_WIDTH : link.pheromone * MAX_LINK_WIDTH / PHEROMONE_MAX_TRESHOLD);
+    }
+
     doEvaporation(factor){
         this.graph.links.map((link) => {
             link.pheromone = (1 - factor) * link.pheromone;

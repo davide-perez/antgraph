@@ -4,6 +4,8 @@ var INTERACTIVE_MODE = true;
 //var PHEROMONE_DEFAULT = 0.10;
 var PHEROMONE_DEFAULT = 20;
 var PHEROMONE_MAX_TRESHOLD = 200;
+var MAX_LINK_WIDTH = 20;
+
 
 var e = null;
 var controller = null;

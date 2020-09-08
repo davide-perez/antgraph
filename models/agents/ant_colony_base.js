@@ -156,6 +156,8 @@ class AntColony {
 
                 currentAnt.lastVisited = link;
 
+                that.environment.updateLinkWidth();
+
             }
 
             // ant which did not move reinforce last edge they crossed
