@@ -183,6 +183,10 @@ class GraphController {
         this.renderer.update(this.graph);
     }
 
+    centerViewPort(){
+        this.renderer.graphObj.zoomToFit();
+    }
+
     getGraphComponents(){
         return {nodes: this.graph.nodes, links: this.graph.links};
     }

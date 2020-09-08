@@ -200,7 +200,7 @@ class GraphEditor {
   }
 
   update(graph) {
-    this.graphObj(this.domElem).graphData(graph).zoomToFit();
+    this.graphObj(this.domElem).graphData(graph);
     this.resetSelection();
   }
 

@@ -33,6 +33,7 @@ function resetEnvironment() {
     if (!confirm('Reset environment? All nodes and links will be deleted.'))
         return;
     controller.reinit();
+    updateEnvironmentInfo();
 }
 
 function switchInteractiveMode() {

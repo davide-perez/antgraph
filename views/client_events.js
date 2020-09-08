@@ -17,6 +17,7 @@ function loadEditor() {
   setupClientEvents();
   setupDefaultGraph();
   updateEnvironmentInfo();
+  controller.centerViewPort();
 }
 
 function setupDefaultGraphFromFile() {
