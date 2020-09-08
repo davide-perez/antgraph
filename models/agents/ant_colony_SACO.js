@@ -27,8 +27,8 @@ class AntColonySACO extends AntColony {
     // Problem: pheromone can never be null. Otherwise you will have a div by zero. Makes sense, because each adjacent path
     // has a chance to be taken. Which value to give as a starter?
     applyProbabilisticRule(ant, routingTable){
-        console.log('Routing table');
-        console.table(routingTable)
+        //console.log('Routing table');
+        //console.table(routingTable)
 
         // sum of all pheromones (denominator)
         var total = routingTable.reduce((sum, link) => sum + Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),this.ALPHA),0);
@@ -45,8 +45,8 @@ class AntColonySACO extends AntColony {
                .reduce((total, probs) => total + probs.prob,0)
         );
 
-        console.log('Function table');
-        console.table(discreteCdf);
+        //console.log('Function table');
+        //console.table(discreteCdf);
 
         // apply_ant_decision_policy
         var rand = Math.random();

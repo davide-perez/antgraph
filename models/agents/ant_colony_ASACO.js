@@ -8,21 +8,6 @@ class AntColonyASACO extends AntColony {
         this.ONLINE_DELAYED_UPDATE = false;
     }
 
-    createAnt(startPos){
-        let ant = {
-            startPosition: startPos,
-            position: startPos, 
-            visited: [], 
-            solution: [],
-            alive: true, 
-            foundSolution: false,
-            retracing: false,
-            lastDirection: null
-        };
-
-        return ant;
-    }
-
     daemonActions(){
     }
 
@@ -48,7 +33,7 @@ class AntColonyASACO extends AntColony {
             return routingTable[0];
         }
 
-        var lastDirection = ant.lastDirection;
+        var lastDirection = ant.lastVisited;
 
         // sum of all pheromones (denominator)
         var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD, this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)),0);
@@ -74,7 +59,6 @@ class AntColonyASACO extends AntColony {
         //console.log('Index found: ' + index);
 
         var chosen = probabilities[index].link;
-        ant.lastDirection = chosen;
 
         return chosen;
 
