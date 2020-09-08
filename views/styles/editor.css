@@ -56,3 +56,8 @@ canvas {
 .container{
     padding: 50px;
 }
+
+.tab-content{
+    height: 700px;
+    overflow:auto;
+}
