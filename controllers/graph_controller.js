@@ -103,6 +103,19 @@ class GraphController {
             this.renderer.graphObj.linkWidth((link) => link.pheromone === PHEROMONE_MAX_TRESHOLD ? MAX_LINK_WIDTH : link.pheromone * MAX_LINK_WIDTH / PHEROMONE_MAX_TRESHOLD);
     }
 
+    updateNodeColor(){
+        if(INTERACTIVE_MODE)
+            this.renderer.graphObj.nodeColor(node => {
+                if(node.classification === 'start')
+                    return 'gold';
+                if(node.classification === 'goal')
+                    return 'coral';
+                var index = (node.noOfAnts / PHEROMONE_MAX_TRESHOLD).toFixed(1) * 10;
+                // https://www.w3schools.com/colors/colors_picker.asp?colorhex=ff0000
+                return COLOR_SCALE[index];
+            })
+    }
+
     doEvaporation(factor){
         this.graph.links.map((link) => {
             link.pheromone = (1 - factor) * link.pheromone;
@@ -186,6 +199,16 @@ class GraphController {
 
     refresh(){
         this.renderer.update(this.graph);
+        this.renderer.graphObj.nodeColor(node => {
+            switch (node.classification) {
+              case 'start':
+                return 'gold';
+              case 'goal':
+                return 'coral';
+              default:
+                return 'lightblue';
+            }
+          });
     }
 
     centerViewPort(){

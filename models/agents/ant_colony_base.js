@@ -128,6 +128,7 @@ class AntColony {
                 currentAnt.lastVisited = link;
 
                 that.environment.updateLinkWidth();
+                that.environment.updateNodeColor();
 
             }
 

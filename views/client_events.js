@@ -1,5 +1,6 @@
 var CANVAS_WIDTH = 700;
 var CANVAS_HEIGHT = 700;
+var COLOR_SCALE = ["#b3b3ff", "#8080ff", "#4d4dff", "#1a1aff", "#0000ff", "#0000e6", "#0000cc", "#0000b3", "#000099", "#000080"];
 var INTERACTIVE_MODE = true;
 var TIMEOUT = 300;
 

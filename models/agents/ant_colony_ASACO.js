@@ -34,8 +34,6 @@ class AntColonyASACO extends AntColony {
             let weightedProb = Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD,ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),BETA))
             return {link: link, prob: weightedProb / total};
         });
-        console.log('Probabilities:');
-        console.table(probabilities);
 
         // discrete cumulative density function
         var discreteCdf = probabilities.map((p,i,arr) => 
