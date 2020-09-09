@@ -110,7 +110,7 @@ class GraphController {
                     return 'gold';
                 if(node.classification === 'goal')
                     return 'coral';
-                var index = (node.noOfAnts / PHEROMONE_MAX_TRESHOLD).toFixed(1) * 10;
+                var index = (node.noOfAnts / NO_OF_ANTS).toFixed(1) * COLOR_SCALE.length - 1;
                 // https://www.w3schools.com/colors/colors_picker.asp?colorhex=ff0000
                 return COLOR_SCALE[index];
             })
