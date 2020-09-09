@@ -4,22 +4,14 @@ class AntColonySACO extends AntColony {
         super(env);
 
         this.name = 'S-ACO';
-        this.ONLINE_STEP_UPDATE = true;
-        this.ONLINE_DELAYED_UPDATE = true;
     }
 
     daemonActions(){
     }
 
     pheromoneEvaporation(){
-        this.environment.doEvaporation(this.RHO);
+        this.environment.doEvaporation(RHO);
     }
-
-    testSolution(ant){
-        // some other context-dependent logic
-        return ant.position.classification === 'goal';
-    }
-
 
     // This version uses the classical version of the pheromone function (without considering length or other params).
     // Then creates a cumulative distribution function in an array to make a weighted choice.
@@ -31,14 +23,12 @@ class AntColonySACO extends AntColony {
         //console.table(routingTable)
 
         // sum of all pheromones (denominator)
-        var total = routingTable.reduce((sum, link) => sum + Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),this.ALPHA),0);
+        var total = routingTable.reduce((sum, link) => sum + Math.pow((link.pheromone / PHEROMONE_MAX_TRESHOLD),ALPHA),0);
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
-            let weightedProb = Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD,this.ALPHA);
+            let weightedProb = Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD,ALPHA);
             return {link: link, prob: weightedProb / total};
         });
-        console.log('Probability table');
-        console.table(probabilities);
         // discrete cumulative density function
         var discreteCdf = probabilities.map((p,i,arr) => 
             arr.filter((elem, j) => j <= i)
@@ -74,16 +64,5 @@ class AntColonySACO extends AntColony {
             return low;
         }
     }
-
-
-    compareSolutions(solution1, solution2){
-        var l1 = solution1 && solution1.length > 0 ? solution1.length : Infinity;
-        var l2 = solution2 && solution2.length > 0 ? solution2.length : Infinity;
-        if(l1 < l2)
-            return solution1;
-        return solution2;
-    }
-
-
 
 }

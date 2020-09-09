@@ -21,38 +21,17 @@ class AntColony {
         this.environment = env;
         this.environment.registerObserverOnGraph(this);
         this.ants = null;
-        this.currentlySelectedAnts = null;
         this.position = this.environment.findNodesByClassification('start')[0];
-        this.currentSolution = null;
 
         this.active = false;
         this.currentIterationNo = 0;
-
-        this.ONLINE_STEP_UPDATE = false;
-        this.ONLINE_DELAYED_UPDATE = false;
-
-        this.PHEROMONE = 0.2;
-        this.NO_OF_ANTS = 25;
-        this.NO_OF_ANTS_AS_UPPERBOUND = false;
-        this.PURGE_PROBABILITY = 2;
-
-        this.TICK_INTERVAL = 100;
-
-
-        // this.NO_OF_ITERATIONS = Number.MAX_SAFE_INTEGER;
-        this.NO_OF_ITERATIONS = Infinity;
-        this.TIMEOUT = 300;
-        this.SIZE_OF_SUBSET = 10;
-        this.ALPHA = 1;
-        this.BETA = 1;
-        this.RHO = 0.01;
     }
 
 
     initAnts() {
-        this.ants = new Array(this.NO_OF_ANTS);
+        this.ants = new Array(NO_OF_ANTS);
         var startPos = this.position;
-        for (let i = 0; i < this.NO_OF_ANTS; i++) {
+        for (let i = 0; i < NO_OF_ANTS; i++) {
             let ant = this.createAnt(startPos);
             ant.index = i;
             this.ants[i] = ant;
@@ -95,28 +74,20 @@ class AntColony {
 
         this.initAnts();
 
-        while (this.active && this.currentIterationNo < this.NO_OF_ITERATIONS) {
+        while (this.active && this.currentIterationNo < NO_OF_ITERATIONS) {
             ACOMetaHeuristicStep();
-            await new Promise(r => setTimeout(r, that.TIMEOUT));
+            await new Promise(r => setTimeout(r, TIMEOUT));
             this.currentIterationNo++;
         }
         if (this.active)
             this.active = false;
-        return this.currentSolution;
-
 
 
         function ACOMetaHeuristicStep() {
             // select alive ants only
             //var ants = that.selectAnts(that.ants.filter(ant => ant.alive), that.SIZE_OF_SUBSET);
-            var ants = that.selectAnts(that.ants.filter(ant => ant.alive), that.SIZE_OF_SUBSET);
-            var nonMovingAnts = [];
+            var ants = that.selectAnts(that.ants.filter(ant => ant.alive), SIZE_OF_SUBSET);
             var updates = [];
-
-            that.ants.forEach(ant => {
-                if(!ants.some(a => a.index === ant.index))
-                    nonMovingAnts.push(ant);
-            })
 
             // if no ants, prevent further processing
             if (ants.length === 0)
@@ -125,7 +96,7 @@ class AntColony {
             for (i = 0; i < ants.length; i++) {
                 let currentAnt = ants[i];
 
-                if (that.RANDOM_PURGE) {
+                if (RANDOM_PURGE) {
                     that.testPurge(currentAnt);
                 }
 
@@ -150,7 +121,7 @@ class AntColony {
 
 
                 // release pheromone
-                let update = that.releasePheromone(link, that.PHEROMONE);
+                let update = that.releasePheromone(link, PHEROMONE_UNIT);
                 updates.push(update);
 
 
@@ -159,14 +130,6 @@ class AntColony {
                 that.environment.updateLinkWidth();
 
             }
-
-            // ant which did not move reinforce last edge they crossed
-            nonMovingAnts.forEach(ant => {
-                if(!ant.lastVisited)
-                    return;
-                var update2 = that.releasePheromone(ant.lastVisited, that.PHEROMONE);
-                updates.push(update2); 
-            })
 
             that.pheromoneEvaporation();
             that.daemonActions();
@@ -227,7 +190,7 @@ class AntColony {
 
     // partial Fisher-Yates shuffle
     selectAnts(ants, sizeOfSubset) {
-        if (this.NO_OF_ANTS_AS_UPPERBOUND) {
+        if (NO_OF_ANTS_AS_UPPERBOUND) {
             sizeOfSubset = this.getRandomInt(1, sizeOfSubset);
         }
         var selected = [];
@@ -244,7 +207,7 @@ class AntColony {
     }
 
     testPurge(ant) {
-        if (this.getRandomInt(1, 100) <= this.PURGE_PROBABILITY)
+        if (this.getRandomInt(1, 100) <= PURGE_PROBABILITY)
             this.killAnt(ant);
     }
 

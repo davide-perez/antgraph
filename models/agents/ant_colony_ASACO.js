@@ -4,22 +4,14 @@ class AntColonyASACO extends AntColony {
         super(env);
 
         this.name = 'AS-ACO';
-        this.ONLINE_STEP_UPDATE = true;
-        this.ONLINE_DELAYED_UPDATE = false;
     }
 
     daemonActions(){
     }
 
     pheromoneEvaporation(){
-        this.environment.doEvaporation(this.RHO);
+        this.environment.doEvaporation(RHO);
     }
-
-    testSolution(ant){
-        // some other context-dependent logic
-        return ant.position.classification === 'goal';
-    }
-
 
     // This version uses the classical version of the pheromone function (without considering length or other params).
     // Then creates a cumulative distribution function in an array to make a weighted choice.
@@ -36,10 +28,10 @@ class AntColonyASACO extends AntColony {
         var lastDirection = ant.lastVisited;
 
         // sum of all pheromones (denominator)
-        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD, this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA)),0);
+        var total = routingTable.reduce((sum, link) => sum + Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD, ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),BETA)),0);
         // compute_transition_probabilities (probability mass function)
         var probabilities = routingTable.map(link => {
-            let weightedProb = Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD,this.ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),this.BETA))
+            let weightedProb = Math.pow(link.pheromone / PHEROMONE_MAX_TRESHOLD,ALPHA)*(Math.pow(this.angleHeuristic(lastDirection, link),BETA))
             return {link: link, prob: weightedProb / total};
         });
         console.log('Probabilities:');
@@ -77,15 +69,6 @@ class AntColonyASACO extends AntColony {
             }
             return low;
         }
-    }
-
-
-    compareSolutions(solution1, solution2){
-        var l1 = solution1 && solution1.length > 0 ? solution1.length : Infinity;
-        var l2 = solution2 && solution2.length > 0 ? solution2.length : Infinity;
-        if(l1 < l2)
-            return solution1;
-        return solution2;
     }
 
 

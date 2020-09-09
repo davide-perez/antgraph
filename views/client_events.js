@@ -1,16 +1,27 @@
 var CANVAS_WIDTH = 700;
 var CANVAS_HEIGHT = 700;
 var INTERACTIVE_MODE = true;
-//var PHEROMONE_DEFAULT = 0.10;
-var PHEROMONE_DEFAULT = 20;
-var PHEROMONE_MAX_TRESHOLD = 200;
+var TIMEOUT = 300;
+
+var PHEROMONE_DEFAULT = 0.1;
+var PHEROMONE_MAX_TRESHOLD = 100;
 var MAX_LINK_WIDTH = 20;
+
+var PHEROMONE_UNIT = 0.1;
+var NO_OF_ANTS = 100;
+var NO_OF_ANTS_AS_UPPERBOUND = false;
+var RANDOM_PURGE = true;
+var PURGE_PROBABILITY = 0;
+var NO_OF_ITERATIONS = Infinity;
+var SIZE_OF_SUBSET = 10;
+var ALPHA = 1;
+var BETA = 1;
+var RHO = 0.01;
 
 
 var e = null;
 var controller = null;
 var colony = null;
-var reportingEngine = null;
 
 function loadEditor() {
   e = document.getElementById("graph");
@@ -19,6 +30,7 @@ function loadEditor() {
   setupClientEvents();
   setupDefaultGraph();
   updateEnvironmentInfo();
+  fetchAlgorithmParams();
   controller.centerViewPort();
 }
 
@@ -62,11 +74,7 @@ function initAntColony(){
     default:
       alert('No valid algorithm selected.');
       return;
-  }
-  reportingEngine = new ReportingEngine(colony);
-  fetchAlgorithmParams(colony);
-  fetchReportingParams(reportingEngine);
- 
+  } 
 }
 
 
@@ -77,35 +85,15 @@ async function run() {
   }
   if(!confirm('Run "' + colony.name + '" with the selected settings?'))
     return;
-  setAlgorithmParams(colony);
+  setAlgorithmParams();
   colony.reset();
   disableAlgorithmButtons();
   disableEnvButtons();
-  var solution = await colony.ACOMetaHeuristic();
-  updateAlgorithmResult();
+  await colony.ACOMetaHeuristic();
   enableAlgorithmButtons();
   enableEnvButtons();
 }
 
-async function runReportingMode() {
-  if(!colony){
-    alert('No algorithm selected. Please select an algorithm from the corresponding tab.');
-    return;
-  }
-  if(!confirm('Run "' + colony.name + '" with the selected settings in reporting mode?'))
-    return;
-  switchInteractiveMode();
-  setAlgorithmParams(colony);
-  setReportingParams(reportingEngine);
-  colony.reset();
-  disableAlgorithmButtons();
-  disableEnvButtons();
-  var solution = await reportingEngine.report();
-  updateReportingResult();
-  switchInteractiveMode();
-  enableAlgorithmButtons();
-  enableEnvButtons();
-}
 
 function stop(){
   if(!colony){

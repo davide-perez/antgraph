@@ -27,7 +27,6 @@
   <script src="./models/environment/ant_node.js"></script>
   <script src="./controllers/graph_controller.js"></script>
   <script src="./controllers/graph_editor.js"></script>
-  <script src="./controllers/reporting_engine.js"></script>
   <script src="./views/client_events.js"></script>
   <script src="./views/cockpit.js"></script>
   <script src="./models/agents/ant_colony_base.js"></script>
@@ -50,9 +49,6 @@
           </li>
           <li class="nav-item">
             <a class="nav-link" id="environment-tab" data-toggle="tab" href="#environment">Environment</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" id="reporting-tab" data-toggle="tab" href="#reporting">Reporting</a>
           </li>
         </ul>
         <div class="tab-content" id="myTabContent">
@@ -81,11 +77,15 @@
                 <label for="noOfSelectedAntsParam">No. of ant to move</label>
                 <input type="number" id="noOfSelectedAntsParam" class="form-control" min="1" step="1">
               </div>
-              <div class="algorithm-param">
-                <label for="noOfAntsAsUpperboundParam">
-                  <input type="checkbox" class="form-check-input" id="noOfAntsAsUpperboundParam">
-                Use number as upperbound:
-              </label>
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="rbUseAsFixedNo" name="algorithm-radios2"
+                  value="useAsFixedNo">
+                <label class="custom-control-label" for="rbUseAsFixedNo">Use as fixed no.</label>
+              </div>
+              <div class="custom-control custom-radio">
+                <input type="radio" class="custom-control-input" id="rbUseAsUpperbound" name="algorithm-radios2"
+                  value="rbUseAsUpperbound">
+                <label class="custom-control-label" for="rbUseAsUpperbound">Use as upperbound</label>
               </div>
               <div class="algorithm-param">
                 <label for="noOfIterationsParam">No. of iterations</label>
@@ -126,7 +126,7 @@
             <button type="button" class="btn btn-danger" id="stop-btn" onclick="stop()">Stop simulation</button>
           </div>
           <div class="tab-pane fade" id="environment" role="tabpanel" aria-labelledby="environment-tab">
-            <p class = "env-captions">
+            <p class="env-captions">
               <b>LIST OF COMMANDS</b><br><br>
               <b>Right click on one or two nodes:</b> select or deselect nodes. <br>
               <b>Right click on an edge:</b> select or deselect edge. <br>
@@ -152,37 +152,21 @@
               </div>
             </div>
             <div class="env-buttons">
-              <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset environment</button>
-              <button type="button" class="btn btn-primary" id="interactive-btn" onclick="switchInteractiveMode()">Switch interactive mode</button>
-              <button type="button" class="btn btn-primary" id="export-btn" onclick="exportGraphToJSON()">Export to file</button>
-              <button type="button" class="btn btn-primary" id="import-btn" onclick="importFileFromClient()">Import from file</button>
-              <input type="file" id="file-selector" name="file-selector" accept='.json' onchange="importGraphFromJSON(event)" hidden/>
+              <button type="button" class="btn btn-danger" id="reset-btn" onclick="resetEnvironment()">Reset
+                environment</button>
+              <button type="button" class="btn btn-primary" id="interactive-btn"
+                onclick="switchInteractiveMode()">Switch interactive mode</button>
+              <button type="button" class="btn btn-primary" id="export-btn" onclick="exportGraphToJSON()">Export to
+                file</button>
+              <button type="button" class="btn btn-primary" id="import-btn" onclick="importFileFromClient()">Import from
+                file</button>
+              <input type="file" id="file-selector" name="file-selector" accept='.json'
+                onchange="importGraphFromJSON(event)" hidden />
             </div>
-          </div>
-            <div class="tab-pane fade" id="reporting" role="tabpanel" aria-labelledby="reporting-tab">
-            <div id="reporting-result">No reporting results. Run an algorithm to obtain results. </div>
-            <br><br>
-              <div class="form-group reporting-parameters">
-                <div class="reporting-param">
-                  <label for="noOfReportingIterations">No. of iterations</label>
-                  <input type="number" id="noOfReportingIterations" class="form-control" min="1" step="1">
-                </div>
-                <br>
-                <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="rbAgent" name="reporting-radios" value="agent">
-                  <label class="custom-control-label" for="rbAgent">Agent-level</label>
-                </div>
-                <div class="custom-control custom-radio">
-                  <input type="radio" class="custom-control-input" id="rbAlgorithm" name="reporting-radios" value="algorithm">
-                  <label class="custom-control-label" for="rbAlgorithm">Algorithm-level</label>
-                </div>
-              </div>
-            <button type="button" class="btn btn-primary" id="reporting-btn" onclick="runReportingMode()">Start reporting</button>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </body>
 
 </html>

@@ -16,13 +16,11 @@ function enableEnvButtons() {
 function disableAlgorithmButtons() {
     $('input[name=algorithm-radios]').attr("disabled", true);
     $('#start-btn').attr("disabled", true);
-    $('#reporting-btn').attr("disabled", true);
 }
 
 function enableAlgorithmButtons() {
     $('input[name=algorithm-radios]').attr("disabled", false);
     $('#start-btn').attr("disabled", false);
-    $('#reporting-btn').attr("disabled", false);
 }
 
 function getSelectedAlgorithm() {
@@ -52,25 +50,29 @@ function setAlgorithm(name) {
     $(name).attr('checked', true);
 }
 
-function fetchAlgorithmParams(colony) {
-    $('#noOfSelectedAntsParam').val(colony.SIZE_OF_SUBSET);
-    $('#noOfAntsParam').val(colony.NO_OF_ANTS);
-    $('#noOfIterationsParam').val(colony.NO_OF_ITERATIONS);
-    $('#pheromoneParam').val(colony.PHEROMONE);
+function fetchAlgorithmParams() {
+    $('#noOfSelectedAntsParam').val(SIZE_OF_SUBSET);
+    $('#noOfAntsParam').val(NO_OF_ANTS);
+    $('#noOfIterationsParam').val(NO_OF_ITERATIONS);
+    $('#pheromoneParam').val(PHEROMONE_UNIT);
     $('#pheromoneMinTreshold').val(PHEROMONE_DEFAULT);
     $('#pheromoneMaxTreshold').val(PHEROMONE_MAX_TRESHOLD);
-    $('#purgeProbability').val(colony.PURGE_PROBABILITY);
-    $('#noOfAntsAsUpperboundParam').prop('checked', colony.NO_OF_ANTS_AS_UPPERBOUND);
-    $('#alphaParam').val(colony.ALPHA);
-    $('#betaParam').val(colony.BETA);
-    $('#rhoParam').val(colony.RHO);
+    $('#purgeProbability').val(PURGE_PROBABILITY);
+    $('#alphaParam').val(ALPHA);
+    $('#betaParam').val(BETA);
+    $('#rhoParam').val(RHO);
+
+    if(NO_OF_ANTS_AS_UPPERBOUND)
+        $('#rbUseAsUpperbound').attr('checked',true)
+    else
+        $('#rbUseAsFixedNo').attr('checked',true);
 }
 
-function setAlgorithmParams(colony) {
+function setAlgorithmParams() {
     var noOfSelectedAnts = parseInt($('#noOfSelectedAntsParam').val());
     var noOfAnts = parseInt($('#noOfAntsParam').val());
     var noOfIterationsParam = parseInt($('#noOfIterationsParam').val());
-    var useNoOfSelectedAntsAsUpperBound = $('#noOfAntsAsUpperboundParam').prop('checked');
+    //var useNoOfSelectedAntsAsUpperBound = $('#noOfAntsAsUpperboundParam').prop('checked');
     var pheromoneParam = parseFloat($('#pheromoneParam').val());
     var alphaParam = parseFloat($('#alphaParam').val());
     var betaParam = parseFloat($('#betaParam').val());
@@ -78,6 +80,8 @@ function setAlgorithmParams(colony) {
     var pheromoneMinTreshold = parseFloat($('#pheromoneMinTreshold').val());
     var pheromoneMaxTreshold = parseFloat($('#pheromoneMaxTreshold').val());
     var purgeProbability = parseFloat($('#purgeProbability').val());
+    var useNoOfSelectedAntsAsUpperBound = $('input[name=algorithm-radios2]:checked').val() === 'rbUseAsUpperbound';
+
 
     // validate params
     noOfAnts = noOfAnts < 1 ? 1 : noOfAnts;
@@ -91,96 +95,22 @@ function setAlgorithmParams(colony) {
     pheromoneMaxTreshold = pheromoneMaxTreshold < 1 ? 100 : pheromoneMaxTreshold;
     purgeProbability = purgeProbability < 0 ? 0 : purgeProbability;
 
-    colony.SIZE_OF_SUBSET = noOfSelectedAnts;
-    colony.NO_OF_ANTS = noOfAnts;
-    colony.NO_OF_ITERATIONS = noOfIterationsParam;
-    colony.NO_OF_ANTS_AS_UPPERBOUND = useNoOfSelectedAntsAsUpperBound;
-    colony.PHEROMONE = pheromoneParam;
-    colony.ALPHA = alphaParam;
-    colony.BETA = betaParam;
-    colony.RHO = rhoParam;
-    colony.PURGE_PROBABILITY = purgeProbability;
-
+    SIZE_OF_SUBSET = noOfSelectedAnts;
+    NO_OF_ANTS = noOfAnts;
+    NO_OF_ITERATIONS = noOfIterationsParam;
+    NO_OF_ANTS_AS_UPPERBOUND = useNoOfSelectedAntsAsUpperBound;
+    PHEROMONE_UNIT = pheromoneParam;
+    ALPHA = alphaParam;
+    BETA = betaParam;
+    RHO = rhoParam;
+    PURGE_PROBABILITY = purgeProbability;
     PHEROMONE_DEFAULT = pheromoneMinTreshold;
-    //controller.graph.links.forEach(link => link.pheromone = PHEROMONE_DEFAULT);
-    //controller.graph.notifyObservers({nodes: controller.graph.nodes, links: controller.graph.links});
-
     PHEROMONE_MAX_TRESHOLD = pheromoneMaxTreshold;
-}
-
-function fetchReportingParams(reportingEngine) {
-    $('#noOfReportingIterations').val(reportingEngine.noOfIterations);
-
-    switch (reportingEngine.reportingMode) {
-        case 'agent':
-            setReportingMode('Agent');
-            break;
-        case 'algorithm':
-            setReportingMode('Algorithm');
-            break;
-    }
-}
-
-function setReportingParams(reportingEngine) {
-    var noOfReportingIterations = parseInt($('#noOfReportingIterations').val());
-    noOfReportingIterations = (isNaN(noOfReportingIterations) || noOfReportingIterations < 1) ? 100 : noOfReportingIterations;
-
-    var selectedMode = getSelectedReportingMode();
-
-    reportingEngine.noOfIterations = noOfReportingIterations;
-    reportingEngine.reportingMode = selectedMode;
-}
-
-function setReportingMode(name) {
-    mode = '#rb' + name;
-    $(mode).attr('checked', true);
-}
-
-function getSelectedReportingMode() {
-    return $('input[name=reporting-radios]:checked').val();
 }
 
 function updateEnvironmentInfo() {
     $('#noOfNodesInfo').text(controller.graph.nodes.length);
     $('#noOfLinksInfo').text(controller.graph.links.length / 2);
-}
-
-
-function updateAlgorithmResult() {
-    var solution = colony.currentSolution;
-    if (!solution)
-        return;
-    var pathString = '';
-    solution.forEach((link, index) => {
-        if (index === 0) {
-            pathString += '[ node ' + link.source.id + ' - node ' + link.target.id;
-            return;
-        }
-        pathString += ' - node ' + link.source.id + ' - node ' + link.target.id;
-    });
-    pathString += ' ]';
-    var resultText = `Last run of ${colony.name} completed evaluating a path of length ${solution.length}. <br><b>Path found:</b> ${pathString}`;
-    $('#algorithm-result').html(resultText);
-}
-
-function updateReportingResult() {
-    var resultText = `Report completed. <b>${reportingEngine.colony.name}</b> has been run ${reportingEngine.noOfIterations} times.<br><br>\
-                    <b>ALGORITHM CONFIGURATION</b><br><b>No. of ants:</b> ${reportingEngine.colony.NO_OF_ANTS}<br>\
-                    <b>No. of iterations: </b> ${reportingEngine.colony.NO_OF_ITERATIONS}<br>\
-                    <b>Pheromone unit: </b> ${reportingEngine.colony.PHEROMONE}<br>\
-                    <b>alpha: </b> ${reportingEngine.colony.ALPHA}<br>\
-                    <b>beta: </b> ${reportingEngine.colony.BETA}<br>\
-                    <b>rho: </b> ${reportingEngine.colony.RHO}<br>`
-    var successRate = reportingEngine.noOfBestSolutions / reportingEngine.solutions.length * 100;
-    if (reportingEngine.reportingMode === 'agent') {
-        resultText += `<br>A total number of ${reportingEngine.solutions.length} solutions were found by ants.\
-                       Optimal solution was found by ${reportingEngine.noOfBestSolutions} ants, with an accuracy rate of ${successRate.toFixed(2)}%.`;
-    }
-    else {
-        resultText += `<br>A total number of ${reportingEngine.solutions.length} solutions were found by ${reportingEngine.colony.name} algorithm.\
-                        Optimal solution was found ${reportingEngine.noOfBestSolutions} times, with a success rate of ${successRate.toFixed(2)}%.`;
-    }
-    $('#reporting-result').html(resultText);
 }
 
 function exportGraphToJSON() {
