@@ -10,13 +10,13 @@ class GraphEditor {
     this.graphObj = ForceGraph();
   }
 
-  render(){
+  render() {
     this.initGraph();
     this.setupEvents();
-    this.setupCanvas();   
+    this.setupCanvas();
   }
 
-  disableInteraction(){
+  disableInteraction() {
     this.graphObj
       .linkDirectionalParticles(0)
       .enableNodeDrag(false)
@@ -25,7 +25,7 @@ class GraphEditor {
       .pauseAnimation();
   }
 
-  enableInteraction(){
+  enableInteraction() {
     this.graphObj
       .enableNodeDrag(true)
       .enableZoomPanInteraction(true)
@@ -39,8 +39,8 @@ class GraphEditor {
       .height(this.CANVAS_HEIGHT)
       .nodeRelSize(this.NODE_REL_SIZE) // Solve this stuff
       .backgroundColor('white')
-      .nodeColor(node =>{
-        switch(node.classification){
+      .nodeColor(node => {
+        switch (node.classification) {
           case 'start':
             return 'gold';
           case 'goal':
@@ -51,7 +51,7 @@ class GraphEditor {
       })
       .nodeLabel(node => {
         let label = `Id: ${node.id}<br>Type: ${node.classification}<br>Coords: (${node.x.toFixed(2)},${node.y.toFixed(2)})`;
-        if(node.noOfAnts !== undefined)
+        if (node.noOfAnts !== undefined)
           label += `<br>No. of ants: ${node.noOfAnts}`;
         return label;
       })
@@ -65,7 +65,7 @@ class GraphEditor {
       .linkDirectionalArrowLength(10)
       .linkDirectionalArrowRelPos(1)
       .zoomToFit();
-      //.linkVisibility(l => l.isMainLink);
+    //.linkVisibility(l => l.isMainLink);
   }
 
   setupEvents() {
@@ -78,7 +78,7 @@ class GraphEditor {
   setupCanvas() {
     this.graphObj
       .nodeCanvasObjectMode((node) =>
-     this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined
+        this.selectedNodes.indexOf(node) !== -1 ? 'before' : undefined
       )
       .nodeCanvasObject((node, ctx) => {
         ctx.beginPath();
@@ -96,10 +96,10 @@ class GraphEditor {
       .linkCanvasObjectMode(() => 'after')
       .linkCanvasObject((link, ctx) => {
 
-        if(!INTERACTIVE_MODE)
+        if (!INTERACTIVE_MODE)
           return;
 
-        if(!link.isMainLink)
+        if (!link.isMainLink)
           return;
 
         const MAX_FONT_SIZE = 15;
@@ -109,7 +109,7 @@ class GraphEditor {
         const end = link.target;
 
         // ignore unbound links
-        if (typeof start !== 'object' || typeof end !== 'object') 
+        if (typeof start !== 'object' || typeof end !== 'object')
           return;
 
         // calculate label positioning
@@ -134,7 +134,7 @@ class GraphEditor {
         if (textAngle < -Math.PI / 2) textAngle = -(-Math.PI - textAngle);
 
         // highlight how this is a visual render only! true value is not altered.
-        if(!link.pheromone)
+        if (!link.pheromone)
           return;
         const label = link.pheromone.toFixed(2);
 
@@ -167,6 +167,20 @@ class GraphEditor {
         ctx.fillStyle = 'blue';
         ctx.fillText(label, 0, 0);
         ctx.restore();
+      })
+      .nodeCanvasObjectMode(() => 'after')
+      .nodeCanvasObject((node, ctx, globalScale) => {
+        const label = node.noOfAnts;
+        const fontSize = 8 / globalScale;
+        ctx.font = `${ fontSize } px Sans - Serif`;
+        const textWidth = ctx.measureText(label).width;
+        const bckgDimensions = [textWidth, fontSize].map(n => n + fontSize * 0.2); // some padding
+        ctx.fillStyle = node.color;
+        ctx.fillRect(node.x - bckgDimensions[0] / 2, node.y - bckgDimensions[1] / 2, ...bckgDimensions);
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillStyle = 'black';
+        ctx.fillText(label, node.x, node.y);
       });
   }
 
@@ -204,7 +218,7 @@ class GraphEditor {
     this.resetSelection();
   }
 
-  notify(data){
+  notify(data) {
     this.update(data);
   }
 
